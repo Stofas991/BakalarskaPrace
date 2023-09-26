@@ -31,6 +31,11 @@ public class MapGenerator : MonoBehaviour
     private bool end;
     public void GenerateMap()
     {
+        for (int i = 0; i < regions.Length; i++)
+        {
+            regions[i].tileMap.ClearAllTiles();
+        }
+
         float[,] noiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
         float[,] treeNoiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, 1, octaves, persistance, lacunarity, new Vector2(2.87f, 1.8f));
         Color[] colourMap = new Color[mapWidth * mapHeight];

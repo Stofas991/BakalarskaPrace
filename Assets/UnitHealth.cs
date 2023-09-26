@@ -36,5 +36,6 @@ public class UnitHealth : MonoBehaviour
 
         //disable enemy
         Destroy(gameObject);
-    }  
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+    }
 }

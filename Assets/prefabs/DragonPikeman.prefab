@@ -86,7 +86,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70bf3300380b6074c923dfa6d8948950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickEffect: {fileID: 2699476985937871758, guid: 58733ae8e55d65043addf73ca4bdd716, type: 3}
   target: {x: 0, y: 0, z: 0}
   enemy: {fileID: 0}
   animator: {fileID: 356696167367167031}
