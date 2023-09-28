@@ -16,6 +16,7 @@ public class EnemyMove : ClickableObject
     private GameObject AlertedUnit;
     private GameObject ChasedEnemy;
     public Animator Animator;
+    public EnemyAttacked enemyAttack;
 
     private float AttackRange;
     private float NextAttackEvent;
@@ -33,6 +34,7 @@ public class EnemyMove : ClickableObject
         distance = 10;
         AttackRange = 1.5f;
         AlertedUnit = transform.Find("ExclamationRed").gameObject;
+        enemyAttack = GetComponent<EnemyAttacked>();
     }
 
     void Update()
@@ -50,6 +52,7 @@ public class EnemyMove : ClickableObject
             if (HitEnemies.Length > 0)
             {
                 ChasedEnemy = HitEnemies[0].gameObject;
+                enemyAttack.unitController = ChasedEnemy.GetComponent<UnitControlScript>();
                 Chasing = true;
             }
             else
@@ -81,6 +84,7 @@ public class EnemyMove : ClickableObject
         else if (Vector3.Distance(agent.transform.position, ChasedEnemy.transform.position) < distance)
         {
             agent.SetDestination(ChasedEnemy.transform.position);
+         
             //Zobrazí vykøièník nad postavou
             AlertedUnit.SetActive(true);
             bool flipped = agent.transform.position.x < ChasedEnemy.transform.position.x;
@@ -101,7 +105,7 @@ public class EnemyMove : ClickableObject
         Animator.SetTrigger("InRange");
 
         //udìlí poškození nepøíteli
-        ChasedEnemy.GetComponent<UnitHealth>().TakeDamage(AttackDamage);
+        ChasedEnemy.GetComponent<UnitStats>().TakeDamage(AttackDamage);
     }
 
     void CancelAttack()

@@ -321,12 +321,13 @@ GameObject:
   m_Component:
   - component: {fileID: 7659020442487220113}
   - component: {fileID: 573371405527132228}
-  - component: {fileID: 1824771157637879241}
   - component: {fileID: 9125814582835871293}
   - component: {fileID: 348409198973724924}
   - component: {fileID: 6303583351644301199}
   - component: {fileID: 8457999181094466859}
   - component: {fileID: 851599225195102060}
+  - component: {fileID: 6901328350384108184}
+  - component: {fileID: 7791686527133230811}
   m_Layer: 8
   m_Name: DemonFighter
   m_TagString: Enemy
@@ -373,19 +374,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &1824771157637879241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5447619987507197513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f584de0c2960af64cbc74a6293cc69b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactionType: 0
 --- !u!114 &9125814582835871293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490,6 +478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 100
+  attackDamage: 20
   HealthBar: {fileID: 6609091749349935929}
 --- !u!61 &851599225195102060
 BoxCollider2D:
@@ -517,6 +506,32 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &6901328350384108184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5447619987507197513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b362bdd539ce1047bdc14da03553392, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7791686527133230811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5447619987507197513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569412edf13930d4e8d03a67bc7a6e14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 3
+  player: {fileID: 0}
 --- !u!1 &7637383844450711078
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,12 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3377633813944631930}
-  - component: {fileID: 35802674226386479}
   - component: {fileID: 5904259467658559720}
-  - component: {fileID: 7650908556596081821}
   - component: {fileID: 356696167367167031}
   - component: {fileID: 213729077932617508}
+  - component: {fileID: 35802674226386479}
+  - component: {fileID: 7650908556596081821}
+  - component: {fileID: -458671157946646322}
   - component: {fileID: 7883299617561180364}
+  - component: {fileID: 8438953995775289405}
   - component: {fileID: 2495273072274223250}
   m_Layer: 6
   m_Name: DragonPikeman
@@ -40,18 +42,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &35802674226386479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 67380354070866521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab6827ac4a76cd42a7a5c089b6f265b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!195 &5904259467658559720
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -74,24 +64,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &7650908556596081821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 67380354070866521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70bf3300380b6074c923dfa6d8948950, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {x: 0, y: 0, z: 0}
-  enemy: {fileID: 0}
-  animator: {fileID: 356696167367167031}
-  attackRange: 3
-  attackDelay: 5
-  attackDamage: 25
 --- !u!95 &356696167367167031
 Animator:
   serializedVersion: 4
@@ -164,6 +136,52 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &35802674226386479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67380354070866521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab6827ac4a76cd42a7a5c089b6f265b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7650908556596081821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67380354070866521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70bf3300380b6074c923dfa6d8948950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickEffect: {fileID: 2699476985937871758, guid: 58733ae8e55d65043addf73ca4bdd716, type: 3}
+  target: {x: 0, y: 0, z: 0}
+  enemy: {fileID: 0}
+  animator: {fileID: 356696167367167031}
+  focus: {fileID: 0}
+  attackRange: 3
+  nextAttackEvent: 0
+  attackDelay: 5
+  attackDamage: 25
+  selected: 0
+--- !u!114 &-458671157946646322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67380354070866521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b362bdd539ce1047bdc14da03553392, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7883299617561180364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,7 +195,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 100
+  attackDamage: 25
   HealthBar: {fileID: 1439205066363382705}
+--- !u!114 &8438953995775289405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67380354070866521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 964167ca5ebb01f4ba4f4fdac04390f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &2495273072274223250
 BoxCollider2D:
   m_ObjectHideFlags: 0

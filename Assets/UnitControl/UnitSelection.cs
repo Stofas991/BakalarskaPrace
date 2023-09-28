@@ -16,4 +16,10 @@ public class UnitSelection : MonoBehaviour
     {
         selectedGameObject.SetActive(visible);
     }
+
+    public void SetSelectedVar(bool selection)
+    {
+        UnitControlScript unit = gameObject.GetComponent<UnitControlScript>();
+        unit.selected = selection;
+    }
 }

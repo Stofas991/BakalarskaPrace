@@ -2,19 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum InteractableType { Enemy, tree }
-
 public class Interactable : MonoBehaviour
 {
-    public UnitHealth myHealth { get; private set; }
+    public UnitStats myHealth { get; private set; }
 
-    public InteractableType interactionType;
+    public float radius = 3f;
 
-    private void Awake()
+    bool isFocus = false;
+    bool hasInteracted = false;
+    public bool isEnemy = false;
+    public Transform player;
+
+    void Update()
     {
-        if(interactionType == InteractableType.Enemy) 
-        { 
-            myHealth = GetComponent<UnitHealth>();
+        if (isFocus && !hasInteracted)
+        {
+            float distance = Vector3.Distance(player.position, transform.position);
+            if (distance <= radius)
+            {
+                Interact();
+                hasInteracted = true;
+            }
         }
+        if (isFocus && isEnemy)
+        {
+            float distance = Vector3.Distance(player.position, transform.position);
+            if (distance <= radius)
+            {
+                Interact();
+            }
+        }
+    }
+
+    public virtual void Interact ()
+    {
+        //tato metoda má být pøepsána objektem ktrý ji bude používat
+    }
+
+    public void OnFocused (Transform playerTransform)
+    {
+        hasInteracted = false;
+        isFocus = true;
+        player = playerTransform;
+    }
+
+    public void OnDeFocused()
+    {
+        hasInteracted = false;
+        isFocus = false;
+        player = null;
     }
 }

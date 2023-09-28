@@ -12,8 +12,6 @@ public class SelectObject2D : MonoBehaviour
     private Vector3 startPosition;
     private Vector3 endPosition;
     private RaycastHit hit;
-    [SerializeField] GameObject clickEffect;
-
 
     public RectTransform selectionBox;
     private HashSet<UnitSelection> selectedUnitList;
@@ -73,44 +71,6 @@ public class SelectObject2D : MonoBehaviour
                 selectedUnitList = SelectObjects(isDragSelect);
             }
         }
-        //po kliknutím pravým tlaèítkem, pokud máme vybranou jednotku posuneme na pozici myši
-        if (Input.GetMouseButtonDown(1) && selectedUnitList.Count > 0)
-        {
-            //kontrola jestli se kliknulo na nepøítele
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-
-            if (hit.transform != null && hit.transform.CompareTag("Enemy"))
-                enemy = hit.transform.GetComponent<Interactable>();
-            else
-                enemy = null;
-
-            //particle effekt pro zobrazení bodu k pohybu
-            if (clickEffect != null)
-            {
-                Vector3 positionZeroedZ = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                positionZeroedZ.z = 0;
-                Instantiate(clickEffect, positionZeroedZ, clickEffect.transform.rotation);
-            }
-
-            foreach (UnitSelection unit in selectedUnitList)
-            {
-                //získání UnitControl property
-                UnitControlScript UnitC = unit.gameObject.GetComponent<UnitControlScript>();
-                //nastavení cílové lokace na pozici myši
-                if (enemy == null)
-                {
-                    UnitC.enemy = null;
-                    UnitC.target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                }
-                else
-                {
-                    UnitC.enemy = enemy;
-                    UnitC.target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                }
-            }
-            
-        }
     }
 
     /// <summary>
@@ -138,6 +98,7 @@ public class SelectObject2D : MonoBehaviour
 
         foreach (UnitSelection unit in selectedUnitList)
         {
+            unit.SetSelectedVar(false);
             unit.SetSelectedVisible(false);
         }
 
@@ -159,6 +120,7 @@ public class SelectObject2D : MonoBehaviour
                     UnitSelection unit = selectedObj.GetComponent<UnitSelection>();
                     if (unit != null)
                     {
+                        unit.SetSelectedVar(true);
                         unit.SetSelectedVisible(true);
                         selectedUnits.Add(unit);
                     }
@@ -174,6 +136,7 @@ public class SelectObject2D : MonoBehaviour
                 UnitSelection unit = hit.transform.GetComponent<UnitSelection>();
                 if (unit != null)
                 {
+                    unit.SetSelectedVar(true);
                     unit.SetSelectedVisible(true);
                     selectedUnits.Add(unit);
                 }
