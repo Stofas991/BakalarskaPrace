@@ -1372,6 +1372,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3555050478613232742, guid: 456bfe4fd79c57a45a0f31ea0027d51c, type: 3}
+      propertyPath: inventoryUI
+      value: 
+      objectReference: {fileID: 4212145042845106834}
     - target: {fileID: 3612611536421310585, guid: 456bfe4fd79c57a45a0f31ea0027d51c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1977,5 +1981,10 @@ PrefabInstance:
 --- !u!224 &2757017006256245743 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 809334004392086389, guid: 456bfe4fd79c57a45a0f31ea0027d51c, type: 3}
+  m_PrefabInstance: {fileID: 3276844409658933402}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4212145042845106834 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1661048951165846024, guid: 456bfe4fd79c57a45a0f31ea0027d51c, type: 3}
   m_PrefabInstance: {fileID: 3276844409658933402}
   m_PrefabAsset: {fileID: 0}

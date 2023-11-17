@@ -28,9 +28,10 @@ public class PlayerMotor : MonoBehaviour
         agent.SetDestination(point);
     }
 
-    public void FollowTarget(Interactable newTarget)
+    public void FollowTarget(Interactable newTarget, float attackRange)
     {
         target = newTarget.transform;
+        agent.stoppingDistance = attackRange;
         if (newTarget.CompareTag("Enemy"))
         {
             newTarget.isEnemy = true;

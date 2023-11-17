@@ -116,7 +116,7 @@ public class UnitControlScript: MonoBehaviour
 
             focus = newFocus;
             newFocus.OnFocused(transform);
-            motor.FollowTarget(newFocus);
+            motor.FollowTarget(newFocus, attackRange);
         }
     }
 
