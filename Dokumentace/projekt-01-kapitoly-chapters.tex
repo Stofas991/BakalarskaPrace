@@ -3,7 +3,7 @@
 \chapter{Úvod}
 Náhodně vytvářený obsah v herním průmyslu je velmi důležitou součástí her už po několik let. Mnoho her postavených na této vlastnosti už se prosadilo na trhu a stále více se uplatňuje. Náhodné vytváření obsahu se používá například na tvoření herních map, věcí v místnosti, skládání různých dopředu vytvořených místností tak aby vznikla jedinečná mapa, zkrátka skoro všude. 
 
-Hlavním důvodem používání náhodně vytvořeného obsahu je možnost opakovaného hraní stejné hry, bez toho aby se stala nezáživná. V budoucnu se procedurální generování rozhodně neztratí a naopak se bude ještě více využívat. Cíl této práce je vytvořit jedinečnou 2D hru z pohledu z hora, která právě takové náhodné vytváření bude používat. Hra je o přežití a ovládání skupiny domorodců a nastolení míru na ostrově. V kapitole \ref{Teorie} je detailně popsáno náhodné generování a různé metody,v kapitole \ref{solution} je vysvětleno jaké způsoby budou nejlepší k řešení, jak byla práce naplánována a proč. V kapitole \ref{realization} je popsaný způsob jakým byla hra řešena, použité metody a jejich význam.
+Hlavním důvodem používání náhodně vytvořeného obsahu je možnost opakovaného hraní stejné hry, bez toho aby se hra stala nezáživnou. V budoucnu se procedurální generování rozhodně neztratí a naopak se bude ještě více využívat v různých odvětvích. Cíl této práce je vytvořit jedinečnou 2D hru z pohledu z hora, která právě takové náhodné vytváření bude používat. Hra je o přežití a ovládání skupiny domorodců a nastolení míru na ostrově. V kapitole \ref{Teorie} je detailně popsáno náhodné generování a různé metody,v kapitole \ref{solution} je vysvětleno jaké způsoby budou nejlepší k řešení, jak byla práce naplánována a proč. V kapitole \ref{realization} je popsaný způsob jakým byla hra řešena, použité metody a jejich význam.
 
 \chapter{Teorie} 
 \label{Teorie}
@@ -22,22 +22,17 @@ V této části porovnáme mechanické generování obsahu s procedurálním, vy
 
 
 \subsection{Mechanické generování obsahu}
-Tento typ generování lze dělat dvěma způsoby, jedním z nich je ruční tvoření
 \label{traditional}
-\todo{informace o tradičním generování obsahu}
-
-\includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
-
-\textcolor{gray}{\blindtext[5]}
-
+Mechanický typ generování je jedním z nejobvyklejších tvoření obsahu ve hrách. Používá se převážně v žánrech, jako je RPG (Role Play Game), RTS(Real Time Strategy) a další, ve kterých pozice objektů a struktura mapy hraje velkou roli a bez lidské tvorby by nebylo dosaženo potřebných výsledků. Toto tvoření lze interpretovat jako proces u něhož se za pomoci různých nástrojů, které uživatel postupně aplikuje, snaží dosáhnout požadovaného výsledku. Jde tedy o metodu ručního vytváření obsahu kde designér, nebo grafik navrhuje a postupně vytváří úroveň, či jinou část hry tak, aby vyhovovala potřebám.
+	
+Proces takového vytváření obsahu pro hry se dá zjednodušeně představit na příkladu. Uvažujme například truhláře vyrábějícího stůl, který také používá různé nástroje na zhotovení nábytku. Aplikováním těchto nástrojů na materiál postupně vytváří výsledný stůl. Nástroje a suroviny, které si na počátku celého procesu vybral, určí možné výsledky, takže výsledkem jeho práce nemůže být třeba obraz.
 
 \subsection{Procedurální generování obsahu}
 \label{procedural}
-\todo{informace o procedurálním generování obsahu}
-
+Procedurálnímu generování se již nějakou dobu dostává zasloužené popularity. Tento typ vytváření obsahu se používá ve více žánrech, ale asi nejznámější z hlediska generování map je Roguelike, kde každá nová hra má unikátní náhodnou mapu. PG se ovšem nepoužívá pouze na generování map, ale také na vytváření objektů, jako jsou stromy, textury, animace a další. Procedurální generování obsahu neznamená, jak se mnozí domnívají, náhodné generování obsahu. V zásadě je to proces obrácený jak u mechanického generování obsahu. Uživatel již nedefinuje různé nástroje pro své vlastní použití, ale naopak je nastavuje algoritmu. Uživatel dále určuje pravidla kterými se algoritmus řídí, aby se dobral kýženého výsledku.
 \includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
 
-\textcolor{gray}{\blindtext[5]}
+\textcolor{gray}{\blindtext[4]}
 
 
 \subsubsection{Známé metody na procedurální generování}
