@@ -1,6 +1,6 @@
 % Autor: Kryštof Glos
 
-\chapter{Úvod}
+\chapter*{Úvod}
 Procedurálně vytvářený obsah v herním průmyslu je velmi důležitou součástí her už po několik let. Mnoho her postavených na této vlastnosti už se prosadilo na trhu a stále více se uplatňuje. Náhodné vytváření obsahu se používá například na tvoření herních map, věcí v místnosti, skládání různých dopředu vytvořených místností tak aby vznikla jedinečná mapa, zkrátka skoro všude. 
 
 Hlavním důvodem používání náhodně vytvořeného obsahu je možnost opakovaného hraní stejné hry, bez toho aby se hra stala nezáživnou. V budoucnu se procedurální generování rozhodně neztratí a naopak se bude ještě více využívat v různých odvětvích. Cíl této práce je vytvořit jedinečnou 2D hru z pohledu z hora, která právě takové náhodné vytváření bude používat. Hra je o přežití a ovládání skupiny domorodců a nastolení míru na ostrově. V kapitole \ref{Teorie} je detailně popsáno náhodné generování a různé metody,v kapitole \ref{solution} je vysvětleno jaké způsoby budou nejlepší k řešení, jak byla práce naplánována a proč. V kapitole \ref{realization} je popsaný způsob jakým byla hra řešena, použité metody a jejich význam.
@@ -15,7 +15,7 @@ Hry které mají pouze dvě dimenze se nazývají 2D. (z anglického two dimensi
 \section{Způsoby generování obsahu}
 V této části porovnáme mechanické generování obsahu s procedurálním, vysvětlíme co je lepší kdy použít a jaké známe metody pro procedurální generování. Následující tři body popisují faktory, které je třeba zvážit při rozhodování, zda bude využita nějaká procedurální metoda na generování, nebo bude lepší použít manuální design úrovní a obsahu:
 \begin{description}
-	\item[Žánr tvořené hry] Při vytváření například takové FPS hry, u které záleží hlavně na ovládání a souboji hráče proti hráči, není třeba vytvářet mapy a další obsah procedurálně. Většinou stačí vytvořit například pouze jednu úroveň a na to není potřeba požívat procedurální generování. Při hrách které závisí na okolí, surovinách a přežití kde každá okolnost nějak ovlivňuje hráče, už procedurální generování hraje větší roli
+	\item[Žánr tvořené hry] Při vytváření například takové FPS hry, u které záleží hlavně na ovládání a souboji hráče proti hráči, není třeba vytvářet mapy a další obsah procedurálně. Většinou stačí vytvořit například pouze jednu úroveň a na to není potřeba požívat procedurální generování. Při hrách které závisí na okolí, surovinách a přežití kde každá okolnost nějak ovlivňuje hráče, už procedurální generování hraje větší roli. Zároveň pro vytváření obsahu jako je text, může být PG velmi obtížnou volbou, neboť v RPG hrách bývá textová část velmi důležitá a generování textu je stále dost obtížné
 	\item[Opakovaná hratelnost] Některé hry jsou dělané tak že čím déle hráč hraje stejnou úroveň(anglicky level) tím více se zlepšuje a je za to například odměňován je právě manuální tvoření úrovní lepší než procedurální. Naopak u jiných her, které mají úrovně procedurálně generované, většinou hráč danou úroveň zvládne, pokračuje na další a nepředpokládá se že se k ní bude ještě vracet.
 	\item[Aspekt designu hry] Jestliže hra závisí z velké části na jedné úrovni s jejími mechanikami, vlastnostmi a obsahem, pak je lepší ji vytvářet mechanicky a doladit všechny vlastnosti a interakce s hráčem.
 \end{description}
@@ -23,7 +23,7 @@ V této části porovnáme mechanické generování obsahu s procedurálním, vy
 
 \subsection{Mechanické generování obsahu}
 \label{traditional}
-Mechanický typ generování je jedním z nejobvyklejších tvoření obsahu ve hrách. Používá se převážně v žánrech, jako je RPG (Role Play Game), RTS(Real Time Strategy) a další, ve kterých pozice objektů a struktura mapy hraje velkou roli a bez lidské tvorby by nebylo dosaženo potřebných výsledků. Toto tvoření lze interpretovat jako proces u něhož se návrhář za pomoci různých nástrojů, které postupně aplikuje, snaží dosáhnout požadovaného výsledku. Jde tedy o metodu ručního vytváření obsahu kde designér, nebo grafik navrhuje a postupně vytváří úroveň, či jinou část hry tak, aby vyhovovala potřebám.
+Mechanický typ generování je jedním z nejobvyklejších tvoření obsahu ve hrách. Používá se převážně v žánrech, jako je RPG (Role Play Game), RTS(Real Time Strategy) a další, ve kterých pozice objektů a struktura mapy hraje velkou roli a bez lidské tvorby by nebylo dosaženo potřebných výsledků. Toto tvoření lze interpretovat jako proces u něhož se návrhář za pomoci různých nástrojů, které postupně aplikuje, snaží dosáhnout požadovaného výsledku. Jde tedy o metodu ručního vytváření obsahu kde designér, nebo grafik navrhuje a postupně vytváří úroveň, či jinou část hry tak, aby vyhovovala potřebám, ať už se jedná o pozici stromu, nebo o to co hráči sděluji NPC.
 	
 Proces takového vytváření obsahu pro hry se dá zjednodušeně představit na příkladu. Uvažujme například truhláře vyrábějícího stůl, který také používá různé nástroje na zhotovení nábytku. Aplikováním těchto nástrojů na materiál postupně vytváří výsledný stůl. Nástroje a suroviny, které si na počátku celého procesu vybral, určí možné výsledky, takže výsledkem jeho práce nemůže být třeba obraz.
 
@@ -33,9 +33,13 @@ Díky tomuto přístupu nehrozí nesrovnalosti ve výsledku, například se nem�
 \label{procedural}
 Roden and Parberry \cite{FromArtistry} pojmenovávají tento druh algoritmů \textit{amplifikační algoritmy (amplification algorithms)}, přijímají menší množství vstupních informací, které zpracují a vracejí větší objem dat na výstupu. Hendrikx et al. \cite{Hendrikx} pojímají procedurální generování jako alternativu k mechanickému navrhování obsahu, ale kladou důraz na zdokonalování a přidávání parametrů umožňujících zásah návrháře do takto vygenerovaných objektů.
 
-Tento typ vytváření obsahu se používá ve více žánrech, ale asi nejznámější z hlediska generování map je Roguelike, kde každá nová hra má unikátní náhodnou mapu. PG se ovšem nepoužívá pouze na generování map, ale také na vytváření objektů, jako jsou stromy, textury, animace a další. Procedurální generování obsahu není to stejné jako, jak se mnozí domnívají, náhodné generování obsahu.
+Tento typ vytváření obsahu se používá ve více žánrech, ale asi nejznámější z hlediska generování map je Roguelike, kde každá nová hra má unikátní náhodnou mapu. PG se ovšem nepoužívá pouze na generování map, ale také na vytváření objektů, jako jsou stromy, textury, animace, text a další. Procedurální generování obsahu není to stejné jako, jak se mnozí domnívají, náhodné generování obsahu.
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.33]{obrazky-figures/BindingOfIsaac.jpg}
+	\caption{Příklad hry Roguelike žánru jménem Binding of Isaac, vpravo nahoře je vidět mapa dungeonu, která je procedurálně vygenerovaná, i takto může PG vypadat.}
+\end{figure}
 
-\includegraphics[scale=0.3]{obrazky-figures/BindingOfIsaac.jpg}
 
 V zásadě je to proces obrácený jak u mechanického generování obsahu. Uživatel sice stále definuje různé nástroje, které jsou použity pro vytváření obsahu, ale nikoli pro své vlastní použití, ale naopak je vytváří pro algoritmus. Uživatel dále určuje pravidla podle kterých se generátor musí řídit tak, aby se dobral kýženého výsledku.
 
@@ -46,17 +50,56 @@ Pro lepší představu uvedu příklad. Program má funkci procedurálního gene
 \includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
 \includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
 
-\todo{dva obrázky, jeden se stromy moc u sebe a druhý lepší}
+\todo{dva obrázky, jeden se stromy moc u sebe a druhý lepší při použití více pravidel}
 
-\subsubsection{Známé metody na procedurální generování}
+\section{Možnosti využití v herním průmyslu}
 \label{metody}
-Algoritmů na generování obsahu existuje mnoho, každý používá jiné nástroje, ale všechny se musí podrobovat pravidlům která stanovuje programátor a podle kterých se řídí. Velmi silně záleží ovšem na tom, čeho chceme docílit. Pro generování například vegetace, se používají jiné metody, než třeba pro vytváření krajiny.
+Algoritmů na generování obsahu existuje mnoho, každý používá jiné nástroje, ale všechny se musí podrobovat pravidlům která stanovuje programátor a podle kterých se řídí. Je více způsobů a míst kde se dá PG uplatnit, různé způsoby a důvody jsou popsány v této kapitole.
+
+\subsection{Text}
+Skoro všechny hry používají text. Z důvodu že každá informace v textu musí odpovídat realitě, je nutno velké množství omezení pro generování. Například když je v textu informace že král je mrtvý \cite{liuDeep}, musí být toto tvrzení pravdivé.
+
+Velkým plusem procedurálního generování textu je vyprávění \cite{madoc59000}, takto vytvořené příběhy jsou často kreativnější a zajímavější, než ty co by vytvořil člověk, neboť lidé mají sklony psát příběhy které již slyšeli, nebo ze svých zkušeností, což dost omezuje nápady.
+
+\subsection{Textury}
+Textury jsou snad skoro ve všech 3D a velké části 2D her. Zároveň se jedná o obsah který má nejméně omezení pro generování. Jednou z nejčastějších metod, která se používá na tvoření textur, je \todo{odkaz na perlinův šum}Perlinův šum, který je detailněji popsán v kapitole \todo{tady a tady}.
+
+\subsection{Zvuky a hudba}
+Většina her má soundtrack a zvukové efekty. Soundtrack většinou nemá nijak zvlášť přísná pravidla, ale zvukové efekty musejí být výstižné a odpovídající akci v daný moment. 
+
+Jukebox \cite{Dhariwal2020JukeboxAG} je model který dokáže generovat hudbu se zpěvem v originální nezpracované formě zvukových dat, s délkou v řádu minut, i s určením žánru a vokálního stylu. Modelů jako je tento již existuje více, avšak zatím to nejsou plně hodnotné soundtracky pro hry a ještě chvíli potrvá, než bude možné jednoduše vygenerovat hudbu a efekty pro hru pomocí pouhého nástroje.
+
+\subsection{Krajina a úrovně}
+Nejvíce obvyklý obsah který se ve hrách generuje a který je zároveň hlavním zaměřením této práce, jsou krajiny a úrovně. Generování lokací, úrovní, nebo obsahu mapy lze jak u 2D her, tak u 3D her. Za úroveň nebo oblast lze označovat otevřené, třeba krajina s lesy, i uzavřené prostranství, vnitřek budovy, nebo jeskyně. 
+
+\paragraph*{Generování oblastí lze rozdělit následovně:}
+\begin{description}
+	\item[Vytváření půdorysu] Tímto pojmem se rozumí vytváření samotné podstaty oblasti. Zahrnuje vytvoření země, moří, řek, hor, atd. Všechny tyto oblasti jsou otevřeného typu. Také můžeme rozumět pod generováním půdorysu i vytváření uzavřeného typu oblastí, například rozložení jednotlivých místností jeskynního komplexu, vytvoření bludiště a jeho cest. 
+	
+	\item[Přidání vegetace a objektů] Tento bod v podstatě navazuje na předchozí, je potřeba abychom měli vytvořený půdorys, aby bylo kam přidávat a rozmísťovat další objekty. Jedná se o bod do kterého spadá vegetace, budovy, atd. 
+	
+	\begin{figure}
+		\centering
+		\begin{subfigure}[b]{0.475\textwidth}
+			\includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
+			\caption{Vygenerovaný půdorys oblasti}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.475\textwidth}
+			\includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
+			\caption{Přidané stromy k půdorysu}
+		\end{subfigure}
+		\caption{Na obrázcích jsou vidět různé postupy generování obsahu, na obrázku a je vygenerovaný půdorys oblasti i s mořem a skálou, na obrázku b se k tomu přidaly stromy}
+	\end{figure}
+
+	
+\end{description} 
+
 
 \todo{informace o všemožných známých metodách procedurálního generování}
 
 \includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
 
-\textcolor{gray}{\blindtext[10]}
+\textcolor{gray}{\blindtext[4]}
 
 
 \subsubsection{Porovnání metod}
