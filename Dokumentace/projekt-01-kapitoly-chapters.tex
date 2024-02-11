@@ -40,21 +40,56 @@ Tento typ vytváření obsahu se používá ve více žánrech, ale asi nejznám
 
 V zásadě je to proces obrácený jak u mechanického generování obsahu. Uživatel sice stále definuje různé nástroje, které jsou použity pro vytváření obsahu, ale nikoli pro své vlastní použití, ale naopak je vytváří pro algoritmus. Uživatel dále určuje pravidla podle kterých se generátor musí řídit tak, aby se dobral kýženého výsledku.
 
-\subsubsection{Příklad procedurálního generování lesů}
-\label{proceduralExample}
-\todo{informace o tom kde konkrétně se používá + obrázky}
-Pro lepší představu uvedu příklad. Program má funkci procedurálního generátoru lesů na mapě, cílem tohoto programu je náhodně naskládat stromy s rozumnými rozestupy od sebe. Pomocí mechanického generování obsahu by designér jednoduše přidával modely stromů do té doby, dokud by mapa neodpovídala představám návrháře a nesplňovala by potřeby herního designu. V případě procedurálního generování, je nutné definovat nástroje, což je v tomto příkladě schopnost přidávat stromy na mapu a pravidla, jako například kolik stromů je potřeba aby algoritmus vysázel, kam program může jednotlivé stromy pokládat a jaké jsou minimální rozestupy mezi nimi. Pravidla a nástroje nám tím pádem jednoznačně definují množinu potenciálních výsledku.
-
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.33]{obrazky-figures/BindingOfIsaac.jpg}
 	\caption{Příklad hry Roguelike žánru jménem Binding of Isaac, vpravo nahoře je vidět mapa dungeonu, která je procedurálně vygenerovaná.}
 \end{figure}
 
-\includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
-\includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
+\subsubsection{Příklad procedurálního generování vegetace}
+\label{proceduralExample}
+Simulace lesních prostředí má mnoho aplikací, od zábavní po výzkumné modelování. Pro lepší představu uvádím příklad od Newlandse a Zaunera.~\cite{newlands2022procedural}
 
-\todo{dva obrázky, jeden se stromy moc u sebe a druhý lepší při použití více pravidel}
+Program má funkci procedurálního generátoru lesů na mapě, cílem tohoto programu je náhodně naskládat stromy s rozumnými rozestupy od sebe. Metody pro vegetaci se dají opět řadit jako procedurální a mechanické. Neprocedurální přístup nabízí velkou kontrolu nad celým procesem a velký detail modelů, výměnou za cenu vyžadujícího značného množství uživatelských zásahů, často na úrovni vysazování rostliny po rostlině. V případě procedurálního generování, se jedná o modely které jsou zkonstruovány algoritmicky a kontrolovány skrze parametrické hodnoty, bez nutnosti vyšší úrovně manuálního vstupu nebo specializace v daném oboru.
+
+Jednou z nejvíce prozkoumanou modelační technikou postavenou na rekurzivních hierarchiích je koncept \hyperref[lsystems]{L-systémů}. Existuje mnoho typů a rozšíření těchto systémů\cite{prusinkiewicz1986graphical}, včetně stochastických, parametrických, diferenciálních \cite{animationOfPlantDevelopment.}, citlivých na okolí \cite{syntheticTopiary}, nebo otevřených~\cite{PrusinkiewiczModelsOfPlants}.
+
+Distribuce stromů na scéně lze udělat například pomocí simulace ekosystému. To vytváří více realistickou distribuci vegetace, než náhodné rozestavení, protože vznikají přirozená chování, jako je shlukování druhů a oblasti negativního růstu kolem stromů.~\cite{newlands2022procedural} Jedná se o simulace, ve kterých každá rostlina žije vlastní život, je ovlivňována ostatními rostlinami a vnějšími podmínkami.~\cite{Benes02ICCVG} 
+
+Při Inicializaci simulace se pro každý specifický druh stromu vytvoří určité množství stromů (pro výpočet slouží rovnice~\ref{eq:treeCount}) ve věku $a_i\in\langle0,a_M\rangle$- kde $a_M$ je maximální věk stromu pro daný druh a jsou náhodně rozestavěny po oblasti od největšího po nejmenší.~\cite{newlands2022procedural}
+\begin{equation}
+\label{eq:treeCount} 
+	n_I=\frac{d_0\cdot\rho}{n_T}w^2 
+\end{equation}
+
+Hodnota $n_I$ představuje počet instancí k vytvoření, $w$ je šířka scény, $d_0$ původní hustota pro objekt a $\rho$ je parametr hustoty jednotlivých objektů.
+
+Po úspěšné inicializaci simulace běží $N$ kroků, kde $N_Y$ kroků utváří rok. Pro každý krok se děje následující:
+
+\begin{itemize}
+	\item[1] Pokud je konec roku, všechny stromy vysejí počet nových rostlin, v kruhu okolo nich.
+	\item[2] U každého páru stromů je rostlina s menší důležitostí odstraněna.
+	\item[3] Stromy starší než jejich maximální věk, jsou považovány za mrtvé a odstraněny.
+	\item[4] Všechny rostliny rostou (jejich věk se zvýší o 1).
+\end{itemize}
+
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=1]{obrazky-figures/treesStart.png}
+		\caption{n=0}
+	\end{subfigure}
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=1]{obrazky-figures/treesEnd.png}
+		\caption{n=1000}
+	\end{subfigure}
+	\caption[generatedTrees]{Vzhled ekosystému po inicializaci a rozložení vegetace po prvních 1000 iteracích. Je vidět že se vytváří shluky rostlinných druhů, tyto klastry zůstávají, pouze se mění jejich pozice. Obrázky převzaty z práce\footnotemark.}
+\end{figure}
+\todo{chyba odkazu}
+\footnotetext[1]{https://arxiv.org/pdf/2208.01471.pdf}
 
 \section{Procedurální generování v herním průmyslu}
 \label{proceduralInGames}
@@ -69,7 +104,7 @@ Velkým plusem procedurálního generování textu je vyprávění \cite{madoc59
 Nejvíce obvyklý obsah který se ve hrách generuje, a který je zároveň hlavním zaměřením této práce, jsou krajiny a úrovně. Generování lokací, úrovní, nebo obsahu mapy lze jak u 2D her, tak u 3D her. Za úroveň nebo oblast lze označovat otevřené, třeba krajina s lesy, i uzavřené prostranství, vnitřek budovy, nebo jeskyně. Tato část PG je rozvedená a podrobněji popsaná v následující kapitole \ref{Krajina}.
 
 \subsection{Textury}
-Zároveň se jedná o obsah který má nejméně omezení pro generování. Jednou z nejčastějších metod, která se používá na tvoření textur, je \todo{odkaz na perlinův šum} Perlinův šum, který je detailněji popsán v kapitole \todo{tady a tady}.
+Jednou z nejčastějších metod, která se používá na tvoření textur, jsou \hyperref[lsystems]{L-systémy}, nebo Perlinův šum, který je detailněji popsán v sekci \ref{noise}.
 
 \subsection{Zvuky a hudba}
 Většina her má soundtrack a zvukové efekty. Soundtrack obvykle nemá nijak zvlášť přísná pravidla, ale zvukové efekty musejí být výstižné a odpovídající akci v daný moment. 
@@ -80,18 +115,56 @@ Jukebox \cite{Dhariwal2020JukeboxAG} je model který dokáže generovat hudbu se
 
 \chapter{Enginy na vývoj her}
 \label{engines}
-Herní engine představuje platformu složenou z interagujícího softwaru, který dohromady vytváří integrovaný celek a umožňuje spouštění samotných her. Herní engine se skládá z několika částí s přesně specifikovanou funkcionalitou: rendering, fyzika, síťování, zvuk atd. \cite{nilson2007game} 
+Herní engine představuje platformu složenou z interagujícího softwaru, který dohromady vytváří integrovaný celek a umožňuje spouštění samotných her. Herní engine se skládá z několika částí s přesně specifikovanou funkcionalitou: rendering, fyzika, síťování, zvuk atd.~\cite{nilson2007game} 
 
-Platforem na vývoj her existuje mnoho, některými z nich jsou například Unity, Construct 2, MonoGame, Unreal Engine, nebo GameMaker Studio 2. Každý herní engine je v něčem jiný a tudíž se hodí na jiné žánry, nebo styly her. Při rozhodování, který engine použít, se z hlediska vývojáře musí zohlednit vícero faktorů, například podporovaný programovací jazyk, nebo platformu na kterou je hra vyvíjena. \cite{vohera2021game}
+Platforem na vývoj her existuje mnoho, některými z nich jsou například Unity, Construct 2, MonoGame, Unreal Engine, nebo GameMaker Studio 2. Každý herní engine je v něčem jiný a tudíž se hodí na jiné žánry, nebo styly her. Při rozhodování, který engine použít, se z hlediska vývojáře musí zohlednit vícero faktorů, například podporovaný programovací jazyk, nebo platformu na kterou je hra vyvíjena.~\cite{vohera2021game}
+
+\section{Construct 2}
+Tento engine dovoluje lidem, kteří nejsou programátoři, vytvářet 2D hry. Používá drag and drop editor pro všechnu logiku založenou na událostech a chování. Může být rozšířen a skriptován pomocí JavaScriptu. 
+
+I když Construct tvrdí že zveřejňují hry na většině mobilních a desktopových platformách, jejich primární cíl je HTML5/JavaScript. Tudíž jakákoliv verze která není ve vyhledávači je obsažena v DOM a obalovacím rozhraní umožňujícím použití JavaScriptu. Tato architektura obecně snižuje výkon.~\cite{engines}
+
+\section{Unreal engine}
+Podporuje multiplatformní vydávání her, jmenovitě DirectX, OpenGL, nebo WebGL. 
+
+Jedná se o engine který je zdarma, ale pouze pro nekomerční užití a ve všech ostatních případech licencování softwaru za malé předplatné a licenční poplatek. Přes to, že původně byl vyvinut pro podporu \textit{Unreal} her z první osoby a neměl tolik nástrojů jako Unity, vyrostl Unreal Engine do podoby velmi výkonného enginu, schopného podporovat jakýkoli žánr her.~\cite{engines}
+
+Skriptování je v enginu pomocí jazyka C++.
+
 \section{Unity}
 \label{unity}
-\includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
+Unity je multiplatformní herní engine, podporující vývoj her na Windows, Linux i macOS.
+Vyvinula ho společnost Unity Technologies v roce 2005. Oproti jiným herním enginům podporuje vývoj her ve 2D, 3D, rozšířenou realitu (AR), nebo virtuální realitu (VR). 
 
-\textcolor{gray}{\blindtext[10]}
+Unity má více plánů které mohou vývojáři využívat, jedná se o personal, pro, enterprise a industry. Ze základu je pro všechny vývojáře zdarma k užívání, ale po překročení 100 000\$ za posledních dvanáct měsíců, je nutné pořídit si jeden z placených plánů. Tyto plány mají i jisté výhody, jako je třeba Havok Physics, přidávající robustní detekci kolizí a fyzikální simulace, technickou podporu, nebo prioritní frontu na zákaznickou podporu.~\cite{UnityPlans} 
+
+Další výhodou je integrované fyzikální jádro PhysX, které pracuje v reálném čase a je vyvíjeno společností Nvidia. Toto jádro zahrnuje efektivní podporu pro multithreading a využívá akceleraci fyzikální simulace prostřednictvím GPU. Programování je v enginu zařízené pomocí jazyka C\#.
+
+Z unity vzešlo mnoho oblíbených herních titulů, řadí se mezi ně hra ve virtuální realitě Beat Saber \ref{fig:beatSaber}, mobilní hra Pokémon Go \ref{fig:pogo}, nebo multiplatformní Cuphead~\ref{fig:cuphead}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.61]{obrazky-figures/Cuphead.png}
+	\caption{Ukázka hry Cuphead}
+	\label{fig:cuphead}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.15]{obrazky-figures/BeatSaber.jpg}
+	\caption{Ukázka hry Beat Saber}
+	\label{fig:beatSaber}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.09]{obrazky-figures/PokemonGo.jpg}
+	\caption{Ukázka mobilní hry Pokemon Go}
+	\label{fig:pogo}
+\end{figure}
+
+
 
 \chapter{Procedurální generování}
 \label{procedural}
-Tato kapitola popisuje \todo{konkrétní metody které popisuje} a použití procedurálního generování v herním průmyslu, do detailu popisuje PG krajiny, generování fraktálů.
+Tato kapitola popisuje metody pro generování geometrie, vegetace, celulární automaty, perlinův šum a použití procedurálního generování v herním průmyslu, do detailu popisuje PG krajiny, generování fraktálů.
 
 Procedurální modelování je téma které se aktivně zkoumá už přes čtyřicet let. Myšlenka je, jak již bylo zmíněno, aby obsah který se vytvářel ručně, dal modelovat pomocí navržené procedury automaticky. Takovýto přístup se již uplatnil na generování například textur, geometrických modelů, zvukových nahrávek, nebo animací. V roce 1980 se začalo pracovat s různými metodami na vytváření terénu, jako hory, pláně a jezera. Začal se také řešit růst rostlin a obecně práce s přírodou. \cite{inproceedings}
 
@@ -108,33 +181,79 @@ Nejznámější celulární automat byl vytvořen v roce 1970 britským matemati
 \begin{figure}[h]
 	\centering
 	\begin{subfigure}{0.475\textwidth}
-		\label{vonNeumann}
 		\centering
 		\includegraphics[scale=0.1]{obrazky-figures/Von_neumann_neighborhood.svg}
 		\caption{Von Neumannovo sousedství}
+		\label{vonNeumann}
 	\end{subfigure}
 	\begin{subfigure}{0.475\textwidth}
-		\label{moore}
 		\centering
 		\includegraphics[scale=0.1]{obrazky-figures/Moore_neighborhood.svg}
 		\caption{Moorovo sousedství}
+		\label{moore}
 	\end{subfigure}
 	\caption{Sousedství z pohledu Von Neumanna a Moora}
 \end{figure}
+
+\section{L-systémy}
+\label{lsystems}
+L-systémy (Lindenmayerovy systémy) jsou formálním nástrojem \cite{prusinkiewicz1986graphical}, který se používá pro modelování vývoje rostlin a buněčných struktur. Tyto systémy byly zavedeny biologem Aristidem Lindenmayerem v roce 1968. \cite{inverseL-systems} Jedná se o paralelní řetězce přepisující systémy, za účelem modelovat růst celulárních organismů. L-systém $\mathcal{L}$ je entice
+
+\[\mathcal{L} = \langle M,\omega,R\rangle ,\]
+
+
+kde $M$ je abeceda L-systému, $\omega$ je axiom a $R$ je množina pravidel přepisování. Abeceda obsahuje parametrizované moduly $M = {A(P),B(P),\ldots}$, kde $P=p_1,p_2,\ldots,p_n$ jsou modulové parametry, jako jsou rotace, zvětšení, zmenšení.
+Axiom $\omega \in M^+$ je neprázdná sekvence modulů a $M^+$ jsou všechny možné prázdné řetězce z $M$. Pravidla pro přepisování mají následující formu:
+
+\[id_1:A(P):cond\rightarrow x,x \in M^*,\]
+\[id_1:A(P):cond\rightarrow x,x \in M^*,\]
+\[\ldots\]
+
+kde $M^*$ jsou všechny možné řetězce z $M$ včetně prázdného $\epsilon$. Pravidlo $id_i$ přepisuje znak na levé straně z abecedy $A(P)$ posloupností písmen z pravé strany, pokud je podmínka $cond$ pravdivá. Modul, který se nenachází na levé straně pravidla, se nazývá \textit{terminální symbol}, neboť se nemůže dál měnit, všechny ostatní moduly se nazývají \textit{neterminální symboly}.\cite{prusinkiewicz2012algorithmic}
+
+Každé písmeno má vlastní pravidlo derivace řetězce, ale probíhá paralelním provedením aplikovatelných pravidel, z množiny $R$ pro každé písmeno které obsahuje. Produkční pravidla přepisují začínající symbol sekvencí modulů a pokračují v úspěšných derivacích $\omega \Rightarrow m_1 \Rightarrow m_2 \Rightarrow \ldots,$ dokud není možné žádný další modul přepsat (řetězec končí pouze terminálními symboly), řetězec modulů je prázdný, kvůli aplikaci pravidla epsilon, nebo byl proces ukončen kvůli maximálnímu počtu iterací, které stanovil uživatel.\cite{lindenmayer1968mathematical}
+
+Rekurze nastává v L-systémech tehdy, když se symbol z levé strany objevuje na pravé straně toho stejného pravidla (i když ne přímo). Nedeterminismus povoluje více pravidel pro jeden znak z abecedy. Toto navíc vyžaduje specifikaci pravděpodobnosti jejich aplikace.\cite{LINDENMAYER1968280}
+
+\subsection{Geometrie pomocí L-systémů}
+\label{lsystemGeometry}
+Pro tvoření geometrie z textových řetězců, je každý řetězec reprezentován želvou, která vytváří geometrické symboly jako čáry, nebo dokonce 3D geometrii.
+Ve 2D má želva stav $S(p,0)$ kde $p=[x,y]$ je její pozice a $0$ je směrový vektor, který udává směr jejího pohybu. 
+
+Želva sekvenčně čte písmena interpretovaného řetězce z modulu od začátku po konec, kde každé písmeno je interpretované jako příkaz. Písmeno F si překládá jako "pohyb od $p$ směrem k $0$ o vzdálenosti d, která je zadaná a nakresli linku mezi starou pozicí a novou." Příkazy +($\alpha$) a $-(\alpha)$ mění směr pohybu želvy, jejím otočením doleva, či doprava o $\alpha$. Cokoliv v závorkách $[M^+]$ je geometricky interpretováno jako větev vygenerované struktury. Výhodou je že ne všechna písmena abecedy musí mít nastavenou geometrickou interpretaci, pokud ji nemají, tak je želva ignoruje.
+\cite{prusinkiewicz1986graphical}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{obrazky-figures/L-system.png}
+	\caption[L-system]{Vygenerovaných obrázek L-systémy želví interpretací, jsou zde vidět jednotlivé posuvy i hodnoty o které se posouvá, převzatý ze článku\footnotemark}
+\end{figure}
+
+\todo{chyba odkazu}
+\footnotetext[1]{http://algorithmicbotany.org/papers/graphical.gi86.pdf}
+
+\section{Šumy}
+\label{noise}
+Šumy se v počítačové grafice využívají například pro přidání kvalitních detailů do synteticky vytvořených obrázků. Perlinův šum, navržený Kenem Perlinem \cite{PerlinKen}, se v dnešní době používá ve vytváření procedurálních textur včetně mraků, vln, tornád, raketových cest, atd. Tato kapitola popisuje různé druhy šumů a jejich použití.
+
+\subsection{Definice šumu}
+
+\subsection{Perlinův šum}
+\label{perlinNoise}
 
 \section{Výškové mapy}
 \label{heightMaps}
 Výškové mapy představují dvoudimenzionální mřížky obsahující výškové hodnoty, jež jsou častým prvkem v modelování terénu. Tyto mapy se běžně využívají jako klíčový prvek pro reprezentaci základu terénu v herním průmyslu. Pro tvorbu výškových map existuje mnoho algoritmů.
 
-Jedny z nejstarších algoritmů jsou metody založené na pododdělení. Segmenty v rámci vygenerované hrubé výškové mapy jsou iterativně rozdělovány, kde každá iterace navíc používá kontrolovanou náhodnost k přidávání detailů. Miller \cite{MillerRendering} popisuje některé varianty všeobecně známé metody středového posunu\todo{napsat něco o této metodě?}, ve které se výška nového bodu nastavuje na průměr hodnot jeho rohů v trojúhelníkovém nebo diamantovém tvaru, k němuž je přidán náhodný offset. Každou iterací se rozsah náhodných hodnot offsetu snižuje, podle parametru, který kontroluje hrubost výsledné výškové mapy. 
+Jedny z nejstarších algoritmů jsou metody založené na pododdělení. Segmenty v rámci vygenerované hrubé výškové mapy jsou iterativně rozdělovány, kde každá iterace navíc používá kontrolovanou náhodnost k přidávání detailů. Miller \cite{MillerRendering} popisuje některé varianty všeobecně známé metody středového posunu, ve které se výška nového bodu nastavuje na průměr hodnot jeho rohů v trojúhelníkovém nebo diamantovém tvaru, k němuž je přidán náhodný offset. Každou iterací se rozsah náhodných hodnot offsetu snižuje, podle parametru, který kontroluje hrubost výsledné výškové mapy. 
 
-Generování výškových map se v dnešní době provádí převážně pomocí fraktálních generátorů šumu, jako je \todo{odkaz na sum}Perlinův šum, který provádí generování šumu vzorkováním a interpolací bodů na mřížce náhodných vektorů.
+Generování výškových map se v dnešní době provádí převážně pomocí fraktálních generátorů šumu, jako je \hyperref[perlinNoise]{Perlinův šum}, který provádí generování šumu vzorkováním a interpolací bodů na mřížce náhodných vektorů.
 
-Výškové mapy se mohou dále transformovat na základě běžných filtrací obrazu, například vyhlazování(smoothing), nebo simulací fyzikálních jevů, např. eroze. \cite{inproceedings}
+Výškové mapy se mohou dále transformovat na základě běžných filtrací obrazu, například vyhlazování (smoothing), nebo simulací fyzikálních jevů, např. eroze. \cite{inproceedings}
 
 \section{Procedurální generování krajiny}
 \label{terrain}
-Procedurální generování krajiny se řadí ke složitějším tématům PG. Je tomu tak hlavně kvůli tomu, že se k tomuto typu generování většinou používají \hyperref[heightMaps]{výškové mapy} (height maps), které se skládají z bitových map odstínů šedé, ve kterých se výška udává pomocí právě odstínu šedé barvy daného pixelu. Většinou se používá postup, při kterém platí, že čím světlejší je pixel, tím větší je výška. Jakmile jsou pixely ohodnoceny, jsou tři různé způsoby jak postupovat:
+Procedurální generování krajiny se řadí ke složitějším tématům PG. Je tomu tak hlavně kvůli tomu, že se k tomuto typu generování většinou používají výškové mapy (height maps), podle kterých se ohodnocují jednotlivé pixely, jak je popsáno v sekci \ref{heightMaps}. Jakmile jsou všechny pixely ohodnoceny, jsou tři různé způsoby jak postupovat:
 \begin{itemize}
 	\item ruční vykreslování textur,
 	\item aplikování textur na ručně vytvořené regiony podle výšky,
@@ -144,11 +263,10 @@ První metoda je výhodná v tom, že textury ručně vykreslené lze udělat na
 
 Druhá metoda je podobná, nakreslí se barvy na určitá místa, kam si designer myslí že by se mohly hodit hory, řeky, nebo země. Jedná se o docela obvyklou metodu, která přináší velice kvalitní výsledky, ale stále se jedná o manuální techniku.
 
-Třetí metoda používá data height mapy a vypočítává jakou texturu použít na které místo. Nízké hodnoty (tmavší místa) se používají jako oceány, střední hodnoty se vyhodnocují jako země/tráva a na vysoké hodnoty (světlá místa) se nanášejí textury hor nebo kamení. Při generování ve 3D hrách lze ještě započítávat takzvané sklony (slopes), díky kterým je možné oddělovat vyšší plochy od nižších pomocí dalších textur například kamene.
+Třetí metoda používá data height mapy a vypočítává jakou texturu použít na které místo. Nízké hodnoty (tmavší místa) se používají například jako oceány, střední hodnoty se vyhodnocují jako země/tráva a na vysoké hodnoty (světlá místa) se nanášejí textury hor nebo kamení. Při generování ve 3D hrách lze ještě započítávat takzvané sklony (slopes), díky kterým je možné oddělovat vyšší plochy od nižších pomocí dalších textur například kamene.
 
 Vzhledem k tomu že první dva postupy vyžadují mechanické vykreslování buď barvy, nebo textur on designéra, nedá se o nich mluvit jako o čistě procedurálních metodách. Naopak postup třetí tomuto popisu zcela odpovídá, neboť kompletně závisí na height mapě a není nutná žádná akce návrháře \cite{madoc59000}.
 
-\pagebreak
 \paragraph*{Generování oblastí lze rozdělit následovně:}
 \begin{description}
 	\item[Vytváření půdorysu] Zahrnuje vytvoření země, moří, řek, hor, atd. Všechny tyto oblasti jsou otevřeného typu. Také můžeme rozumět pod generováním půdorysu i vytváření uzavřeného typu oblastí, například rozložení jednotlivých místností jeskynního komplexu, vytvoření bludiště a jeho cest. 
@@ -174,6 +292,7 @@ Vzhledem k tomu že první dva postupy vyžadují mechanické vykreslování bu�
 \todo{informace o všemožných známých metodách procedurálního generování}
 
 \includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
+\iffalse
 
 \section{Metody pro procedurální generování krajiny}
 \subsubsection{Porovnání metod}
@@ -212,3 +331,4 @@ Tato část se věnuje podrobnostem implementace skriptů, jež jsou klíčovým
 \chapter{Závěr}
 \label{end}
 \textcolor{gray}{\blindtext[4]}
+\fi

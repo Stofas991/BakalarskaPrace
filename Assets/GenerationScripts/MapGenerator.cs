@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -26,11 +29,33 @@ public class MapGenerator : MonoBehaviour
     public bool autoUpdate;
 
     public TerrainType[] regions;
+
+    public GameObject treePrefab;
     private int treeCount;
 
     private bool end;
+
+    List<GameObject> treePrefabList = new List<GameObject>();
     public void GenerateMap()
     {
+        MapDisplay display = FindObjectOfType<MapDisplay>();
+
+        if (treePrefabList.Count > 0)
+        {
+            foreach (GameObject tree in treePrefabList)
+            {
+                DestroyImmediate(tree);
+            }
+            treePrefabList.Clear();
+        }
+        Debug.Log(treePrefabList.Count);
+
+        if (drawMode == DrawMode.NoiseMap)
+        {
+            float[,] noisemapp = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
+            display.DrawTexture(TextureGenerator.DrawNoiseMap(noisemapp));
+        }
+
         for (int i = 0; i < regions.Length; i++)
         {
             regions[i].tileMap.ClearAllTiles();
@@ -64,6 +89,7 @@ public class MapGenerator : MonoBehaviour
                 {
 
                     regions[4].tileMap.SetTile(new Vector3Int(x, y, 0), regions[4].tile);
+                    treePrefabList.Add(Instantiate(treePrefab, new Vector3Int(x, y, 0), new Quaternion()));
                     treeCount++;
 
                     if (treeCount > treeLimit)
@@ -77,17 +103,14 @@ public class MapGenerator : MonoBehaviour
                 {
                     regions[5].tileMap.SetTile(new Vector3Int(x,y,0), regions[5].tile);
                 } 
-                    
-
-                
-
+             
             }
         }
+        Debug.Log(treePrefabList.Count);
 
-        MapDisplay display = FindObjectOfType<MapDisplay>();
         if (drawMode == DrawMode.NoiseMap)
         {
-            display.DrawTexture(TextureGenerator.TextureFromHeightMap(treeNoiseMap));
+            //display.DrawTexture(TextureGenerator.TextureFromHeightMap(treeNoiseMap));
         }
         else if (drawMode == DrawMode.ColourMap)
         {

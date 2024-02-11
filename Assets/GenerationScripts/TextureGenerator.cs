@@ -31,5 +31,24 @@ public static class TextureGenerator
 
         return TextureFromColorMap(Tilemap, width, height);
     }
+    public static Texture2D DrawNoiseMap(float[,] heightMap)
+    {
+        int width = heightMap.GetLength(0);
+        int height = heightMap.GetLength(1);
 
+        Texture2D texture = new Texture2D(width, height);
+
+        Color[] Tilemap = new Color[width * height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                Tilemap[y * width + x] = Color.Lerp(Color.black, Color.white, heightMap[x, y]);
+            }
+        }
+        texture.SetPixels(Tilemap);
+        texture.Apply();
+
+        return texture;
+    }
 }

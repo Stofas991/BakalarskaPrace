@@ -168,7 +168,6 @@ MonoBehaviour:
   attackRange: 3
   nextAttackEvent: 0
   attackDelay: 5
-  attackDamage: 25
   selected: 0
 --- !u!114 &-458671157946646322
 MonoBehaviour:
@@ -182,6 +181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b362bdd539ce1047bdc14da03553392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  attacking: 0
 --- !u!114 &7883299617561180364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +197,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 100
   attackDamage: 25
+  attackSpeed: 2
+  attackCooldown: 0
   HealthBar: {fileID: 1439205066363382705}
 --- !u!114 &8438953995775289405
 MonoBehaviour:
@@ -383,7 +386,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 3811d35f6fad7f44ba59752e825d0551, type: 3}
   m_Color: {r: 0.019607842, g: 0.08120305, b: 1, a: 1}
   m_FlipX: 0
