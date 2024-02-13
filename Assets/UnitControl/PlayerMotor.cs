@@ -31,11 +31,17 @@ public class PlayerMotor : MonoBehaviour
     public void FollowTarget(Interactable newTarget, float attackRange)
     {
         target = newTarget.transform;
-        agent.stoppingDistance = attackRange;
         if (newTarget.CompareTag("Enemy"))
         {
             newTarget.isEnemy = true;
+            agent.stoppingDistance = attackRange;
         }
+        else
+        {
+            agent.stoppingDistance = 1;
+        }
+        
+
     }
 
     public void StopFollowingTarget()

@@ -89,7 +89,7 @@ public class MapGenerator : MonoBehaviour
                 {
 
                     regions[4].tileMap.SetTile(new Vector3Int(x, y, 0), regions[4].tile);
-                    treePrefabList.Add(Instantiate(treePrefab, new Vector3Int(x, y, 0), new Quaternion()));
+                    treePrefabList.Add(Instantiate(treePrefab, new Vector3(x+0.5f, y+0.5f, 0f), new Quaternion()));
                     treeCount++;
 
                     if (treeCount > treeLimit)

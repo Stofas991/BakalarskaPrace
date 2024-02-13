@@ -6,6 +6,7 @@ TagManager:
   tags:
   - selectable
   - Enemy
+  - TreeTilemap
   layers:
   - Default
   - TransparentFX

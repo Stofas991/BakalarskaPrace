@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 5997612312725051997}
   - component: {fileID: 8555760093985826035}
   - component: {fileID: 8570137996297588649}
+  - component: {fileID: -6267771263162931206}
   m_Layer: 6
   m_Name: DragonMage
   m_TagString: selectable
@@ -201,6 +202,8 @@ MonoBehaviour:
   attackDamage: 50
   attackSpeed: 2
   attackCooldown: 4
+  plantCutDamage: 10
+  plantCutSpeed: 2
   HealthBar: {fileID: 3568833214334632642}
 --- !u!61 &5997612312725051997
 BoxCollider2D:
@@ -252,6 +255,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 964167ca5ebb01f4ba4f4fdac04390f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-6267771263162931206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67380354070866521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ce5f1d0b9fc6b6479792be38592f63a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &161245697680456192

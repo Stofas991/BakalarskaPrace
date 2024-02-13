@@ -6,7 +6,7 @@ public class Interactable : MonoBehaviour
 {
     public UnitStats myHealth { get; private set; }
 
-    public float radius = 3f;
+    public float radius = 2f;
 
     bool isFocus = false;
     bool hasInteracted = false;
@@ -15,13 +15,12 @@ public class Interactable : MonoBehaviour
 
     void Update()
     {
-        if (isFocus && !hasInteracted)
+        if (isFocus && !hasInteracted && !isEnemy)
         {
             float distance = Vector3.Distance(player.position, transform.position);
             if (distance <= radius)
             {
                 Interact();
-                hasInteracted = true;
             }
         }
         if (isFocus && isEnemy)

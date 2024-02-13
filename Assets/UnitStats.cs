@@ -8,6 +8,9 @@ public class UnitStats : MonoBehaviour
     public int attackDamage = 0;
     public float attackSpeed = 2f;
     public float attackCooldown = 0f;
+    public int plantCutDamage = 10;
+    public float plantCutSpeed = 4f;
+    public float cutCooldown = 0f;
     int CurrentHealth;
 
     public HealthBarScript HealthBar;

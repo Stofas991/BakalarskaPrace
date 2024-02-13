@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 7883299617561180364}
   - component: {fileID: 8438953995775289405}
   - component: {fileID: 2495273072274223250}
+  - component: {fileID: 3951262751104878280}
   m_Layer: 6
   m_Name: DragonPikeman
   m_TagString: selectable
@@ -197,8 +198,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 100
   attackDamage: 25
-  attackSpeed: 2
+  attackSpeed: 1
   attackCooldown: 0
+  plantCutDamage: 10
+  plantCutSpeed: 0.75
+  cutCooldown: 0
   HealthBar: {fileID: 1439205066363382705}
 --- !u!114 &8438953995775289405
 MonoBehaviour:
@@ -238,6 +242,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &3951262751104878280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67380354070866521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ce5f1d0b9fc6b6479792be38592f63a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &424266985133530066
 GameObject:
   m_ObjectHideFlags: 0
