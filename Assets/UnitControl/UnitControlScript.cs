@@ -123,7 +123,15 @@ public class UnitControlScript: MonoBehaviour
     void RemoveFocus()
     {
         if (focus != null)
+        {
+            if (focus.tag == "Tree")
+            {
+                focus.transform.GetChild(0).gameObject.SetActive(false);
+            }
             focus.OnDeFocused();
+        }
+
+
 
         focus = null;
         motor.StopFollowingTarget();

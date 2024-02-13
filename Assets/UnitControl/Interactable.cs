@@ -17,18 +17,25 @@ public class Interactable : MonoBehaviour
     {
         if (isFocus && !hasInteracted && !isEnemy)
         {
-            float distance = Vector3.Distance(player.position, transform.position);
-            if (distance <= radius)
+            if (transform != null)
             {
-                Interact();
+                float distance = Vector3.Distance(player.position, transform.position);
+                if (distance <= radius)
+                {
+                    Interact();
+                }
             }
         }
         if (isFocus && isEnemy)
         {
-            float distance = Vector3.Distance(player.position, transform.position);
-            if (distance <= player.GetComponent<UnitControlScript>().attackRange)
+            if (transform != null)
             {
-                Interact();
+                float distance = Vector3.Distance(player.position, transform.position);
+
+                if (distance <= player.GetComponent<UnitControlScript>().attackRange)
+                {
+                    Interact();
+                }
             }
         }
     }

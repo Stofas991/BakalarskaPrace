@@ -7,18 +7,24 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class treeScript : Interactable
 {
-    public int maxHealth = 100;
-    public int currentHealth;
+    public int progressFinish = 100;
+    public int currentProgress;
     public TileBase tile;
     public GameObject droppedItem;
+
+    public HealthBarScript healthBar;
+    public GameObject healthCanvas;
+
     void Start()
     {
-        currentHealth = maxHealth;
+        currentProgress = 0;
+        healthBar.SetMaxHealth(progressFinish);
     }
 
     public override void Interact()
     {
         base.Interact();
+        healthCanvas.SetActive(true);
 
         Gathering playerGather = player.GetComponent<Gathering>();
 
@@ -28,13 +34,13 @@ public class treeScript : Interactable
         }
     }
 
-    public void TakeDamage(int Damage)
+    public void TakeDamage(int progress)
     {
-        currentHealth -= Damage;
-        //HealthBar.SetHealth(CurrentHealth);
+        currentProgress += progress;
+        healthBar.SetHealth(currentProgress);
         // Play hurt animation
 
-        if (currentHealth <= 0)
+        if (currentProgress >= progressFinish)
         {
             Die();
         }
@@ -51,7 +57,9 @@ public class treeScript : Interactable
         int x = (int)transform.position.x;
         int y = (int)transform.position.y;
         trees.GetComponent<Tilemap>().SetTile(new Vector3Int(x, y, 0), tile);
-        Instantiate(droppedItem, new Vector3(x + 0.5f, y + 0.5f, 0f), new Quaternion()); 
+        GameObject wood = Instantiate(droppedItem, new Vector3(x + 0.5f, y + 0.5f, 0f), new Quaternion());
+
+        wood.GetComponent<ItemSpecifics>().count = Random.Range(5, 20);
 
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }

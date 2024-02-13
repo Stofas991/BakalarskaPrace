@@ -18,7 +18,7 @@ public class UnitStats : MonoBehaviour
     void Start()
     {
         CurrentHealth = MaxHealth;
-        HealthBar.SetMaxHealt(MaxHealth);
+        HealthBar.SetMaxHealth(MaxHealth);
 
     }
 

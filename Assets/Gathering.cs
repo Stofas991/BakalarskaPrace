@@ -22,7 +22,6 @@ public class Gathering : MonoBehaviour
         {
             targetTree.TakeDamage(myStats.plantCutDamage);
             myStats.cutCooldown = 1f / myStats.plantCutSpeed;
-            Debug.Log("hit for"+myStats.plantCutDamage);
         }
     }
 }

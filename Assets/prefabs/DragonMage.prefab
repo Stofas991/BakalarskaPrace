@@ -203,7 +203,8 @@ MonoBehaviour:
   attackSpeed: 2
   attackCooldown: 4
   plantCutDamage: 10
-  plantCutSpeed: 2
+  plantCutSpeed: 1
+  cutCooldown: 0
   HealthBar: {fileID: 3568833214334632642}
 --- !u!61 &5997612312725051997
 BoxCollider2D:
