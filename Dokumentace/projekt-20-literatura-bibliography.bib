@@ -302,7 +302,129 @@ abstract = {A theory is proposed for the development of filamentous organisms, b
     doi={10.4108/eai.5-11-2015.150615}
 }
 
-      
+@article{Perlin2002ImprovingN,
+  title={Improving noise},
+  author={Ken Perlin},
+  journal={Proceedings of the 29th annual conference on Computer graphics and interactive techniques},
+  year={2002},
+  url={https://api.semanticscholar.org/CorpusID:207550606}
+}
+
+@article{10.1145/74334.74360,
+author = {Lewis, J. P.},
+title = {Algorithms for solid noise synthesis},
+year = {1989},
+issue_date = {July 1989},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {23},
+number = {3},
+issn = {0097-8930},
+url = {https://doi.org/10.1145/74334.74360},
+doi = {10.1145/74334.74360},
+abstract = {A solid noise is a function that defines a random value at each point in space. Solid noises have immediate and powerful applications in surface texturing, stochastic modeling, and the animation of natural phenomena.Existing solid noise synthesis algorithms are surveyed and two new algorithms are presented. The first uses Wiener interpolation to interpolate random values on a discrete lattice. The second is an efficient sparse convolution algorithm. Both algorithms are developed for model-directed synthesis, in which sampling and construction of the noise occur only at points where the noise value is required, rather than over a regularly sampled region of space. The paper attempts to present the rationale for the selection of these particular algorithms.The new algorithms have advantages of efficiency, improved control over the noise power spectrum, and the absence of artifacts. The convolution algorithm additionally allows quality to be traded for efficiency without introducing obvious deterministic effects. The algorithms are particularly suitable for applications where high-quality solid noises are required. Several sample applications in stochastic modeling and solid texturing are shown.},
+journal = {SIGGRAPH Comput. Graph.},
+month = {jul},
+pages = {263–270},
+numpages = {8}
+}
+
+@inproceedings{Lewis89,
+author = {Lewis, J. P.},
+title = {Algorithms for solid noise synthesis},
+year = {1989},
+isbn = {0897913124},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/74333.74360},
+doi = {10.1145/74333.74360},
+abstract = {A solid noise is a function that defines a random value at each point in space. Solid noises have immediate and powerful applications in surface texturing, stochastic modeling, and the animation of natural phenomena.Existing solid noise synthesis algorithms are surveyed and two new algorithms are presented. The first uses Wiener interpolation to interpolate random values on a discrete lattice. The second is an efficient sparse convolution algorithm. Both algorithms are developed for model-directed synthesis, in which sampling and construction of the noise occur only at points where the noise value is required, rather than over a regularly sampled region of space. The paper attempts to present the rationale for the selection of these particular algorithms.The new algorithms have advantages of efficiency, improved control over the noise power spectrum, and the absence of artifacts. The convolution algorithm additionally allows quality to be traded for efficiency without introducing obvious deterministic effects. The algorithms are particularly suitable for applications where high-quality solid noises are required. Several sample applications in stochastic modeling and solid texturing are shown.},
+booktitle = {Proceedings of the 16th Annual Conference on Computer Graphics and Interactive Techniques},
+pages = {263–270},
+numpages = {8},
+series = {SIGGRAPH '89}
+}
+
+
+@article{Cook05,
+author = {Cook, Robert L. and DeRose, Tony},
+title = {Wavelet noise},
+year = {2005},
+issue_date = {July 2005},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {24},
+number = {3},
+issn = {0730-0301},
+url = {https://doi.org/10.1145/1073204.1073264},
+doi = {10.1145/1073204.1073264},
+abstract = {Noise functions are an essential building block for writing procedural shaders in 3D computer graphics. The original noise function introduced by Ken Perlin is still the most popular because it is simple and fast, and many spectacular images have been made with it. Nevertheless, it is prone to problems with aliasing and detail loss. In this paper we analyze these problems and show that they are particularly severe when 3D noise is used to texture a 2D surface. We use the theory of wavelets to create a new class of simple and fast noise functions that avoid these problems.},
+journal = {ACM Trans. Graph.},
+month = {jul},
+pages = {803–811},
+numpages = {9},
+keywords = {wavelets, texturing, texture synthesis, shading, rendering, procedural textures, noise, multiresolution analysis}
+}
+
+@article{Goldberg08,
+author = {Goldberg, Alexander and Zwicker, Matthias and Durand, Fr\'{e}do},
+title = {Anisotropic noise},
+year = {2008},
+issue_date = {August 2008},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {27},
+number = {3},
+issn = {0730-0301},
+url = {https://doi.org/10.1145/1360612.1360653},
+doi = {10.1145/1360612.1360653},
+abstract = {Programmable graphics hardware makes it possible to generate procedural noise textures on the fly for interactive rendering. However, filtering and antialiasing procedural noise involves a tradeoff between aliasing artifacts and loss of detail. In this paper we present a technique, targeted at interactive applications, that provides high-quality anisotropic filtering for noise textures. We generate noise tiles directly in the frequency domain by partitioning the frequency domain into oriented subbands. We then compute weighted sums of the subband textures to accurately approximate noise with a desired spectrum. This allows us to achieve high-quality anisotropic filtering. Our approach is based solely on 2D textures, avoiding the memory overhead of techniques based on 3D noise tiles. We devise a technique to compensate for texture distortions to generate uniform noise on arbitrary meshes. We develop a GPU-based implementation of our technique that achieves similar rendering performance as state-of-the-art algorithms for procedural noise. In addition, it provides anisotropic filtering and achieves superior image quality.},
+journal = {ACM Trans. Graph.},
+month = {aug},
+pages = {1–8},
+numpages = {8}
+}
+
+@inproceedings{Kensler2008,
+  title={1 Better Gradient Noise},
+  author={Andrew E. Kensler},
+  year={2008},
+  url={https://api.semanticscholar.org/CorpusID:15788995}
+}
+
+@article{Lagae09,
+author = {Lagae, Ares and Lefebvre, Sylvain and Drettakis, George and Dutr\'{e}, Philip},
+title = {Procedural noise using sparse Gabor convolution},
+year = {2009},
+issue_date = {August 2009},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {28},
+number = {3},
+issn = {0730-0301},
+url = {https://doi.org/10.1145/1531326.1531360},
+doi = {10.1145/1531326.1531360},
+abstract = {Noise is an essential tool for texturing and modeling. Designing interesting textures with noise calls for accurate spectral control, since noise is best described in terms of spectral content. Texturing requires that noise can be easily mapped to a surface, while high-quality rendering requires anisotropic filtering. A noise function that is procedural and fast to evaluate offers several additional advantages. Unfortunately, no existing noise combines all of these properties.In this paper we introduce a noise based on sparse convolution and the Gabor kernel that enables all of these properties. Our noise offers accurate spectral control with intuitive parameters such as orientation, principal frequency and bandwidth. Our noise supports two-dimensional and solid noise, but we also introduce setup-free surface noise. This is a method for mapping noise onto a surface, complementary to solid noise, that maintains the appearance of the noise pattern along the object and does not require a texture parameterization. Our approach requires only a few bytes of storage, does not use discretely sampled data, and is nonperiodic. It supports anisotropy and anisotropic filtering. We demonstrate our noise using an interactive tool for noise design.},
+journal = {ACM Trans. Graph.},
+month = {jul},
+articleno = {54},
+numpages = {10},
+keywords = {shading, rendering, procedural texture, noise}
+}
+
+@article{Lagae10,
+author = {Lagae, A. and Lefebvre, S. and Cook, R. and DeRose, T. and Drettakis, G. and Ebert, D.S. and Lewis, J.P. and Perlin, K. and Zwicker, M.},
+title = {A Survey of Procedural Noise Functions},
+journal = {Computer Graphics Forum},
+volume = {29},
+number = {8},
+pages = {2579-2600},
+doi = {https://doi.org/10.1111/j.1467-8659.2010.01827.x},
+url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-8659.2010.01827.x},
+eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.1467-8659.2010.01827.x},
+year = {2010}
+}
+
 
 
 

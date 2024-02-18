@@ -163,6 +163,7 @@ GameObject:
   - component: {fileID: 5910038380877169666}
   - component: {fileID: -5092128012499425880}
   - component: {fileID: 7144421941765282448}
+  - component: {fileID: -3449454017174338832}
   m_Layer: 0
   m_Name: TreePrefab
   m_TagString: Tree
@@ -207,6 +208,9 @@ MonoBehaviour:
   droppedItem: {fileID: 9120545310718558474, guid: 5fc09227c0c6df14eb39b4b353b7db1b, type: 3}
   healthBar: {fileID: 7790986191394417824}
   healthCanvas: {fileID: 8299318691964381453}
+  objectCursor: {fileID: 2800000, guid: 9a61acd122b54a84696d1cf9e101b319, type: 3}
+  playerGatherList: []
+  navMesh: {fileID: 0}
 --- !u!61 &7144421941765282448
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -231,8 +235,21 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
+--- !u!114 &-3449454017174338832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6595367054490062467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c348621a691ce6640a1e9a0bdeb9fd76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NavMeshData: {fileID: 23800000, guid: d6f6ed8b25023054f990ee80efc6df85, type: 2}
 --- !u!1 &7860376599468435368
 GameObject:
   m_ObjectHideFlags: 0

@@ -231,15 +231,58 @@ Ve 2D má želva stav $S(p,0)$ kde $p=[x,y]$ je její pozice a $0$ je směrový 
 
 \todo{chyba odkazu}
 \footnotetext[1]{http://algorithmicbotany.org/papers/graphical.gi86.pdf}
+\newpage
 
 \section{Šumy}
 \label{noise}
 Šumy se v počítačové grafice využívají například pro přidání kvalitních detailů do synteticky vytvořených obrázků. Perlinův šum, navržený Kenem Perlinem \cite{PerlinKen}, se v dnešní době používá ve vytváření procedurálních textur včetně mraků, vln, tornád, raketových cest, atd. Tato kapitola popisuje různé druhy šumů a jejich použití.
 
 \subsection{Definice šumu}
-
+Šum je generátor náhodných čísel počítačové grafiky. Jedná se o náhodný a neuspořádaný vzor, který je užitečný všude tam, kde je potřebný detail bez evidentní struktury.
 \subsection{Perlinův šum}
 \label{perlinNoise}
+Roku 1985 Perlin představil \textit{Perlinův šum}, jeho slavnou procedurální funkci pro generování šumu.~\cite{PerlinKen}~\cite{Perlin2002ImprovingN}
+
+\subsection{Porovnání procedurálních funkcí šumů}
+Tato sekce se věnuje porovnání jednotlivý funkcí procedurálního generování šumů.~\cite{Lagae10}
+
+Šumy popsané v jednotlivých citovaných pracích a následně výsledky jejich porovnání zapisovány do tabulky 
+
+\begin{table}
+	\centering
+	\caption{Porovnání funkce šumu}
+	\label{tab:porovnani_sumu}
+	\begin{tabular}{|m{5em}|m{5em}|m{5em}|m{5em}|m{5em}|m{5em}|m{5em}|}
+		\hline
+		\textbf{Kategorie} & \textbf{Perlinův šum} \cite{Perlin2002ImprovingN} & \textbf{Řídký konvoluční šum} \cite{Lewis89} & \textbf{Vlnkový (Wavelet) šum} \cite{Cook05} & \textbf{Anisotropní šum} \cite{Goldberg08} & \textbf{Kvalitnější gradientový šum} \cite{Kensler2008} & \textbf{Gaborův šum} \cite{Lagae09} \\
+		\hline
+		\textbf{Požadavky na úložný prostor} & & & & & & \\
+		Procedurální & $O(N)$ & $O(1)$ & $O(Nd)$ & $O(Nd)$ & $O(dN)$ & $O(1)$ \\
+		Parametry & Váhový součet & Kernel & Váhový součet & Váhový součet (aniso.) & Váhový součet & Kernel \\
+		\hline
+		\textbf{Modelování} & & & & & & \\
+		Spektrální kontrola & Váhový součet & Kernel & Váhový součet & Váhový součet (aniso.) & Váhový součet & Kernel \\
+		Anizotropní šum & & $\checkmark$ & & $\checkmark$ & & \\
+		\hline
+		\textbf{Povrchy} & & & & & & \\
+		Pevný šum & $\checkmark$ & $\checkmark$ & $\checkmark$ & & $\checkmark$ & $\checkmark$ \\
+		Povrchový šum & & $\checkmark$ & $\checkmark$ & & $\checkmark$ & $\checkmark$ \\
+		Bez nastavení povrchového šumu & & & $\checkmark$ & & $\checkmark$ & $\checkmark$ \\
+		\hline
+		\textbf{Filtrování} & & & & & & \\
+		Izotropní filtrování & & $\checkmark$ & $\checkmark$ & $\checkmark$ & & \\
+		Anizotropní filtrování & & & & $\checkmark$ & & $\checkmark$ \\
+		\hline
+		\textbf{Analýza} & & & & & & \\
+		Spektrum pásmové propusti & & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & \\
+		Gaussovské rozložení amplitudy & & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
+		\hline
+		\textbf{Porovnání} & & & & & & \\
+		Rychlost & 0 & $-$ & $-$ & $+$ & $-$ & $-$ \\
+		Obchod kvalita/rychlost & $\checkmark$ & & & & & $\checkmark$ \\
+		\hline
+	\end{tabular}
+\end{table}
 
 \section{Výškové mapy}
 \label{heightMaps}
@@ -278,24 +321,24 @@ Vzhledem k tomu že první dva postupy vyžadují mechanické vykreslování bu�
 	\centering
 	\begin{subfigure}{0.475\textwidth}
 		\centering
-		\includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
+		\includegraphics[scale=0.5]{obrazky-figures/layoutNoTrees.png}
 		\caption{Vygenerovaný půdorys oblasti}
 	\end{subfigure}
 	\begin{subfigure}{0.475\textwidth}
 		\centering
-		\includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
+		\includegraphics[scale=0.5]{obrazky-figures/treesAdded.png}
 		\caption{Přidané stromy k půdorysu}
 	\end{subfigure}
-	\caption{Na obrázcích jsou vidět různé postupy generování obsahu, na obrázku a je vygenerovaný půdorys oblasti i s mořem a skálou, na obrázku b se k tomu přidaly stromy}
+	\caption{Na obrázcích jsou vidět různé postupy generování obsahu z této hry, na obrázku a je vygenerovaný půdorys oblasti i s mořem a pláží, na obrázku b se k tomu přidaly stromy}
 \end{figure}
 
-\todo{informace o všemožných známých metodách procedurálního generování}
-
-\includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
-\iffalse
+%\iffalse
 
 \section{Metody pro procedurální generování krajiny}
+Tato část se zabývá průzkumem procedurálních metod, aplikovaných na modelování terénu. Pojednává o důležitých aspektech, jako je realističnost výstupu, náročnost algoritmu a prostředky pomocí kterých je uživatel schopen ovlivnit a kontrolovat proces generování.~\cite{inproceedings}
+
 \subsubsection{Porovnání metod}
+
 \todo{porovnání jednotlivých metod}
 \textcolor{gray}{\blindtext[8]}
 
@@ -303,16 +346,10 @@ Vzhledem k tomu že první dva postupy vyžadují mechanické vykreslování bu�
 
 \textcolor{gray}{\blindtext[23]}
 
-\section{2D hry}
-
-\todo{popis hry}
-\textcolor{gray}{\blindtext[18]}
-\includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
-
 \chapter{Návrh řešení}
 \label{solution}
 \textcolor{gray}{\blindtext[2]}
-\textcolor{gray}{\blindtext[46]}
+\textcolor{gray}{\blindtext[26]}
 
 \section{Vybraná metoda generování}
 \todo{podrobnější popis metody, výhody, nevýhody}
@@ -331,4 +368,4 @@ Tato část se věnuje podrobnostem implementace skriptů, jež jsou klíčovým
 \chapter{Závěr}
 \label{end}
 \textcolor{gray}{\blindtext[4]}
-\fi
+%\fi

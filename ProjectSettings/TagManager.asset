@@ -8,11 +8,12 @@ TagManager:
   - Enemy
   - TreeTilemap
   - Tree
+  - NavMesh
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Items
   - Water
   - UI
   - Clickable

@@ -40,6 +40,7 @@ public class MapGenerator : MonoBehaviour
     {
         MapDisplay display = FindObjectOfType<MapDisplay>();
 
+        //removing trees from old map
         if (treePrefabList.Count > 0)
         {
             foreach (GameObject tree in treePrefabList)
@@ -84,7 +85,7 @@ public class MapGenerator : MonoBehaviour
                         break;
                     }
                 }
-                //adding trees on next layer
+                //adding trees on next layer and objects representing them
                 if (!end && currentHeight > regions[1].height && currentHeight <= regions[2].height && treeCurrentHeight > regions[4].height)
                 {
 
