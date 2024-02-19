@@ -52,7 +52,6 @@ public class EnemyMove : ClickableObject
             if (HitEnemies.Length > 0)
             {
                 ChasedEnemy = HitEnemies[0].gameObject;
-                enemyAttack.unitController = ChasedEnemy.GetComponent<UnitControlScript>(); //setting unitController into EnemyAttacked for stats
                 Chasing = true;
             }
             else

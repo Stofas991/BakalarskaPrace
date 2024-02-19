@@ -3,7 +3,7 @@ guid: 611637306a89d5f478d45c02918e05f4
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -63,6 +63,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -13923,7 +13924,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Wall_514: -1998292167
+      Wall_104: -1505903775
       Wall_116: -120884031
       Wall_486: -994057833
       Wall_374: -1438067309
@@ -14069,9 +14070,9 @@ TextureImporter:
       Wall_319: -766176332
       Wall_401: 494218737
       Wall_330: -330399043
+      Wall_387: -396433869
       Wall_249: 1646013190
       Wall_344: -1580619585
-      Wall_387: -396433869
       Wall_516: 1331839086
       Wall_345: -1310158038
       Wall_140: -1768152777
@@ -14578,8 +14579,8 @@ TextureImporter:
       Wall_309: -1169138658
       Wall_562: -1513222639
       Wall_553: 1430517920
-      Wall_104: -1505903775
       Wall_479: -80360615
+      Wall_514: -1998292167
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

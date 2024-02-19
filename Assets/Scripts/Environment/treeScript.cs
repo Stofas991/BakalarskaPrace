@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using UnityEngine.Tilemaps;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public class treeScript : Interactable
+public class TreeScript : Interactable
 {
     public int progressFinish = 100;
     public int currentProgress;
@@ -16,7 +16,7 @@ public class treeScript : Interactable
     public HealthBarScript healthBar;
     public GameObject healthCanvas;
     public Texture2D objectCursor;
-    public List<Gathering> playerGatherList = new List<Gathering>();
+    public Gathering playerGather;
     public NavMeshSurface2d navMesh;
 
     void Start()
@@ -35,22 +35,16 @@ public class treeScript : Interactable
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 
-    public override void Interact()
+    public override void Interact(UnityEngine.Transform interactingPlayer)
     {
-        base.Interact();
+        base.Interact(interactingPlayer);
         healthCanvas.SetActive(true);
 
-        if (!playerGatherList.Contains(player.GetComponent<Gathering>())) //checking if player is already gathering
+        playerGather = interactingPlayer.GetComponent<Gathering>();
+        
+        if (playerGather != null)
         {
-            playerGatherList.Add(player.GetComponent<Gathering>()); //adding gatherer to list
-        }
-
-        if (playerGatherList.Count > 0)
-        {
-            foreach(Gathering gatherer in playerGatherList)
-            {
-                gatherer.CutTree(this);
-            }
+            playerGather.CutTree(this);
         }
     }
 
@@ -82,5 +76,14 @@ public class treeScript : Interactable
         wood.GetComponent<ItemSpecifics>().count = Random.Range(5, 20);
 
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+    }
+
+    public override void OnDeFocused(UnityEngine.Transform playerTransform)
+    {
+        base.OnDeFocused(playerTransform);
+        if (playerList.Count <= 0)
+        {
+            healthCanvas.SetActive(false);
+        }
     }
 }

@@ -3,7 +3,7 @@ guid: 63fa74b7a42419d4d842639fda84b794
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -63,6 +63,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -7892,10 +7893,10 @@ TextureImporter:
       Tree0_164: -340443699
       Tree0_108: -1666124159
       Tree0_63: -1303459918
-      Tree0_71: -957511328
-      Tree0_286: 1693311102
       Tree0_94: 1820073770
+      Tree0_71: -957511328
       Tree0_342: -829580439
+      Tree0_286: 1693311102
       Tree0_102: 305483656
       Tree0_288: -464143204
       Tree0_161: 547988061
@@ -8089,8 +8090,8 @@ TextureImporter:
       Tree0_219: 475199733
       Tree0_220: -1605275642
       Tree0_141: -809644651
-      Tree0_41: -192318666
       Tree0_336: -1752773098
+      Tree0_41: -192318666
       Tree0_265: 506497821
       Tree0_159: 726485640
       Tree0_174: -2128562345
@@ -8152,16 +8153,16 @@ TextureImporter:
       Tree0_114: 1757066217
       Tree0_228: 471277570
       Tree0_18: -695626657
-      Tree0_221: 845737701
-      Tree0_10: -420289312
       Tree0_162: -1471637478
+      Tree0_218: -1848372934
+      Tree0_10: -420289312
+      Tree0_221: 845737701
       Tree0_148: 1891075241
       Tree0_258: -1866459093
-      Tree0_218: -1848372934
       Tree0_240: 1028493341
+      Tree0_295: 956650163
       Tree0_187: -274565915
       Tree0_232: 1107045940
-      Tree0_295: 956650163
       Tree0_338: 1393991749
       Tree0_166: 516593747
       Tree0_29: 2124753995

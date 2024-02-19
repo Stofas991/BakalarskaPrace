@@ -16,7 +16,7 @@ public class Gathering : MonoBehaviour
         myStats.cutCooldown -= Time.deltaTime;
     }
 
-    public void CutTree(treeScript targetTree)
+    public void CutTree(TreeScript targetTree)
     {
         if (myStats.cutCooldown <= 0)
         {

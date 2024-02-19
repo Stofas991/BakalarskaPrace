@@ -3,18 +3,16 @@ using UnityEngine;
 [RequireComponent (typeof(UnitStats))]
 public class EnemyAttacked : Interactable
 {
-
-    public UnitControlScript unitController;
     UnitStats myStats;
 
     void Start()
     { 
         myStats = GetComponent<UnitStats>();
     }
-    public override void Interact()
+    public override void Interact(Transform interactingPlayer)
     {
-        base.Interact();
-        CharacterCombat playerCombat = unitController.GetComponent<CharacterCombat>();
+        base.Interact(interactingPlayer);
+        CharacterCombat playerCombat = interactingPlayer.GetComponent<CharacterCombat>();
 
         if (playerCombat != null)
         {

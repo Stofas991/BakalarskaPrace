@@ -454,7 +454,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 171009134, guid: deabc73efc40d504085f5c6919e16acc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -482,6 +482,9 @@ MonoBehaviour:
   attackDamage: 20
   attackSpeed: 2
   attackCooldown: 0
+  plantCutDamage: 10
+  plantCutSpeed: 2
+  cutCooldown: 0
   HealthBar: {fileID: 6609091749349935929}
 --- !u!61 &851599225195102060
 BoxCollider2D:

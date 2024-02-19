@@ -3,9 +3,9 @@ using UnityEngine;
 public class itemPickup : Interactable
 {
     public Item item;
-    public override void Interact()
+    public override void Interact(Transform interactingPlayer)
     {
-        base.Interact();
+        base.Interact(interactingPlayer);
 
         PickUp();
     }

@@ -1732,7 +1732,6 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player1_73: 2145929799
       Player1_46: -816013741
       Player1_34: -988557373
       Player1_29: -678983248
@@ -1743,6 +1742,7 @@ TextureImporter:
       Player1_64: -1930385534
       Player1_69: 1655961951
       Player1_0: -982284935
+      Player1_41: 743412448
       Player1_14: -9154369
       Player1_16: -1062013746
       Player1_33: 100339623
@@ -1806,7 +1806,7 @@ TextureImporter:
       Player1_70: -1637189470
       Player1_3: -804650759
       Player1_9: -1923254813
-      Player1_41: 743412448
+      Player1_73: 2145929799
       Player1_44: 1550740731
       Player1_67: -206867606
   spritePackingTag: 

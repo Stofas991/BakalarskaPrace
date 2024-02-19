@@ -84,7 +84,7 @@ public class UnitControlScript: MonoBehaviour
         if (newFocus != focus)
         {
             if (focus != null)
-                focus.OnDeFocused();
+                focus.OnDeFocused(transform);
 
             focus = newFocus;
             newFocus.OnFocused(transform);
@@ -97,15 +97,7 @@ public class UnitControlScript: MonoBehaviour
     {
         if (focus != null)
         {
-            if (focus.tag == "Tree")
-            {
-                focus.transform.GetComponent<treeScript>().playerGatherList.Remove(this.GetComponent<Gathering>()); //removing this player from gathering player list
-                if (focus.transform.GetComponent<treeScript>().playerGatherList.Count == 0)                         //if list is empty we can deactivate progress bar
-                {
-                    focus.transform.GetChild(0).gameObject.SetActive(false);
-                }
-            }
-            focus.OnDeFocused();
+            focus.OnDeFocused(transform);
         }
 
         focus = null;

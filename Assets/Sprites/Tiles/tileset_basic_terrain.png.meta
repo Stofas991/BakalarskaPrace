@@ -3,7 +3,7 @@ guid: 00ad8fbca85d160449ffd198e4219d0e
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -63,6 +63,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -6055,22 +6056,22 @@ TextureImporter:
       tileset_basic_terrain_87: 1838375995
       tileset_basic_terrain_164: 1023515448
       tileset_basic_terrain_260: 566068786
+      tileset_basic_terrain_268: -1667715018
       tileset_basic_terrain_21: 247646515
       tileset_basic_terrain_88: 1845250530
-      tileset_basic_terrain_107: -289179873
-      tileset_basic_terrain_144: 1744310620
       tileset_basic_terrain_166: 112649396
+      tileset_basic_terrain_191: -1046578181
       tileset_basic_terrain_230: 11052232
-      tileset_basic_terrain_55: 966919012
+      tileset_basic_terrain_144: 1744310620
+      tileset_basic_terrain_107: -289179873
       tileset_basic_terrain_45: 1797320113
-      tileset_basic_terrain_268: -1667715018
+      tileset_basic_terrain_55: 966919012
       tileset_basic_terrain_159: -645255992
       tileset_basic_terrain_43: -2009138772
       tileset_basic_terrain_214: -758474266
-      tileset_basic_terrain_191: -1046578181
+      tileset_basic_terrain_212: -686333640
       tileset_basic_terrain_236: -360327619
       tileset_basic_terrain_249: -164374680
-      tileset_basic_terrain_212: -686333640
       tileset_basic_terrain_217: 1131513384
       tileset_basic_terrain_48: 1177802709
       tileset_basic_terrain_132: 1943329246
