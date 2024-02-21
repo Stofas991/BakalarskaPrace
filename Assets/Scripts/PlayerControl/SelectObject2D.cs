@@ -14,6 +14,7 @@ public class SelectObject2D : MonoBehaviour
     private RaycastHit hit;
 
     public RectTransform selectionBox;
+    public bool buildingMode = false;
     private HashSet<UnitSelection> selectedUnitList;
     [SerializeField] LayerMask clickableLayers;
     Interactable enemy;
@@ -37,38 +38,41 @@ public class SelectObject2D : MonoBehaviour
             selectedUnitList = tmp;
         }
 
-        //vytvoøení selectovacího okna
-        if (Input.GetMouseButtonDown(0))
+        if (!buildingMode) //nejsme v režimu stavìní
         {
-            startPosition = Input.mousePosition;
-        }
-
-        if (Input.GetMouseButton(0))
-        {
-            if(!isDragSelect && (startPosition - Input.mousePosition).magnitude > 30)
+            //vytvoøení selectovacího okna
+            if (Input.GetMouseButtonDown(0))
             {
-                isDragSelect = true;
+                startPosition = Input.mousePosition;
             }
 
-            if(isDragSelect)
+            if (Input.GetMouseButton(0))
             {
-                endPosition = Input.mousePosition;
-                UpdateSelectionBox();
-            }
-        }
+                if (!isDragSelect && (startPosition - Input.mousePosition).magnitude > 30)
+                {
+                    isDragSelect = true;
+                }
 
-        //vybrání jednotek v selection boxu
-        if(Input.GetMouseButtonUp(0))
-        {
-            if(isDragSelect)
-            {
-                selectedUnitList = SelectObjects(isDragSelect);
-                isDragSelect = false;
-                UpdateSelectionBox();
+                if (isDragSelect)
+                {
+                    endPosition = Input.mousePosition;
+                    UpdateSelectionBox();
+                }
             }
-            else
+
+            //vybrání jednotek v selection boxu
+            if (Input.GetMouseButtonUp(0))
             {
-                selectedUnitList = SelectObjects(isDragSelect);
+                if (isDragSelect)
+                {
+                    selectedUnitList = SelectObjects(isDragSelect);
+                    isDragSelect = false;
+                    UpdateSelectionBox();
+                }
+                else
+                {
+                    selectedUnitList = SelectObjects(isDragSelect);
+                }
             }
         }
     }
