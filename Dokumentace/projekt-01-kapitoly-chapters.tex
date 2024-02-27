@@ -162,7 +162,7 @@ Z unity vzešlo mnoho oblíbených herních titulů, řadí se mezi ně hra ve v
 
 
 
-\chapter{Procedurální generování}
+\chapter{Metody procedurálního generování}
 \label{procedural}
 Tato kapitola popisuje metody pro generování geometrie, vegetace, celulární automaty, perlinův šum a použití procedurálního generování v herním průmyslu, do detailu popisuje PG krajiny, generování fraktálů.
 
@@ -170,7 +170,7 @@ Procedurální modelování je téma které se aktivně zkoumá už přes čtyř
 
 Roden and Parberry \cite{FromArtistry} pojmenovávají tento druh algoritmů \textit{amplifikační algoritmy (amplification algorithms)}, přijímají menší množství vstupních informací, které zpracují a vracejí větší objem dat na výstupu. Hendrikx et al. \cite{Hendrikx} pojímají procedurální generování jako alternativu k mechanickému navrhování obsahu, ale kladou důraz na zdokonalování a přidávání parametrů umožňujících zásah návrháře do takto vygenerovaných objektů.
 
-\section{Celulární automaty pro PG}
+\section{Celulární automaty pro procedurální generování}
 \label{celular}
 Celulární automaty se ve hrách používají intenzivně zejména pro modelování týkajícího se systémů v prostředí, jako jsou teplo, oheň, déšť, tlak a exploze. Zatím podle průzkumu nejsou známé žádné hry, které by postavili generování celého 2D herního světa, pouze pomocí celulárních automatů. Momentálně existují webové stránky, které možnost generování malých map pomocí mřížek navrhují, ale není jich mnoho a neexistuje žádné spolehlivé ohodnocení těchto algoritmů. \cite{articleCellular}
 
@@ -235,58 +235,177 @@ Ve 2D má želva stav $S(p,0)$ kde $p=[x,y]$ je její pozice a $0$ je směrový 
 
 \section{Šumy}
 \label{noise}
-Šumy se v počítačové grafice využívají například pro přidání kvalitních detailů do synteticky vytvořených obrázků. Perlinův šum, navržený Kenem Perlinem \cite{PerlinKen}, se v dnešní době používá ve vytváření procedurálních textur včetně mraků, vln, tornád, raketových cest, atd. Tato kapitola popisuje různé druhy šumů a jejich použití.
+Šumy se v počítačové grafice využívají například pro přidání kvalitních detailů do synteticky vytvořených obrázků. Perlinův šum, navržený Kenem Perlinem \cite{PerlinKen}, se v dnešní době používá ve vytváření procedurálních textur včetně mraků, vln, tornád, raketových cest, atd. Tato kapitola poskytuje detailní přehled jednotlivých funkcí generujících šum. Rozděluje tyto funkce do tří kategorií: gradientní mřížkové šumy \ref{LatticeNoises}, explicitní šumy \ref{ExplicitNoises} a řídké konvoluční šumy \ref{SparseNoises}. V každé z těchto kapitol je popsáno několik reprezentativních šumových funkcí rozebraných do detailu a další související příklady \cite{Lagae10}. 
 
 \subsection{Definice šumu}
-Šum je generátor náhodných čísel počítačové grafiky. Jedná se o náhodný a neuspořádaný vzor, který je užitečný všude tam, kde je potřebný detail bez evidentní struktury.
-\subsection{Perlinův šum}
-\label{perlinNoise}
-Roku 1985 Perlin představil \textit{Perlinův šum}, jeho slavnou procedurální funkci pro generování šumu.~\cite{PerlinKen}~\cite{Perlin2002ImprovingN}
+Šum je generátor náhodných čísel počítačové grafiky. \cite{PerlinKen} Jedná se o náhodný a neuspořádaný vzor, který je užitečný všude tam, kde je potřebný detail bez evidentní struktury. Jednoduchý šum pracuje například takto:
+\begin{enumerate}
+	\item Uvažujme množinu všech bodů v prostoru, jejichž souřadnice x, y a z jsou všechny celočíselné. Tuto množinu nazveme celočíselná mřížka. Každému bodu v této mřížce přiřaďte pseudonáhodnou hodnotu a gradientní hodnoty x, y a z. Přesněji, zobrazte každou uspořádanou posloupnost tří celých čísel do nekorelované uspořádané posloupnosti čtyř reálných čísel: $[a,b,c,d] = H([x,y,z])$, kde $[a,b,c,d]$ definují lineární rovnici s gradientem [a,b,c] a hodnotou d v bodě $[x,y,z]$. H 0 je nejlépe implementováno jako hashovací funkce.
+	\item Pokud $[x,y,z]$ je na celočíselné mřížce, definujeme $Noise([x,y,z]) = d_{[x,y,z]}$. Pokud $[x,y,z]$ není v celočíselné mřížce, spočítáme hladkou (např. kubickou polynomickou) interpolaci mezi koeficienty rovnic mřížky, aplikovanou nejprve v x(podél hran mřížky), pak v y(ve vnitřních plochách mřížky z) a nakonec v z. Poté vyhodnotíme tuto interpolovanou rovnici v bodě [x,y,z]. 
+\end{enumerate}
 
-\subsection{Porovnání procedurálních funkcí šumů}
-Tato sekce se věnuje porovnání jednotlivý funkcí procedurálního generování šumů.~\cite{Lagae10}
+Ohodnocením hodnot takového šumu jsme schopni vytvářet jednoduché náhodné textury povrchu. \cite{PerlinKen} 
 
-Šumy popsané v jednotlivých citovaných pracích a následně výsledky jejich porovnání zapisovány do tabulky 
+Například při ohodnocení šumu pouze bílou barvou:
 
-\begin{table}
+\[color = white * Noise(point)\]
+
+Výše uvedená textura má omezený frekvenční charakter, není zde žádný detail mimo určitý rozsah velikosti. Vzniklý obrázek je \ref{SpottedDoughnut}.
+
+S hodnotou vrácenou funkcí Noise() \cite{Perlin2002ImprovingN} lze dále dělat mnoho různých věcí, s pomocí funkční kompozice, lze například mapovat různé rozsahy hodnot do různých barev:
+
+\[color = Colorful(Noise(k * point))\]
+
+V příkladu výše, byla textura škálovaná pomocí násobení domény funkce Noise() konstantou k. Jednou z výhod přístupu funkční kompozice je jednoduchost se kterou lze takovéto úpravy provádět, výsledný obrázek je níže \ref{ColoredDoughnut}.
+
+\begin{figure}[H]
 	\centering
-	\caption{Porovnání funkce šumu}
-	\label{tab:porovnani_sumu}
-	\begin{tabular}{|m{5em}|m{5em}|m{5em}|m{5em}|m{5em}|m{5em}|m{5em}|}
-		\hline
-		\textbf{Kategorie} & \textbf{Perlinův šum} \cite{Perlin2002ImprovingN} & \textbf{Řídký konvoluční šum} \cite{Lewis89} & \textbf{Vlnkový (Wavelet) šum} \cite{Cook05} & \textbf{Anisotropní šum} \cite{Goldberg08} & \textbf{Kvalitnější gradientový šum} \cite{Kensler2008} & \textbf{Gaborův šum} \cite{Lagae09} \\
-		\hline
-		\textbf{Požadavky na úložný prostor} & & & & & & \\
-		Procedurální & $O(N)$ & $O(1)$ & $O(Nd)$ & $O(Nd)$ & $O(dN)$ & $O(1)$ \\
-		Parametry & Váhový součet & Kernel & Váhový součet & Váhový součet (aniso.) & Váhový součet & Kernel \\
-		\hline
-		\textbf{Modelování} & & & & & & \\
-		Spektrální kontrola & Váhový součet & Kernel & Váhový součet & Váhový součet (aniso.) & Váhový součet & Kernel \\
-		Anizotropní šum & & $\checkmark$ & & $\checkmark$ & & \\
-		\hline
-		\textbf{Povrchy} & & & & & & \\
-		Pevný šum & $\checkmark$ & $\checkmark$ & $\checkmark$ & & $\checkmark$ & $\checkmark$ \\
-		Povrchový šum & & $\checkmark$ & $\checkmark$ & & $\checkmark$ & $\checkmark$ \\
-		Bez nastavení povrchového šumu & & & $\checkmark$ & & $\checkmark$ & $\checkmark$ \\
-		\hline
-		\textbf{Filtrování} & & & & & & \\
-		Izotropní filtrování & & $\checkmark$ & $\checkmark$ & $\checkmark$ & & \\
-		Anizotropní filtrování & & & & $\checkmark$ & & $\checkmark$ \\
-		\hline
-		\textbf{Analýza} & & & & & & \\
-		Spektrum pásmové propusti & & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & \\
-		Gaussovské rozložení amplitudy & & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\
-		\hline
-		\textbf{Porovnání} & & & & & & \\
-		Rychlost & 0 & $-$ & $-$ & $+$ & $-$ & $-$ \\
-		Obchod kvalita/rychlost & $\checkmark$ & & & & & $\checkmark$ \\
-		\hline
-	\end{tabular}
-\end{table}
+	\begin{subfigure}{0.5\textwidth}
+		\centering
+		\includegraphics[scale=0.475]{obrazky-figures/SpottedDoughnut.png}
+		\caption{Kobliha s puntíkovým vzorem}
+		\label{SpottedDoughnut}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[scale=0.5]{obrazky-figures/ColoredDoughnut.png}
+		\caption{Kobliha s barevným vzorem}
+		\label{ColoredDoughnut}
+	\end{subfigure}
+	\caption{Na obrázcích jsou vidět koblihy se vzory podle aplikovaných ohodnocení šumů, obrázky jsou převzaty z \cite{PerlinKen}}
+	\label{Doughnuts}
+\end{figure}
+
+\subsection{Gradientní mřížkové šumy}
+\label{LatticeNoises}
+\textit{Gradientní mřížkové šumy} vytvářejí šum pomocí interpolace, nebo konvolucí náhodných hodnot a/nebo gradientů definovaných v bodech celočíselné mřížky. Reprezentativním příkladem je \hyperref[perlinNoise]{Perlinův šum} \cite{Lagae10}.
+
+\subsubsection{Perlinův šum}
+\label{perlinNoise}
+Roku 1985 Perlin představil \textit{Perlinův šum}, jeho slavnou procedurální funkci pro generování šumu.~\cite{PerlinKen}~\cite{Perlin2002ImprovingN} Perlinův šum určuje šum v bodě prostoru výpočtem pseudonáhodného gradientu u každého z osmi nejbližších vrcholů na celočíselné krychlové mřížce a následným provedením spline interpolace. Pseudonáhodný gradient je získán hashováním mřížkového bodu a použitím výsledku k výběru gradientu. Mřížkové body jsou hashovány pomocí postupné aplikace pseudonáhodné permutace na souřadnice k dekorelaci indexů do pole pseudonáhodných jednotkových gradientových vektorů. Sada gradientů se skládá z 12 vektorů definovaných směry od středu krychle k jejím hranám. Interpolantem je kvintický polynom, který zajišťuje spojitou derivaci šumu, neboli hladké přechody mezi jednotlivými body.
+
+Již od svého uvedení před skoro čtyřmi desetiletími se Perlinův šum široce využívá v grafice, například při generování textur, které je vidět na obrázku \ref{PerlinVase}. Perlinův šum je rychlý, jednoduchý a nadále zůstává pilířem průmyslu.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.3]{obrazky-figures/PerlinNoiseVase.png}
+	\caption{Váza s vygenerovanou texturou pomocí Perlinova šumu. Obrázek převzat z \cite{PerlinKen}}
+	\label{PerlinVase}
+\end{figure}
+
+\subsubsection{Lepší gradientový šum}
+Modifikovaná hashovací funkce kombinovaná s oddělenou gradientní tabulkou vylepšuje axialní dekorelaci. Jiné rekonstrukční jádro zlepšuje omezení pásma. Metoda projekce zlepšuje kvalitu šumu na 2D površích pomocí pevného šumu. Je třeba poznamenat, že tyto zlepšení platí pro několik druhů gradientových šumů mřížky. \cite{Kensler2008}
+
+\subsubsection{Hardwarové implementace}
+Již mnoho autorů představilo hardwarové implementace funkcí podobných Perlinovu šumu. Hart a spol. \cite{hart1999antialiased} prezentovali VLSI hardwarovou implementaci Perlinova šumu. Dále byly prezentovány GPU implementace Perlinova šumu, jak od Harta \cite{hart01} tak i od Olano \cite{ola05}. Dále je Perlinův šum nedílnou součástí OpenGL Shading Language (GLSL).
+
+\subsection{Explicitní šumy}
+\label{ExplicitNoises}
+\textit{Explicitní šumy} generují šum explicitním způsobem předzpracováním a ukládají ho. Doslovně vzato, explicitní šumy nejsou procedurální šumové funkce, ale i tak jsou velmi podstatné. Dva reprezentativní příklady jsou, \hyperref[WaveletNoise]{vlnkový šum} a \hyperref[AnisotropNoise]{anisotropní} šum \cite{Lagae10}.
+
+\subsubsection{Vlnkový šum}
+\label{WaveletNoise}
+Poprvé představen autory Cook a DeRose roku 2005 \cite{Cook05}. Perlinův šum ve větších vzdálenostech mívá problém s aliasingem a ztrátou detailů, z důvodu slabého pásmového omezení, kvůli tomu byla představena nová šumová funkce, která je téměř perfektně pásmově omezená.
+
+Podstata algoritmu spočívá v následujících čtyřech krocích, které jsou vyobrazeny na obrázku \ref{fig:WaveletNoise}:
+
+\begin{enumerate}
+	\item Vytvoření obrazu $R$ vyplněného náhodným šumem.
+	\item Snížení vzorkovací frekvence $R$ za účelem vytvoření obrazu o poloviční velikosti $R^\downarrow$.
+	\item Zvětšení $R^\downarrow$ na plnou velikost $R^{\downarrow\uparrow}$.
+	\item Odečtení $R^{\downarrow\uparrow}$ od originálního obrazu $R$ aby byl vytvořen výsledný obraz $N$.
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.9]{obrazky-figures/WaveletNoise.png}
+	\caption{Proces generování šumu.(a) Obrázek $R$ náhodného šumu, (b) o polovinu menší obrázek $R\downarrow$, (c) poloviční rozlišení obrázku $R{\downarrow\uparrow}$, (d) obraz pásmového šumu $N = R-R{\downarrow\uparrow}$. Obrázek převzat z \cite{Cook05}}
+	\label{fig:WaveletNoise}
+\end{figure}
+
+Koeficienty šumu v dlaždici N jsou tedy vytvořeny z R a odstraněním části, která je reprezentovatelná na poloviční velikosti. Zbývá část, která není reprezentovatelná na poloviční velikosti, tj. pásmově omezená část. Filtry použité v krocích vzorkování dolů a nahoru jsou získány pomocí vlnkové analýzy. Rozšíření na více dimenzí je přímé.
+
+\subsubsection{Anisotropní šum}
+\label{AnisotropNoise}
+Roku 2008, představil Goldberg a spol. \textit{anisotropní šum} \cite{Goldberg08}. Goldberg vypozoroval že existující šumové funkce podporují pouze isotropní filtrování, na což se také vztahuje aliasing a ztráta detailů, a představil novou funkci, která podporuje anisotropní filtrování na vysoké úrovni.
+
+Hlavní myšlenkou bylo vygenerovat šumové textury tak, že frekvenční obor je rozdělen do orientovaných pod-pásem. Anizotropní šumové pásma mají nejen určitý rozsah škály, ve kterém jsou účinné, ale také mají preferovanou směrovou orientaci. Konstrukce takového šumu je založena na ovladatelných filtrech, které rozdělují frekvenční obor. Poskytují řadu vlastností, které jsou zásadní pro generování šumu:
+\begin{enumerate}
+	\item Každý filtr definuje pod-pásmo které je úzce lokalizované velikostí a orientací.
+	\item Filtry implementují invertibilní transformaci. To znamená, že lze přesně obnovit signál z jeho dekompozice do pod-pásem.
+	\item Filtry disponují možností točení orientace. Hlavním účelem je, že lineární interpolace filtrů může generovat filtr s přesně stejným profilem, ale s prostřední orientací.
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{obrazky-figures/AnisotropicNoise.png}
+	\caption{Ilustrace spektrálního generování šumu. Dekompozice frekvenční domény má tři orientace. Jsou vidět tři orientované pod-pásma se stejnou velikostí a odpovídajícími obrazy prostorových domén, které se následně ukládají jako textury. Obrázek převzat z \cite{Goldberg08}.}
+	\label{fig:AnisotropicNoise}
+\end{figure}
+
+Každý orientovaný pod-pásmový obraz je zabalen do jednoho kanálu 32bitového RGBA obrazu, což vede ke čtyřem orientacím na každou texturu. Obvykle použití čtyř nebo osmi pásů, tj. jedné nebo dvou textur, představuje dobrý kompromis mezi úložným prostorem, rychlostí vykreslování a kvalitou obrazu. Pod-pásma šumu jsou vypočítána dopředu pouze na jedné škále najednou. Všechny ostatní škály jsou generovány za běhu, jednoduše pomocí stupňování předem vypočítaných textur. \cite{Lagae10}
+
+\subsubsection{Stochastické poddělení}
+Fournier a spol. \cite{Fournier98}, který představil metodu středního posunu, uvedl také stochastický algoritmus dělení, pro generování přírodních nepravidelných fraktálních objektů a jevů, jako je terén. Lewis \cite{Lewis86,Lewis87} předvedl zobecněné stochastické poddělení, a generalizoval Fournierovu práci na libovolné autokorelační funkce.
+
+\subsubsection{Fourierova spektrální syntéza}
+\label{Fourier}
+\textit{Fourierova spektrální syntéza} generuje šum s konkrétním výkonovým spektrem filtrováním bílého šumu ve frekvenční oblasti. Fourierova spektrální syntéza byla uvedena v počítačové grafice autorem Anjyo \cite{Anjyo88} Saupe a Voss \cite{Saupe1988}, kteří ji využili, aby vygenerovali náhodné fraktály a simulovaly přírodní jevy. Fourierova spektrální syntéza může být užitečná i při generování referenčních řešení pro šumové funkce, u kterých je známé očekávané výkonové spektrum.
+
+\subsection{Řídké konvoluční šumy}
+\label{SparseNoises}
+\textit{Řídké konvoluční šumy} generují šum jako sumu náhodně pozicovaných a vážených kernelů. Třemi reprezentativními příklady jsou šum řídké konvoluce, \hyperref[SpotNoise]{bodový šum} a \hyperref[GaborNoise]{Gaborův šum}.
+
+\subsubsection{Definice}
+V sérii prací mezi lety 1984 a 1989 Lewis představil \textit{řídký konvoluční šum} \cite{Lewis84, Lewis86, Lewis89}.
+
+Konstrukce řídkého konvolučního šumu je jednoduchá: libovolné jádro $k$ je konvoluváno se šumem Poissonova procesu $\gamma$.
+
+\[N(x,y) = \int\gamma(u,v)k(x-u,y-v)dudv\]
+
+Poissonův proces sestává z impulsů nekorelovaných intenzit $a_k$ situovaných na náhodných nezávisle na sobě zvolených pozicích $(x_k,y_k)$.
+
+\[\gamma(x,y) = \sum_k a_k \delta(x-x_k,y-y_k)\]
+
+Poissonův proces je řídký, což znamená že nedefinuje každý pixel nebo bod v prostoru, od toho je odvozený název \textit{řídká konvoluce}. Tento způsob použití řídkého impulsního šumu umožňuje alespoň nějakou výpočetní efektivitu, vzhledem k tomu že konvoluce efektivně rozprostírá jádro se škálou amplitudy pouze na určitých místech $(x_k, y_k)$.
+
+Abychom vyhodnotili šum v konkrétním bodě, je nutné použít pouze jádra, která se s tímto bodem překrývají. Toto je urychleno zavedením virtuální mřížky, kde velikost buňky mřížky odpovídá poloměru jádra. Vyhodnocením pak zahrnuje pouze jádra, která jsou umístěna v buňce obsahující daný bod a těch v sousedních buňkách. Souřadnice buňky jsou také použity k zasazení generátoru náhodných čísel pro generování Poissonových impulzů umístěných v této buňce. Více podrobností a vylepšených schémat pro tento krok jsou uvedeny u Worleyho \cite{worley1996} a Lagae a spol. \cite{Lagae09}. I když Lewis \cite{Lewis89} popisuje několik optimalizací, jako je ukládání konstruovaných Poissonových impulzů za předpokladu koherentního přístupu, je řídká konvoluční metoda trochu pomalejší než jedna oktáva Perlinova šumu.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{obrazky-figures/SparseConvolutionNoise.png}
+	\caption{\textit{Řídký konvoluční šum}. Vlevo dole: Vzorek obrázku vlasů. Vpravo: přibližná textura vlasů vytvořená pomoc9 2D řídké konvoluce. Obrázek převzat z \cite{Lagae10}.}
+	\label{fig:SparseConvolutionNoise}
+\end{figure}
+
+Jelikož výkonové spektrum výstupu konvoluce je součinem vstupů a výkonové spektrum Poissonova impulsu je konstantní, je jednoduše škálovanou verzí tohoto jádra.
+
+\subsubsection{Bodový šum}
+\label{SpotNoise}
+Jedná se o metodu generování stochastických textur pro vizualizaci skalárních a vektorových polí nad plochami. Na bodový šum lze nahlížet jako na explicitní formu řídkého konvolučního šumu, vypočítaného konverzí bodů, nebo Fourierovou spektrální syntézou (popsána v sekci \ref{Fourier}).
+
+Van Wijk \cite{Wijk91} diskutuje vztah mezi bodem a texturou v detailech. Poukázal na několik důležitých konceptů, které později uvedl v kontextu šumu. Například, mapování textur na parametrických plochách, syntézu textur nad zakřivenými plochami jako alternativu pevnému šumu, a lokální kontrolu variací bodu. Dále lze pracovat s tvary, ostrostí hran, nebo různými vzory.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{obrazky-figures/SpotNoiseSize.png}
+	\caption{Vztah mezi texturou a bodem. Na třech dvojicích obrázků jsou vidět tři různé velikosti bodu a tři různé šumy které se k těmto bodům vztahují. Obrázek převzat z \cite{Wijk91}.}
+	\label{fig:SpotNoise}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{obrazky-figures/SpotNoiseNonProportional.png}
+	\caption{Na třech dvojicích obrázků je vidět jak se textury mění, když se velikost obrázku mění ne-proporcionálně. Obrázek převzat z \cite{Wijk91}.}
+	\label{fig:SpotNoiseNonProportional}
+\end{figure}
+
+\subsubsection{Gaborův šum}
+\label{GaborNoise}
+
 
 \section{Výškové mapy}
 \label{heightMaps}
-Výškové mapy představují dvoudimenzionální mřížky obsahující výškové hodnoty, jež jsou častým prvkem v modelování terénu. Tyto mapy se běžně využívají jako klíčový prvek pro reprezentaci základu terénu v herním průmyslu. Pro tvorbu výškových map existuje mnoho algoritmů.
+Výškové mapy představují dvoudimenzionální mřížky obsahující výškové hodnoty, jež jsou častým prvkem v modelování terénu. Tyto mapy se běžně využívají jako klíčový prvek pro reprezentaci základu terénu v herním průmyslu. Pro tvorbu výškových map existuje mnoho algoritmů. Na obrázku \ref{HeightMap} je jednoduchá ukázka jak jednotlivé body na mapě mají hodnoty, podle kterých se dále určí jejich elevace. \cite{heightMap08}
 
 Jedny z nejstarších algoritmů jsou metody založené na pododdělení. Segmenty v rámci vygenerované hrubé výškové mapy jsou iterativně rozdělovány, kde každá iterace navíc používá kontrolovanou náhodnost k přidávání detailů. Miller \cite{MillerRendering} popisuje některé varianty všeobecně známé metody středového posunu, ve které se výška nového bodu nastavuje na průměr hodnot jeho rohů v trojúhelníkovém nebo diamantovém tvaru, k němuž je přidán náhodný offset. Každou iterací se rozsah náhodných hodnot offsetu snižuje, podle parametru, který kontroluje hrubost výsledné výškové mapy. 
 
@@ -294,7 +413,32 @@ Generování výškových map se v dnešní době provádí převážně pomocí
 
 Výškové mapy se mohou dále transformovat na základě běžných filtrací obrazu, například vyhlazování (smoothing), nebo simulací fyzikálních jevů, např. eroze. \cite{inproceedings}
 
-\section{Procedurální generování krajiny}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.9]{obrazky-figures/HeightMap.png}
+	\caption{Ukázka hodnot a jejich výšek výškových map}
+	\label{HeightMap}
+\end{figure}
+
+Jednou z hlavních nevýhod výškových map je, že nepodporují tvorbu skalních převisů a jeskyní. Gamito a Musgrave \cite{Gamito2001ProceduralLW} navrhovali systém deformace terénu, který má za výsledek pravidelné, uměle vytvořené skalní převisy. O něco novější metoda \cite{Peytavie09} přináší propracovanější struktury s rozdílnými vrstvami materiálů, které podporují kameny, klenby, převisy a jeskyně. Příklady takto vygenerovaných struktur jsou vidět na obrázcích. \ref{PeytavieGen}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=1]{obrazky-figures/Overhang.png}
+		\caption{Vygenerované převisy}
+	\end{subfigure}
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=1]{obrazky-figures/Arches.png}
+		\caption{Vygenerované kamenné klenby}
+	\end{subfigure}
+	\caption{Na obrázcích jsou vidět klenby a převisy vygenerované pomocí algoritmu vytvořeného Peytaviem, obrázky jsou převzaty z \cite{Peytavie09}}
+	\label{PeytavieGen}
+\end{figure}
+
+\chapter{Procedurální generování krajiny}
 \label{terrain}
 Procedurální generování krajiny se řadí ke složitějším tématům PG. Je tomu tak hlavně kvůli tomu, že se k tomuto typu generování většinou používají výškové mapy (height maps), podle kterých se ohodnocují jednotlivé pixely, jak je popsáno v sekci \ref{heightMaps}. Jakmile jsou všechny pixely ohodnoceny, jsou tři různé způsoby jak postupovat:
 \begin{itemize}
@@ -306,7 +450,7 @@ První metoda je výhodná v tom, že textury ručně vykreslené lze udělat na
 
 Druhá metoda je podobná, nakreslí se barvy na určitá místa, kam si designer myslí že by se mohly hodit hory, řeky, nebo země. Jedná se o docela obvyklou metodu, která přináší velice kvalitní výsledky, ale stále se jedná o manuální techniku.
 
-Třetí metoda používá data height mapy a vypočítává jakou texturu použít na které místo. Nízké hodnoty (tmavší místa) se používají například jako oceány, střední hodnoty se vyhodnocují jako země/tráva a na vysoké hodnoty (světlá místa) se nanášejí textury hor nebo kamení. Při generování ve 3D hrách lze ještě započítávat takzvané sklony (slopes), díky kterým je možné oddělovat vyšší plochy od nižších pomocí dalších textur například kamene.
+Třetí metoda používá data height mapy a vypočítává jakou texturu použít na které místo. Nízké hodnoty (tmavší místa) se používají například jako oceány, střední hodnoty se vyhodnocují jako země/tráva a na vysoké hodnoty (světlá místa) se nanášejí textury hor nebo kamení. Při generování ve 3D hrách lze ještě započítávat takzvané sklony (slopes), díky kterým je možné oddělovat vyšší plochy od nižších pomocí dalších textur například kamene. Tato metoda je více rozvedena v sekci \ref{heightMaps}.
 
 Vzhledem k tomu že první dva postupy vyžadují mechanické vykreslování buď barvy, nebo textur on designéra, nedá se o nich mluvit jako o čistě procedurálních metodách. Naopak postup třetí tomuto popisu zcela odpovídá, neboť kompletně závisí na height mapě a není nutná žádná akce návrháře \cite{madoc59000}.
 
@@ -337,18 +481,15 @@ Vzhledem k tomu že první dva postupy vyžadují mechanické vykreslování bu�
 \section{Metody pro procedurální generování krajiny}
 Tato část se zabývá průzkumem procedurálních metod, aplikovaných na modelování terénu. Pojednává o důležitých aspektech, jako je realističnost výstupu, náročnost algoritmu a prostředky pomocí kterých je uživatel schopen ovlivnit a kontrolovat proces generování.~\cite{inproceedings}
 
+\if 0
 \subsubsection{Porovnání metod}
-
 \todo{porovnání jednotlivých metod}
-\textcolor{gray}{\blindtext[8]}
-
 \includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
 
-\textcolor{gray}{\blindtext[23]}
+\textcolor{gray}{\blindtext[10]}
 
 \chapter{Návrh řešení}
 \label{solution}
-\textcolor{gray}{\blindtext[2]}
 \textcolor{gray}{\blindtext[26]}
 
 \section{Vybraná metoda generování}
@@ -368,4 +509,4 @@ Tato část se věnuje podrobnostem implementace skriptů, jež jsou klíčovým
 \chapter{Závěr}
 \label{end}
 \textcolor{gray}{\blindtext[4]}
-%\fi
+\fi

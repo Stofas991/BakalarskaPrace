@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class SelectedToBuild : MonoBehaviour
 {
     public GameObject UIObject;
     public GameObject objectToPlace;
+    public GameObject tilemapParent;
+
     SelectObject2D selectObject;
     GameObject currentPlaceableObject;
 
