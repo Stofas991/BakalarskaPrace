@@ -86,10 +86,8 @@ Po úspěšné inicializaci simulace běží $N$ kroků, kde $N_Y$ kroků utvá�
 		\includegraphics[scale=1]{obrazky-figures/treesEnd.png}
 		\caption{n=1000}
 	\end{subfigure}
-	\caption[generatedTrees]{Vzhled ekosystému po inicializaci a rozložení vegetace po prvních 1000 iteracích. Je vidět že se vytváří shluky rostlinných druhů, tyto klastry zůstávají, pouze se mění jejich pozice. Obrázky převzaty z práce\footnotemark.}
+	\caption[generatedTrees]{Vzhled ekosystému po inicializaci a rozložení vegetace po prvních 1000 iteracích. Je vidět že se vytváří shluky rostlinných druhů, tyto klastry zůstávají, pouze se mění jejich pozice.}
 \end{figure}
-\todo{chyba odkazu}
-\footnotetext[1]{https://arxiv.org/pdf/2208.01471.pdf}
 
 \section{Procedurální generování v herním průmyslu}
 \label{proceduralInGames}
@@ -111,7 +109,7 @@ Většina her má soundtrack a zvukové efekty. Soundtrack obvykle nemá nijak z
 
 Jukebox \cite{Dhariwal2020JukeboxAG} je model který dokáže generovat hudbu se zpěvem v originální nezpracované formě zvukových dat, s délkou v řádu minut, i s určením žánru a vokálního stylu. Modelů jako je tento již existuje více, avšak zatím to nejsou plně hodnotné soundtracky pro hry a ještě chvíli potrvá, než bude možné jednoduše vygenerovat hudbu a efekty pro hru pomocí pouhého nástroje.
 
-\pagebreak
+\newpage
 
 \chapter{Enginy na vývoj her}
 \label{engines}
@@ -160,7 +158,7 @@ Z unity vzešlo mnoho oblíbených herních titulů, řadí se mezi ně hra ve v
 	\label{fig:pogo}
 \end{figure}
 
-
+\newpage
 
 \chapter{Metody procedurálního generování}
 \label{procedural}
@@ -226,11 +224,8 @@ Ve 2D má želva stav $S(p,0)$ kde $p=[x,y]$ je její pozice a $0$ je směrový 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{obrazky-figures/L-system.png}
-	\caption[L-system]{Vygenerovaných obrázek L-systémy želví interpretací, jsou zde vidět jednotlivé posuvy i hodnoty o které se posouvá, převzatý ze článku\footnotemark}
+	\caption[L-system]{Vygenerovaných obrázek L-systémy želví interpretací, jsou zde vidět jednotlivé posuvy i hodnoty o které se posouvá}
 \end{figure}
-
-\todo{chyba odkazu}
-\footnotetext[1]{http://algorithmicbotany.org/papers/graphical.gi86.pdf}
 \newpage
 
 \section{Šumy}
@@ -476,29 +471,128 @@ Vzhledem k tomu že první dva postupy vyžadují mechanické vykreslování bu�
 	\caption{Na obrázcích jsou vidět různé postupy generování obsahu z této hry, na obrázku a je vygenerovaný půdorys oblasti i s mořem a pláží, na obrázku b se k tomu přidaly stromy}
 \end{figure}
 
-%\iffalse
+\iffalse
 
 \section{Metody pro procedurální generování krajiny}
 Tato část se zabývá průzkumem procedurálních metod, aplikovaných na modelování terénu. Pojednává o důležitých aspektech, jako je realističnost výstupu, náročnost algoritmu a prostředky pomocí kterých je uživatel schopen ovlivnit a kontrolovat proces generování.~\cite{inproceedings}
 
-\if 0
 \subsubsection{Porovnání metod}
 \todo{porovnání jednotlivých metod}
 \includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
 
-\textcolor{gray}{\blindtext[10]}
+\fi
 
 \chapter{Návrh řešení}
 \label{solution}
-\textcolor{gray}{\blindtext[26]}
+Tato kapitola popisuje vybrané technologie, které byly použity k vývoji hry a z jakého důvodu, zvolené metody jak budou procedurální mapy vytvářeny, návrhy algoritmů a způsobů generování oblastí. 
 
-\section{Vybraná metoda generování}
-\todo{podrobnější popis metody, výhody, nevýhody}
-\textcolor{gray}{\blindtext[46]}
+\section{Vybrané technologie}
+V mé práci jsem se rozhodl pro použití herního enginu Unity, který je podrobněji popsán v sekci \ref{unity}. Před samotným začátkem práce jsem zhodnotil, že vývojové prostředí Unity nabízí mnoho výhod a pro vývoj procedurálního generování a následné hry bude ideální.
+
+Dalším z důvodů pro volbu Unity je jazyk C\#, který nabízí mnoho knihoven, které budou užitečné při tvorbě hry. Plusem je že C\# disponuje silnou typovou kontrolou, což znamená, že chyby v kódu jsou odhaleny během překladu, což usnadňuje odhalování a opravování chyb při vývoji.
+
+C\# nabízí širokou škálu knihoven, ale tou pro mě nejdůležitější byla knihovna Mathf, která kromě mnoha matematických funkcí obsahuje také funkci Perlinova šumu. Jazyk C\# je obecně velmi užívaný a tím pádem má i velkou aktivní komunitu vývojářů, přispívajících do knihoven, nástrojů, frameworků, poskytují podporu a návody, které pomáhají ostatním vývojářům efektivně pracovat s procedurálním generováním. 
+
+Některé další výhody použití programovacího jazyka C\# v kombinaci s Unity pro tvorbu her s procedurálním generováním zahrnují:
+
+\begin{enumerate}
+	\item \textbf{Snadná integrace s Unity:} C\# je primárním programovacím jazykem pro vývoj her v Unity, což znamená že má těsnou integraci s Unity API a prostředím.
+	\item \textbf{Objektově orientovaný přístup:} C\# je objektově orientovaný jazyk, což umožňuje vytvářet modulární a znovupoužitelný kód. To usnadňuje organizaci a správu algoritmů a umožňuje snadnou rozšiřitelnost, údržbu a znovupoužitelnost v jiných projektech.
+	\item \textbf{Platformní nezávislost:} Díky tomu, že Unity podporuje mnoho různých platforem, může být C\# kód psaný v Unity použit na vytváření her pro různé platformy, včetně mobilních zařízení, stolních počítačů, konzolí a webu, což zvyšuje dostupnost a dosah hry.
+\end{enumerate}
+
+Vývojovým prostředím jsem zvolil Visual Studio, které je primárním IDE doporučované společností Unity pro vývoj v jazyce C\#. Poskytuje silnou integraci s Unity Editorem, což znamená, že lze snadno vytvářet a upravovat skripty přímo v rámci Unity Editoru. Existuje ale několik dalších důvodů, proč zvolit Visual Studio jako vývojové prostředí:
+ 
+\begin{enumerate}
+	\item \textbf{Široká podpora a komunita:} Visual Studio je velmi populární vývojové prostředí s rozsáhlou komunitou uživatelů a dostupností online dokumentace a návodů. To je užitečné pro získání podpory a řešení problémů během vývoje.
+	\item \textbf{Pokročilé funkce pro vývoj:} Nabízí mnoho pokročilých funkcí pro vývoj v jazyce C\#, jako je inteligentní vyplňování kódu, refactoring, ladění za běhu a integrace s verzovacími systémy. 
+	\item \textbf{Podpora pro rozšíření:} Visual Studio umožňuje rozšiřování funkcí pomocí různých rozšíření, balíčků a doplňků, která mohou usnadni proces vývoje a zvýšit produktivitu.
+\end{enumerate}
+
+\section{Návrh procedurálního generování oblastí}
+V této sekci je popsán způsob jakým se generují jednotlivé oblasti, použité algoritmy, metody a různé úpravy pomocí kterých bude vytvořena 2D mapa, na které se následně bude odehrávat samotná hra, jejíž návrh je detailněji popsán v sekci \ref{GameDesign}.
+
+\subsection{Zvolený šum}
+Pro generování samotného šumu jsem vybral známý Perlinův šum, detailně popsán v sekci \ref{perlinNoise}, který je relativně jednoduchý na implementaci a jeho porozumění. Algoritmus kterým je implementován je intuitivní a snadno přenositelný do různých herních prostředí. Zde je pár dalších důvodů proč jsem vybral právě Perlinův šum pro generování:
+
+\begin{description}
+	\item[Hladkost a přirozenost] Perlinův šum poskytuje hladké a přirozené výsledky. Jeho charakteristika umožňuje vytvářet organické a realistické terény.
+	\item[Efektivita] Perlinův šum je poměrně efektivní z hlediska výpočetní náročnosti. Jeho algoritmus umožňuje generování šumu s rozumným výkonem a nízkou paměťovou náročností.
+\end{description}
+
+Oproti například vlnkovému šumu, sekce \ref{WaveletNoise}, sice nemá takovou flexibilitu v nastavení detailů a škálování, ale kvůli přirozenosti jsem se rozhodl pro Perlinův. Perlinův šum bude mít mnoho vlastností, detailně popsány v sekci implementace \ref{PerlinNoiseImplement}, ale asi nejdůležitější bude vlastnost \textit{seed}, pomocí které bude možné kteroukoliv mapu znovu vygenerovat.
+
+\subsection{Algoritmus procedurálního generování mapy}
+Procedurální generování mapy je jedním z hlavních cílů této práce. Pro generování samotné mapy, se bude využívat již zmíněný Perlinův šum, s použitím výškových map, popsány v sekci \ref{heightMaps}. Každá oblast, země, voda, skály, nebo pláže, bude mít definovaný rozsah výšky na výškové mapě. Unity disponuje nástrojem zvaným \textit{tilemap}, jedná se o čtvercovou mřížku, do jejíž buněk lze skládat takzvané \textit{tiles} (dlaždice). Velkou výhodou těchto tilemap je, že každý bod reprezentuje jeden tile, tím pádem po ohodnocení bodu lze pouze položit odpovídající tile.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.9]{obrazky-figures/AlgoritmusDiagram.png}
+	\caption{Ilustrace navrhovaného diagramu algoritmu, který bude generovat mapu}
+	\label{AlgoritmusDiagram}
+\end{figure}
+
+Kvůli jednodušší a srozumitelné interakci s uživatelem při generování map v Unity, navrhuji skript, obsahující následující algoritmus, vyobrazený na obrázku \ref{AlgoritmusDiagram}:
+
+\begin{description}
+	\item[Vstupní hodnoty] Uživatel zadá potřebné hodnoty pro generování šumu, jako jsou výška a šířka mapy a přiblížení šumu. Tyto hodnoty určují vlastnosti výsledného šumu a tím i vzhled herního terénu.
+	\item[Generátor Perlinova šumu] Na základě zadaných parametrů se generuje dvoudimenzionální Perlinův šum. Tento šum je vytvořen pomocí algoritmu Perlinova šumu, který produkuje hladké a přirozeně vypadající přechody mezi různými hodnotami.
+	\item[Procházení tilemapy] Procházením každého bodu na tilemapě se určí, jaký typ terénu nebo objekty by měl být umístěn na daném místě. To se prování porovnáním hodnoty Perlinova šumu v daném bodě s definovanými prahovými hodnotami nebo regiony.
+	\item[Aplikace hodnoty šumu] Na základě porovnání s definovaným regiony se do každého bodu na tilemapě vloží odpovídající tile, který reprezentuje určitý typ terénu, jako jsou travnaté plochy, hory, jezera nebo lesy. Díky tomu může být vytvořen pestrobarevný a realistický herní svět.
+\end{description}
+
+Tento algoritmus poskytuje uživatelům možnost tvořit rozmanitá a realistická herní prostředí v Unity pomocí Perlinova šumu a tilemap. Samotný algoritmus je navržen tak, aby poskytoval co největší kontrolu na vzhledem vygenerovaných map. Díky flexibilitě a jednoduchosti tohoto přístupu může být proces tvorby herního světa intuitivní a rychlý. 
+
+\section{Návrh hry}
+\label{GameDesign}
+Tato sekce popisuje žánr, styl, cíle a ovládání samotné hry, založené na procedurálním generování 2D map v herním prostředí.
+
+Hra bude kombinovat prvky real-time strategie (RTS) s prvky survival žánru, vyžaduje strategické plánování a rychlé rozhodování v rámci nepřetržitého boje o přežití. Cílem hry je bránit se pravidelným nájezdům nepřátel, zatímco hráč současně buduje a rozvíjí svoji obranou sílu.
+
+Při výběru hratelné rasy a dvou začínajících postav na začátku hry hráči rozhodují o strategickém směru, kterým se jejich osada bude ubírat. Různé rasy mohou poskytovat specifické výhody a jedinečné schopnosti, což ovlivňuje strategii budování a obrany hráčů.
+
+Kromě budování základní infrastruktury, jako jsou farmy pro zajištění potravin, musí hráči také efektivně využívat dostupné prostředky a suroviny k budování různých typů obranných struktur. To může zahrnovat stavbu opevněných hradeb, věží, pastí, které mají za cíl zpomalit nebo zastavit postup nepřátelských sil.
+
+Kromě obrany před nepřáteli se hráči budou muset vypořádat s dalšími přírodními a lidskými hrozbami, jako je nedostatek surovin, nebo náhlé změny počasí.
+
+Vývoj ve hře je doprovázen možností rozšíření a vylepšení stávajících budov, což umožňuje vybudovat silnější a odolnější obranné systémy. Zároveň se hráči musí adaptovat na nové výzvy a nepředvídatelné situace.
+
+\subsection{Grafika}
+Hra je navržena jako 2D hra s pohledem zhora (top-down), což poskytne hráčům přehledný pohled na herní prostředí a umožní jim snadnou navigaci a řízení svých jednotek. Grafický styl hry bude pixelový, s použitím převážně 16x16 pixelových spriteů. Tento styl grafiky je známý svou jednoduchostí. Modelů tohoto stylu je mnoho volně dostupných a v případě potřeby lze bez problémů dotvořit vlastní. Díky tomuto stylu grafiky bude zároveň možné udržet nízké nároky na hardwarové prostředky, což umožní hladký běh hry i na starších zařízeních.
+
+\subsection{Jednoduchá umělá inteligence nepřátel}
+Umělá inteligence nepřátel bude implementována pomocí skriptů, které budou mít za úkol detekovat hráče v okolí a podle toho reagovat, včetně pronásledování a útoku na hráče. Pro pohyb po mapě bude využit vestavěný systém v Unity nazývaný NavMesh. Každá jednotka, která se má pohybovat po mapě, bude mít přiděleného NavMesh agenta, který bude schopen reagovat na podloží definované NavMesh surface. Tímto způsobem bude umožněno nepřátelským jednotkám plánovat svůj pohyb po herním světě s ohledem na dostupné průchody a neprůchodné oblasti definované v NavMesh surface, což vytvoří realističtější a dynamické chování nepřátel.
+
+\subsection{NavMesh funkcionalita}
+NavMesh je vestavěný systém v Unity, který umožňuje jednotkám v herním světě plánovat svůj pohyb a navigovat přes prostředí. Jedná se o komplexní nástroj pro tvorbu navigačních dat, která definují, kde se mohou jednotky pohybovat a kudy nemohou.
+
+NavMesh systém v Unity funguje následovně:
+
+\begin{enumerate}
+	\item Nejprve je třeba vytvořit navigační síť v herním světě. To se obvykle provádí pomocí generování NavMesh surface, které automaticky vytvoří navigační data podle geometrie herního světa.
+	\item Poté co je NavMesh vytvořen, mohou být jednotkám přiděleni NavMesh agenti. Jedná se o komponentu umožňující jednotkám navigaci přes NavMesh a plánovat jejich pohyb.
+	\item Agenti mohou plánovat svůj pohyb v reálném čase na základě polohy jednotky a cíle, kam se má jednotka dostat. NavMesh agenti automaticky vyhledají nejkratší cestu k danému cíli.
+	\item NavMesh může být dynamicky aktualizován v průběhu hry, což umožňuje jednotkám reagovat na změny v prostředí a dynamicky plánovat svůj pohyb.
+\end{enumerate}
+
+\subsection{Ekonomika hry}
+Hra bude obsahovat základní suroviny jako je dřevo, kámen a jídlo, které budou hrát klíčovou roli v průběhu hry.
+
+\begin{description}
+	\item[Dřevo:] Dřevo lze získat těžbou stromů, které budou rozmístěné po herní mapě. Dřevo bude nezbytné pro výstavbu obranných struktur a budování celé osady. Jeho nedostatek může ztížit možnosti obrany a rozvoje osady.
+	\item[Kámen:] Kámen lze získat kopáním skal a hornin v okolí herního prostředí. Bude sloužit jako stavební a vylepšující materiál pro obranné struktury a osadu. Nedostatek kamene může omezit hráčovy možnosti vylepšení obrany.
+	\item[Jídlo:] Jídlo bude nezbytné pro přežití obyvatel osady. Hráči budou moci získat jídlo pomocí farmaření, kde budou pěstovat plodiny, nebo lovením divoké zvěře. Nedostatek jídla může vést k hladovění osadníků a jejich úmrtí, což může znamenat prohru.
+\end{description}
+
+Všechny tyto suroviny budou hrát klíčovou roli v ekonomice a strategii hry. Hráči budou muset efektivně spravovat jejich zdroje a využívat je pro zajištění bezpečnosti a přežití své osady.
+
 
 \chapter{Implementace}
 \label{implementace}
 Tato část se věnuje podrobnostem implementace skriptů, jež jsou klíčovými součástmi vytváření finální hry.
+\iffalse
+\section{Perlinův šum}
+\label{PerlinNoiseImplement}
 \textcolor{gray}{\blindtext[60]}
 \chapter{Experimenty a vyhodnocení}
 \label{experiments}
