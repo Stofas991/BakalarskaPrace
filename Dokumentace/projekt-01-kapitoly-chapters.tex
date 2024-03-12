@@ -586,10 +586,89 @@ Hra bude obsahovat základní suroviny jako je dřevo, kámen a jídlo, které b
 
 Všechny tyto suroviny budou hrát klíčovou roli v ekonomice a strategii hry. Hráči budou muset efektivně spravovat jejich zdroje a využívat je pro zajištění bezpečnosti a přežití své osady.
 
+\todo{Blbost>>?}
+
+\subsection{Model dat}
+Při návrhu modelu dat jsem vycházel z potřeb herního prostředí a funkcí, která hra poskytuje. Model dat je navržen tak, aby reflektoval vztahy mezi jednotlivými herními entitami a umožňoval efektivní správu a manipulaci s daty během hry. Hlavními entitami v modelu dat jsou postavy, objekty, suroviny a herní události.
+
+Postavy jsou reprezentovány jako objekty s atributy jako jméno, životy, úroveň atd. Objekty jsou rozděleny do kategorií jako budovy, překážky atd. Suroviny jsou reprezentovány jako objekty s atributy jako typ suroviny a množství.
+
+Vztahy mezi entitami jsou definovány pomocí vazeb a asociací, což umožňuje přesné modelování herních mechanismů a interakcí. Například postava může vlastnit určité objekty, suroviny mohou být sbírány a využívány k výrobě dalších objektů a herní události mohou ovlivňovat stav postav a objektů.
+
+\subsubsection{ER diagram:}
+Pro lepší představu modelu dat je zde uveden ER diagram, což je grafický nástroj používaný k vizualizaci a popisu struktury datového modelu.
+
+\todo{diagram dodělat}
+
 
 \chapter{Implementace}
 \label{implementace}
-Tato část se věnuje podrobnostem implementace skriptů, jež jsou klíčovými součástmi vytváření finální hry.
+Tato část se věnuje podrobnostem implementace skriptů, jež jsou klíčovými součástmi vytváření finální hry a struktury samotného projektu.
+
+\section{Architektura hry}
+V této sekci se zabývám popisem architektury samotného projektu a jeho struktury. Dále je zde ER diagram popisující vztah jednotlivých datových struktur.
+
+\subsection{Struktura projektu}
+Jednotlivé části projektu obsahují klíčové prvky této práce a jsou následovně rozděleny do jednotlivých složek. Tato sekce popisuje hlavní složky do kterých je tento projekt rozdělen.
+
+\todo{přidat diagram struktury složek}
+
+\begin{description}
+	\item[Animations] Tato složka obsahuje soubory s animacemi postav a okolí ve hře. Animace jsou klíčovým prvkem pro pohyb a vizuální efekty herních postav a prostředí. V této složce se nachází více dalších podsložek které dále rozdělují animace tak, aby usnadňovaly snadný přístup a správu animačních souborů.
+	\item[Graphics] Ve složceGraphics se nacházejí všechny grafické podklady použité v této hře, jako jsou textury, sprity, modely a další vizuální prvky. Grafické podklady jsou důležité pro vytváření vizuálního prostředí této hry a přispívají k celkovému vzhledu a atmosféře.
+	\item[Prefabs] Prefabs jsou předvytvořené herní objekty s přiřazenými skripty a dalšími vlastnostmi, které lze opakovaně využívat ve hře.
+	
+	Tato složka obsahuje klíčové herní objekty, které jsou vytvořeny, konfigurovány předem a mohou být snadno použity v různých scénách hry. Příklad využití je například u stromů, které mají při inicializaci stejné vlastnosti a tak mají vlastní prefab, který tyto informace, společně se spritem, obsahuje.
+	\item[Scenes] V této složce jsou definované herní scény, jako jsou menu, nebo samotná hlavní herní scéna hry. Každá scéna obsahuje specifické herní objekty, nastavení a logiku potřebnou pro danou část hry.
+	\item[ScriptableObjects] ScriptableObjects jsou objekty vytvořené pomocí skriptů, které dědí z třídy ScriptableObject vestavěné v Unity. Tyto objekty mohou uchovávat data, nastavení a další informace, které lze použít v různých částech hry, hodí se například pro stavitelné objekty které budou mít vždy stejné základní vlastnosti, jako je sprite, název, nebo kategorii do které spadá, ke kterým si potom vývojář přidá potřebné skripty.
+	\item[Scripts] Ve složce scripts se nacházejí všechny skripty potřebné k běhu hry. Skripty obsahují herní logiku, ovladače, umělou inteligenci, UI interakce a další funkce potřebné k implementaci funkcí a chování vaší hry. Tato složka je dále rozdělená do podsložek, z důvodu ještě lepší organizace, přístupu a správy skriptů
+\end{description}
+
+Při organizaci složek jsem zohlednil několik kritérií, která jsou důležitá pro efektivní správu a vývoj projektu. Při navrhování struktury složek jsem se zaměřil na funkční oddělení a jednoduchost formátu. Hlavní složky projektu jsou rozděleny podle typu obsahu a funkčnosti, co usnadňuje navigaci a správu projektu.
+
+Dalším hlediskem na které jsem se zaměřil bylo oddělení logiky a dat, přičemž skripty obsahují herní logiku a funkce, zatímco ScriptableObjects slouží k uchování dat a nastavení, nezávislých na konkrétních instancích herních objektů. Toto rozdělení pomáhá udržovat kód čistý a přehledný, což usnadňuje údržbu a správu projektu v průběhu vývoje.
+
+\section{Implementace algoritmů}
+Tato sekce detailně popisuje implementaci jednotlivých algoritmů včetně příkladů kódu.
+
+\subsection{Generování terénu}
+Tato sekce se detailně zaměřuje na konkrétní implementaci Perlinova šumu v prostředí Unity pomocí skriptů v jazyce C\#. Vysvětluje postup krok za krokem a představuje klíčové prvky implementace jako je využití Perlinova šumu, detailně vysvětleného v sekci \ref{perlinNoise}, který je implementovaný v knihovně \textit{Mathf}. 
+
+\subsubsection{Skript pro inicializaci a nastavení šumu}
+Skriptem, který má za úkol inicializovat generátor Perlinova šumu a umožňuje nastavení klíčových parametrů, jako jsou šířka a výška mapy, seed, přiblížení šumu, oktávy, apod. pro dosažení různorodých terénů, je pojmenován \textit{MapGenerator.cs} \todo{bez .cs?}. 
+
+Jedná se o skript který je přímo přiřazený hernímu objektu jménem \textit{Map Generator}, ve kterém může vývojář pohodlně zadávat potřebné hodnoty pro generování šumu a samotného terénu.
+
+\begin{lstlisting}
+using system;
+
+public class MapGenerator : MonoBehaviour
+{
+	public int mapWidth;
+	public int mapHeight;
+	public float noiseScale;
+	public int octaves;
+	public int octaves;
+	[Range(0f, 1f)]
+	public float persistance;
+	public float lacunarity;
+	
+	public int seed;
+	public Vector2 offset;	
+	
+	public void GenerateMap()
+	{
+		.
+		.
+		.
+		float[,] noiseMap = noise.GenerateNoiseMap(mapWidth, 
+		mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
+		.
+		.
+		.
+	}
+}
+\end{lstlisting}
 \iffalse
 \section{Perlinův šum}
 \label{PerlinNoiseImplement}
