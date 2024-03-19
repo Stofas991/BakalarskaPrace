@@ -6,14 +6,23 @@ using UnityEngine.Tilemaps;
 public enum Category
 {
     Wall,
-    Storage
+    Zone,
+    Items
 }
 
-[CreateAssetMenu (fileName = "Buildable", menuName = "BuildingObjects/Create Buildable")]
-public class BuildableObjects : ScriptableObject
+public enum PlaceType
+{
+    Single,
+    Line,
+    Rectangle
+}
+
+[CreateAssetMenu (fileName = "Buildable", menuName = "BuildingObjectBase/Create Buildable")]
+public class BuildableObjectBase : ScriptableObject
 {
     [SerializeField] Category category;
     [SerializeField] TileBase tileBase;
+    [SerializeField] PlaceType placeType;
 
     public TileBase TileBase
     {
@@ -23,5 +32,10 @@ public class BuildableObjects : ScriptableObject
     public Category Category 
     { 
         get { return category; } 
+    }
+
+    public PlaceType PlaceType
+    { 
+        get { return placeType; } 
     }
 }

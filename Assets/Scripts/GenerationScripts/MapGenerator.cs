@@ -25,6 +25,7 @@ public class MapGenerator : MonoBehaviour
 
     public int seed;
     public Vector2 offset;
+    public GameObject treeParent;
 
     public bool autoUpdate;
 
@@ -90,7 +91,9 @@ public class MapGenerator : MonoBehaviour
                 {
 
                     regions[4].tileMap.SetTile(new Vector3Int(x, y, 0), regions[4].tile);
-                    treePrefabList.Add(Instantiate(treePrefab, new Vector3(x+0.5f, y+0.5f, 0f), new Quaternion()));
+                    GameObject tree = Instantiate(treePrefab, new Vector3(x + 0.5f, y + 0.5f, 0f), new Quaternion());
+                    tree.transform.parent = treeParent.transform;
+                    treePrefabList.Add(tree);
                     treeCount++;
 
                     if (treeCount > treeLimit)

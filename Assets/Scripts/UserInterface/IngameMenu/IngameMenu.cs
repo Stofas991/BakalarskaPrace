@@ -5,19 +5,18 @@ using UnityEngine;
 public class IngameMenu : MonoBehaviour
 {
     GameObject activeSubMenu;
-    public GameObject buildingSubMenu;
-    public GameObject zoneSubMenu;
-    public void BuildingMenu()
+
+    public void ActivateSubMenu(GameObject subMenu)
     {
-        CloseActiveMenu(buildingSubMenu);
+        CloseActiveMenu(subMenu);
 
-        buildingSubMenu.SetActive(!buildingSubMenu.activeSelf);    //activating new submenu
-        activeSubMenu = buildingSubMenu;    
-
+        subMenu.SetActive(!subMenu.activeSelf);    //activating new submenu
+        activeSubMenu = subMenu;
     }
-    void CloseActiveMenu(GameObject subMenu)
+
+    void CloseActiveMenu(GameObject menu)
     {
-        if (activeSubMenu != null && activeSubMenu != subMenu)
+        if (activeSubMenu != null && activeSubMenu != menu)
         {
             activeSubMenu.SetActive(false);
             activeSubMenu = null;

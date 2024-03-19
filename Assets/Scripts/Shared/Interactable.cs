@@ -35,6 +35,11 @@ public class Interactable : MonoBehaviour
             {
                 foreach (Transform player in playerList)
                 {
+                    if (player == null)
+                    {
+                        playerList.Remove(player);
+                        continue;
+                    }
                     float distance = Vector3.Distance(player.position, transform.position);
 
                     if (distance <= player.GetComponent<UnitControlScript>().attackRange)

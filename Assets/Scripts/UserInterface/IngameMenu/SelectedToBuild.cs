@@ -6,57 +6,53 @@ using UnityEngine.Tilemaps;
 
 public class SelectedToBuild : MonoBehaviour
 {
+    [SerializeField] Tilemap previewMap;
     public GameObject UIObject;
-    public GameObject objectToPlace;
     public GameObject tilemapParent;
 
-    SelectObject2D selectObject;
-    GameObject currentPlaceableObject;
+    TileBase tileBase;
+    Vector3Int currentGridPosition;
+    Vector3Int lastGridPosition;
+    public BuildableObjectBase selectedObject;
 
-    void Start()
+    private BuildableObjectBase SelectedObject
     {
-        selectObject = UIObject.GetComponent<SelectObject2D>();
+        set
+        {
+            selectedObject = value;
+
+            tileBase = selectedObject != null ? selectedObject.TileBase : null;
+
+            UpdatePreview();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (currentPlaceableObject != null)
+        //if something is selected, show preview
+        if (selectedObject != null)
         {
-            MoveObject();
-            ReleaseIfClicked();
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int gridPos = previewMap.WorldToCell(mousePos);
+
+            if(gridPos != currentGridPosition)
+            {
+                lastGridPosition = currentGridPosition;
+                currentGridPosition = gridPos;
+            }
+
+            UpdatePreview();
         }
+        
     }
 
-    public virtual void Build()
+    private void UpdatePreview()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0;
-        currentPlaceableObject = Instantiate(objectToPlace, mousePos, new Quaternion());
-        selectObject.buildingMode = true;
-    }
+        //removing old tile if existing
+        previewMap.SetTile(lastGridPosition, null);
 
-    private void MoveObject()
-    {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0;
-        currentPlaceableObject.transform.localPosition = mousePos;
-    }
-
-    private void ReleaseIfClicked()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            //check if it is possible to place object here
-            //
-
-            //some action to place blueprint
-            //
-
-            Debug.Log("Build it and lose it");
-
-            selectObject.buildingMode = false;
-            currentPlaceableObject = null;
-        }
+        //set current tile to current mouse position tile
+        previewMap.SetTile(currentGridPosition, tileBase);
     }
 }

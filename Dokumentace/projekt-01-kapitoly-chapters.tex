@@ -639,36 +639,7 @@ Skriptem, který má za úkol inicializovat generátor Perlinova šumu a umožň
 
 Jedná se o skript který je přímo přiřazený hernímu objektu jménem \textit{Map Generator}, ve kterém může vývojář pohodlně zadávat potřebné hodnoty pro generování šumu a samotného terénu.
 
-\begin{lstlisting}
-using system;
 
-public class MapGenerator : MonoBehaviour
-{
-	public int mapWidth;
-	public int mapHeight;
-	public float noiseScale;
-	public int octaves;
-	public int octaves;
-	[Range(0f, 1f)]
-	public float persistance;
-	public float lacunarity;
-	
-	public int seed;
-	public Vector2 offset;	
-	
-	public void GenerateMap()
-	{
-		.
-		.
-		.
-		float[,] noiseMap = noise.GenerateNoiseMap(mapWidth, 
-		mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
-		.
-		.
-		.
-	}
-}
-\end{lstlisting}
 \iffalse
 \section{Perlinův šum}
 \label{PerlinNoiseImplement}

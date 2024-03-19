@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e5d9503e40e0ba43b32caa345b51f23, type: 3}
+  m_Name: StockpileZone
+  m_EditorClassIdentifier: 
+  category: 1
+  tileBase: {fileID: 11400000, guid: fdbf0480cac36594d886f8e65dbdbf10, type: 2}
+  placeType: 2
