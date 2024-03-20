@@ -17,6 +17,14 @@ public class BuildingButtonHandler : MonoBehaviour
         buildingCreator = BuildingCreator.GetInstance(); //singleton
     }
 
+    public BuildableObjectBase Item
+    {
+        set 
+        {
+            item = value;
+        }
+    }
+
     private void ButtonClicked()
     {
         buildingCreator.ObjectSelected(item);

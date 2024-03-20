@@ -3,39 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum Category
-{
-    Wall,
-    Zone,
-    Items
-}
-
-public enum PlaceType
-{
-    Single,
-    Line,
-    Rectangle
-}
-
-[CreateAssetMenu (fileName = "Buildable", menuName = "BuildingObjectBase/Create Buildable")]
+[CreateAssetMenu (fileName = "Buildable", menuName = "Building/Create Buildable")]
 public class BuildableObjectBase : ScriptableObject
 {
-    [SerializeField] Category category;
+    [SerializeField] BuildingCategory category;
     [SerializeField] TileBase tileBase;
     [SerializeField] PlaceType placeType;
+    [SerializeField] UICategory uiCategory;
 
     public TileBase TileBase
     {
         get { return tileBase; }
     }
 
-    public Category Category 
+    public BuildingCategory Category 
     { 
         get { return category; } 
     }
 
     public PlaceType PlaceType
     { 
-        get { return placeType; } 
+        get { return placeType == PlaceType.None ? category.PlaceType : placeType; } 
     }
+    //Write about this, every buildable object has placeType, can be None, if it is none it gets value from BuildingCategory which also has placeType
+
+    public UICategory UICategory
+    {
+        get { return uiCategory; }
+    }
+
 }

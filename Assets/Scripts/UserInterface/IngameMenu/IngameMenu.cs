@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IngameMenu : MonoBehaviour
+public class IngameMenu : Singleton<IngameMenu>
 {
     GameObject activeSubMenu;
 
