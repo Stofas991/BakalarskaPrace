@@ -9,20 +9,18 @@ public class SelectObject2D : MonoBehaviour
 {
     // Update is called once per frame
     private bool isDragSelect = false;
-    private Vector3 startPosition;
+    public Vector3 startPosition;
     private Vector3 endPosition;
-    private RaycastHit hit;
 
     public RectTransform selectionBox;
     public bool buildingMode = false;
     private HashSet<UnitSelection> selectedUnitList;
-    [SerializeField] LayerMask clickableLayers;
-    Interactable enemy;
 
     private void Awake()
     {
         selectedUnitList = new HashSet<UnitSelection>();
     }
+
     void Update()
     {
         if (selectedUnitList.Count > 0)

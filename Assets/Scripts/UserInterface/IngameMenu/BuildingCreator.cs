@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,6 +14,9 @@ public class BuildingCreator : Singleton<BuildingCreator>
     [SerializeField] Tilemap previewMap, defaultMap;
     public CategoryTilemap[] categoriesTilemaps;
     PlayerBuildInput playerInput;
+    
+    //if any one of those maps contain tile, cant place there
+    [SerializeField] List<Tilemap> forbidPlacingMaps;
 
     TileBase tileBase;
     BuildableObjectBase selectedObject;
@@ -174,8 +178,13 @@ public class BuildingCreator : Singleton<BuildingCreator>
         //removing old tile if existing
         previewMap.SetTile(lastGridPosition, null);
 
-        //set current tile to current mouse position tile
         previewMap.SetTile(currentGridPosition, tileBase);
+
+        if (IsForbidden(currentGridPosition))
+        {
+            previewMap.SetTileFlags(currentGridPosition, TileFlags.None);
+            previewMap.SetColor(currentGridPosition, Color.red);
+        }
     }
 
     private void HandleDrawing()
@@ -206,7 +215,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
             {
                 case PlaceType.Line:
                 case PlaceType.Rectangle:
-                    DrawBounds(tilemap);
+                    DrawBounds(tilemap, false);
                     previewMap.ClearAllTiles();
                     break;
             }
@@ -222,7 +231,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
         bounds.yMin = currentGridPosition.y < holdStartPosition.y ? currentGridPosition.y : holdStartPosition.y;
         bounds.yMax = currentGridPosition.y > holdStartPosition.y ? currentGridPosition.y : holdStartPosition.y;
 
-        DrawBounds(previewMap);
+        DrawBounds(previewMap, true);
     }
 
     private void LineRenderer()
@@ -249,23 +258,66 @@ public class BuildingCreator : Singleton<BuildingCreator>
             bounds.yMax = currentGridPosition.y > holdStartPosition.y ? currentGridPosition.y : holdStartPosition.y;
         }
 
-        DrawBounds(previewMap);
+        DrawBounds(previewMap, true);
     }
 
-    private void DrawBounds(Tilemap map)
+    private void DrawBounds(Tilemap map, bool previewMode)
     {
         for (int x = bounds.xMin; x <= bounds.xMax; x++)
         {
             for (int y = bounds.yMin; y <= bounds.yMax; y++)
             {
-                map.SetTile(new Vector3Int(x, y, 0), tileBase);
+                if (previewMode)
+                {
+                    map.SetTile(new Vector3Int(x, y, 0), tileBase);
+
+                    if (IsForbidden(new Vector3Int(x, y, 0)))
+                    {
+                        if (!IsSameTilemap(new Vector3Int(x, y, 0), selectedObject.Category.tilemap))
+                            map.SetColor(new Vector3Int(x, y, 0), Color.red);
+                    }
+                }
+                else
+                {
+                    if (!IsForbidden(new Vector3Int(x, y, 0)))
+                        map.SetTile(new Vector3Int(x, y, 0), tileBase);
+                }
             }
         }
     }
 
     private void DrawItem()
     {
-        tilemap.SetTile(currentGridPosition, tileBase);
+        if (!IsForbidden(currentGridPosition))
+        {
+            tilemap.SetTile(currentGridPosition, tileBase);
+            selectedObject = null;
+            holdActive = false;
+            SelectionScript.startPosition = Input.mousePosition;
+        }
+
+    }
+
+    private bool IsForbidden (Vector3Int pos)
+    {
+        return forbidPlacingMaps.Any(map =>
+        {
+            return map.HasTile(pos);
+        });
+    }
+
+    //maybe create override method to IsForbidden
+    private bool IsSameTilemap(Vector3Int pos, Tilemap tilemapToCheck)
+    {
+        foreach (Tilemap map in forbidPlacingMaps)
+        {
+            if (map.HasTile(pos))
+            {
+                if (map == tilemapToCheck)
+                    return true;
+            }
+        }
+        return false;
     }
 }
 

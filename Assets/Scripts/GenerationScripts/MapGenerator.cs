@@ -37,6 +37,9 @@ public class MapGenerator : MonoBehaviour
     private bool end;
 
     List<GameObject> treePrefabList = new List<GameObject>();
+
+    [SerializeField] Tilemap[] tilemaps;
+
     public void GenerateMap()
     {
         MapDisplay display = FindObjectOfType<MapDisplay>();
@@ -58,9 +61,9 @@ public class MapGenerator : MonoBehaviour
             display.DrawTexture(TextureGenerator.DrawNoiseMap(noisemapp));
         }
 
-        for (int i = 0; i < regions.Length; i++)
+        foreach (Tilemap tilemap in tilemaps)
         {
-            regions[i].tileMap.ClearAllTiles();
+            tilemap.ClearAllTiles();
         }
 
         float[,] noiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
