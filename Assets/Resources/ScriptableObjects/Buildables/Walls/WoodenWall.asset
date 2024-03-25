@@ -16,3 +16,4 @@ MonoBehaviour:
   tileBase: {fileID: 11400000, guid: 83142ebfc587bd542b178a4681157e47, type: 2}
   placeType: 2
   uiCategory: {fileID: 11400000, guid: 026008fefceeb4d45ab5ed9f78362ad1, type: 2}
+  prefab: {fileID: 5152080460175122735, guid: 11b85c38bcaf9e640bcb031ea566a337, type: 3}

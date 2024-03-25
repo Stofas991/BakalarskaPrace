@@ -9,7 +9,7 @@ public class Interactable : MonoBehaviour
     public float radius = 2f;
 
     bool isFocus = false;
-    bool hasInteracted = false;
+    public bool hasInteracted = false;
     public bool isEnemy = false;
     public List<Transform> playerList;
 

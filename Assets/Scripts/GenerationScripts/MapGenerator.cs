@@ -16,6 +16,7 @@ public class MapGenerator : MonoBehaviour
     public int treeLimit = 50;
     public int mapHeight;
     public float noiseScale;
+    public float treeNoisScale;
 
 
     public int octaves;
@@ -67,7 +68,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         float[,] noiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
-        float[,] treeNoiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, 1, octaves, persistance, lacunarity, new Vector2(2.87f, 1.8f));
+        float[,] treeNoiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, treeNoisScale, octaves, persistance, lacunarity, new Vector2(2.87f, 1.8f));
         Color[] colourMap = new Color[mapWidth * mapHeight];
         treeCount = 0;
         end = false;

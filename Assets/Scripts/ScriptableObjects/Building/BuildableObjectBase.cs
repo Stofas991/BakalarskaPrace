@@ -10,6 +10,7 @@ public class BuildableObjectBase : ScriptableObject
     [SerializeField] TileBase tileBase;
     [SerializeField] PlaceType placeType;
     [SerializeField] UICategory uiCategory;
+    [SerializeField] GameObject prefab;
 
     public TileBase TileBase
     {
@@ -32,4 +33,8 @@ public class BuildableObjectBase : ScriptableObject
         get { return uiCategory; }
     }
 
+    public GameObject Prefab
+    {
+        get { return prefab; }
+    }
 }

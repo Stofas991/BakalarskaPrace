@@ -14,13 +14,16 @@ public class BuildingCreator : Singleton<BuildingCreator>
     [SerializeField] Tilemap previewMap, defaultMap;
     public CategoryTilemap[] categoriesTilemaps;
     PlayerBuildInput playerInput;
-    
+    [SerializeField] GameObject itemParent;
+
     //if any one of those maps contain tile, cant place there
     [SerializeField] List<Tilemap> forbidPlacingMaps;
 
     TileBase tileBase;
     BuildableObjectBase selectedObject;
     SelectObject2D SelectionScript;
+    GameObject categoryParent;
+
 
     Camera _camera;
 
@@ -263,6 +266,12 @@ public class BuildingCreator : Singleton<BuildingCreator>
 
     private void DrawBounds(Tilemap map, bool previewMode)
     {
+        //creating parent for each zone, if it is already created just use the one already existing
+        if (!previewMode)
+        {
+            categoryParent = InitializeParent();
+        }
+
         for (int x = bounds.xMin; x <= bounds.xMax; x++)
         {
             for (int y = bounds.yMin; y <= bounds.yMax; y++)
@@ -279,18 +288,56 @@ public class BuildingCreator : Singleton<BuildingCreator>
                 }
                 else
                 {
-                    if (!IsForbidden(new Vector3Int(x, y, 0)))
+                    //cant place on forbidden tilemaps or on another zone
+                    if (!IsForbidden(new Vector3Int(x, y, 0)) && !selectedObject.Category.tilemap.HasTile(new Vector3Int(x, y, 0)))
+                    {
                         map.SetTile(new Vector3Int(x, y, 0), tileBase);
+                        GameObject item = Instantiate(selectedObject.Prefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
+                        item.transform.parent = categoryParent.transform;
+                    }
                 }
             }
         }
+    }
+
+    private GameObject InitializeParent()
+    {
+        GameObject parent;
+        if (selectedObject.Category.name == "Zone")
+        {
+            parent = GameObject.Find(selectedObject.name + "_zone");
+            if (parent == null)
+            {
+                parent = new GameObject(selectedObject.name + "_zone");
+            }
+            parent.transform.parent = itemParent.transform;
+        }
+        else if (selectedObject.Category.name == "Wall")
+        {
+            parent = GameObject.Find(selectedObject.name + "_wall");
+            if (parent == null)
+            {
+                parent = new GameObject(selectedObject.name + "_wall");
+            }
+            parent.transform.parent = itemParent.transform;
+        }
+        else
+        {
+            parent = null;
+        }
+        return parent;
     }
 
     private void DrawItem()
     {
         if (!IsForbidden(currentGridPosition))
         {
+            //placing tile and prefab
             tilemap.SetTile(currentGridPosition, tileBase);
+            GameObject item = Instantiate(selectedObject.Prefab, new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0), Quaternion.identity);
+            item.transform.parent = itemParent.transform;
+
+            //removing selected item and position
             selectedObject = null;
             holdActive = false;
             SelectionScript.startPosition = Input.mousePosition;

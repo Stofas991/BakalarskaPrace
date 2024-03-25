@@ -104,4 +104,22 @@ public class UnitControlScript: MonoBehaviour
         motor.StopFollowingTarget();
     }
 
+    public void PickUp(GameObject itemToPick, int count)
+    {
+        Instantiate(itemToPick, transform);
+
+    }
+
+    //This function makes character go towards stockpile
+    public void HaulItem()
+    {
+
+    }
+
+    //places item into stockpile
+    public void StockItem()
+    {
+
+    }
+
 }
