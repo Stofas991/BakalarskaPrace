@@ -15,6 +15,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
     public CategoryTilemap[] categoriesTilemaps;
     PlayerBuildInput playerInput;
     [SerializeField] GameObject itemParent;
+    [SerializeField] GameObject zoneParent;
 
     //if any one of those maps contain tile, cant place there
     [SerializeField] List<Tilemap> forbidPlacingMaps;
@@ -310,7 +311,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
             {
                 parent = new GameObject(selectedObject.name + "_zone");
             }
-            parent.transform.parent = itemParent.transform;
+            parent.transform.parent = zoneParent.transform;
         }
         else if (selectedObject.Category.name == "Wall")
         {

@@ -38,7 +38,7 @@ public class PlayerMotor : MonoBehaviour
         }
         else
         {
-            agent.stoppingDistance = 1;
+            agent.stoppingDistance = 1.5f;
         }
         
 

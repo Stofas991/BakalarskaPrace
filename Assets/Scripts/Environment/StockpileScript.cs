@@ -2,17 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StockpileScript : MonoBehaviour
+public class StockpileScript : Interactable
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool containsItem = false;
+    public ContainedItemType itemType;
+    public int itemCount;
+    public int itemMaxCount = 100;
+
+    [SerializeField] StockpileItemBase stockpileItem;
+    ResourcesScript resourceMenu;
+
+    private void Start()
     {
-        
+        resourceMenu = ResourcesScript.GetInstance();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Interact(Transform interactingPlayer)
     {
-        
+        base.Interact(interactingPlayer);
+        //if does not contain item, spawn new one
+        if (!containsItem)
+        {
+            GameObject gameObject = stockpileItem.ItemImage;
+            Instantiate(gameObject, transform);
+
+            itemType = stockpileItem.ItemType;
+            containsItem = true;
+
+        }
+        resourceMenu.UpdateAmmount(itemCount, itemType);
+        interactingPlayer.GetComponent<UnitControlScript>().DestroyCarriedItem();
+
+        hasInteracted = true;
     }
 }
+public enum ContainedItemType
+{
+    None,
+    Wood,
+    Stone,
+    Iron
+}
+

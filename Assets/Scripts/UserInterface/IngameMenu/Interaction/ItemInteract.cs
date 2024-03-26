@@ -53,8 +53,8 @@ public class ItemInteract : Interactable
         Destroy(instance);
 
         //copy values for effectivity and spawn canvas
-        int count = GetComponent<ItemSpecifics>().count;
-        unitControlScript.PickUp(itemCanvas, count);
+        ItemSpecifics itemSpecifics = GetComponent<ItemSpecifics>();
+        unitControlScript.PickUp(itemCanvas, itemSpecifics.count, itemSpecifics.itemType);
 
         //Destroy this object
         Destroy(gameObject);

@@ -71,3 +71,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5236a40f7ed2e345be6722ffe6c6588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  radius: 2
+  hasInteracted: 0
+  isEnemy: 0
+  playerList: []
+  containsItem: 0
+  itemType: 0
+  itemCount: 0
+  itemMaxCount: 100
+  stockpileItem: {fileID: 11400000, guid: b22eddfc83bd24347bbf82cc26849775, type: 2}

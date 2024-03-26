@@ -11,6 +11,7 @@ using UnityEngine.UIElements.Experimental;
 public class UnitControlScript: MonoBehaviour
 {
     [SerializeField] GameObject clickEffect;
+    [SerializeField] GameObject zoneParent;
 
     public Vector3 target;
     private NavMeshAgent agent;
@@ -18,12 +19,16 @@ public class UnitControlScript: MonoBehaviour
     public Animator animator;
     public Interactable focus;
     private PlayerMotor motor;
+    private GameObject stockpileZone;
+    private GameObject carriedItem;
     
     public float attackRange;
     public float nextAttackEvent;
     public float attackDelay = 5f;
     public Guid guid;
     public bool selected = false;
+    private int UCCount;
+    private ContainedItemType UCItemType;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,14 +48,19 @@ public class UnitControlScript: MonoBehaviour
             CancelAttack();
             if (Input.GetMouseButtonDown(1))
             {
-                //kontrola jestli se kliknulo na nepøítele
+                //check what was clicked
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
                 if (hit)
                 {
                     Interactable interactable = hit.collider.GetComponent<Interactable>();
-                    if (interactable != null)
+                    StockpileScript stockpile = interactable.GetComponent<StockpileScript>();
+                    if (stockpile != null)
+                    {
+                        HaulItem(UCCount, UCItemType);
+                    }
+                    else if (interactable != null)
                     {
                         SetFocus(interactable);
                     }
@@ -104,22 +114,68 @@ public class UnitControlScript: MonoBehaviour
         motor.StopFollowingTarget();
     }
 
-    public void PickUp(GameObject itemToPick, int count)
+    public void PickUp(GameObject itemToPick, int count, ContainedItemType itemType)
     {
-        Instantiate(itemToPick, transform);
+        carriedItem = Instantiate(itemToPick, transform);
+        stockpileZone = StockpileGetter();
+        UCItemType = itemType;
+        UCCount = count;
 
+        HaulItem(count, itemType);
     }
 
     //This function makes character go towards stockpile
-    public void HaulItem()
+    public void HaulItem(int count, ContainedItemType itemType)
     {
+        StockpileScript stockpileScript = new StockpileScript();
+        foreach(Transform child in stockpileZone.transform)
+        {
+            stockpileScript = child.GetComponent<StockpileScript>();
+            if (!stockpileScript.containsItem)
+            {
+                stockpileScript.itemCount = count;
+                stockpileScript.itemType = itemType;
+                break;
+            }
+            else
+            {
+                if (stockpileScript.itemType == itemType)
+                {
+                    var controllCount = count + stockpileScript.itemCount;
 
+                    if (controllCount > stockpileScript.itemMaxCount)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        stockpileScript.itemCount = controllCount;
+                        break;
+                    }
+                }
+                else
+                { 
+                    continue; 
+                }
+
+            }
+        }
+        if (stockpileScript != null)
+        {
+            SetFocus(stockpileScript);
+        }
     }
 
-    //places item into stockpile
-    public void StockItem()
+    //destroys image of carried item
+    public void DestroyCarriedItem()
     {
+        Destroy(carriedItem);
+    }
 
+    public GameObject StockpileGetter()
+    {
+        GameObject stockpile = zoneParent.transform.Find("Stockpile_zone").gameObject;
+        return stockpile;
     }
 
 }

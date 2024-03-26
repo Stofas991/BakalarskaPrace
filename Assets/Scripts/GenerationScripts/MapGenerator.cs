@@ -69,6 +69,7 @@ public class MapGenerator : MonoBehaviour
 
         float[,] noiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
         float[,] treeNoiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, treeNoisScale, octaves, persistance, lacunarity, new Vector2(2.87f, 1.8f));
+        float[,] vegetationMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, 2, octaves, persistance, lacunarity, new Vector2(2.87f, 1.8f));
         Color[] colourMap = new Color[mapWidth * mapHeight];
         treeCount = 0;
         end = false;
@@ -79,6 +80,7 @@ public class MapGenerator : MonoBehaviour
             {
                 float currentHeight = noiseMap[x, y];
                 float treeCurrentHeight = treeNoiseMap[x, y];
+                float vegetationCurrentHeight = vegetationMap[x, y];
                 
                 for(int i = 0; i < regions.Length; i++)
                 {
@@ -91,7 +93,7 @@ public class MapGenerator : MonoBehaviour
                     }
                 }
                 //adding trees on next layer and objects representing them
-                if (!end && currentHeight > regions[1].height && currentHeight <= regions[2].height && treeCurrentHeight > regions[4].height)
+                if (!end && currentHeight > regions[1].height && currentHeight <= regions[2].height && treeCurrentHeight > regions[4].height && vegetationCurrentHeight <= regions[5].height)
                 {
 
                     regions[4].tileMap.SetTile(new Vector3Int(x, y, 0), regions[4].tile);
@@ -105,13 +107,17 @@ public class MapGenerator : MonoBehaviour
                         end = true;
                     }
                 }
+                else if (currentHeight > regions[1].height && currentHeight <= regions[2].height && vegetationCurrentHeight >= regions[5].height)
+                {
+                    regions[6].tileMap.SetTile(new Vector3Int(x, y, 0), regions[6].tile);
+                }
+
                 //placing nothing everywhere where the trees are not present
                 //used for erasing trees
                 else
                 {
                     regions[5].tileMap.SetTile(new Vector3Int(x,y,0), regions[5].tile);
                 } 
-             
             }
         }
         Debug.Log(treePrefabList.Count);

@@ -68,9 +68,9 @@ TextureImporter:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
-    resizeAlgorithm: 0
+    resizeAlgorithm: 1
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -1848,7 +1848,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GUI0_83
+      name: menuAlternative
       rect:
         serializedVersion: 2
         x: 128
@@ -1857,7 +1857,7 @@ TextureImporter:
         height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 4, y: 5, z: 4, w: 5}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -5139,6 +5139,7 @@ TextureImporter:
       menu8: 947888428
       GUI0_114: -125475825
       GUI0_157: -2050191286
+      menuAlternative: -764859696
       GUI0_217: -1554121810
       GUI0_14: -882254767
       GUI0_109: -576731932
@@ -5183,7 +5184,6 @@ TextureImporter:
       GUI0_100: 1655550269
       GUI0_175: -480203912
       GUI0_193: 526163674
-      GUI0_83: -764859696
       GUI0_89: -46623923
       menu2: 65340094
       GUI0_131: 963736073
