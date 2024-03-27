@@ -11,6 +11,7 @@ public class BuildableObjectBase : ScriptableObject
     [SerializeField] PlaceType placeType;
     [SerializeField] UICategory uiCategory;
     [SerializeField] GameObject prefab;
+    [SerializeField] RequiredResources requiredResources;
 
     public TileBase TileBase
     {
@@ -37,4 +38,16 @@ public class BuildableObjectBase : ScriptableObject
     {
         get { return prefab; }
     }
+
+    public RequiredResources RequiredResources
+    {
+        get { return requiredResources;}
+    }
+}
+
+[System.Serializable]
+public class RequiredResources
+{
+    public ContainedItemType itemType;
+    public int ammount;
 }

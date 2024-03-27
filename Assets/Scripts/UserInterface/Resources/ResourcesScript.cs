@@ -12,10 +12,10 @@ public class ResourcesScript : Singleton<ResourcesScript>
     {
         foreach (var resource in resourceList)
         {
-            if (resource.type == type)
+            if (resource.requiredResources.itemType == type)
             {
-                resource.ammount += ammount;
-                resource.text.text = resource.ammount.ToString();
+                resource.requiredResources.ammount += ammount;
+                resource.text.text = resource.requiredResources.ammount.ToString();
                 break;
             }
         }
@@ -26,6 +26,5 @@ public class ResourcesScript : Singleton<ResourcesScript>
 public class Resource
 {
     public TMP_Text text;
-    public ContainedItemType type;
-    public int ammount;
+    public RequiredResources requiredResources;
 }

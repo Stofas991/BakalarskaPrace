@@ -27,8 +27,8 @@ public class UnitControlScript: MonoBehaviour
     public float attackDelay = 5f;
     public Guid guid;
     public bool selected = false;
-    private int UCCount;
-    private ContainedItemType UCItemType;
+    public int UCCount;
+    public ContainedItemType UCItemType = ContainedItemType.None;
     // Start is called before the first frame update
     void Start()
     {
@@ -56,11 +56,11 @@ public class UnitControlScript: MonoBehaviour
                 {
                     Interactable interactable = hit.collider.GetComponent<Interactable>();
                     StockpileScript stockpile = interactable.GetComponent<StockpileScript>();
-                    if (stockpile != null)
+                    if (stockpile != null && UCItemType != ContainedItemType.None)
                     {
                         HaulItem(UCCount, UCItemType);
                     }
-                    else if (interactable != null)
+                    else if (interactable != null && stockpile == null)
                     {
                         SetFocus(interactable);
                     }
@@ -127,13 +127,12 @@ public class UnitControlScript: MonoBehaviour
     //This function makes character go towards stockpile
     public void HaulItem(int count, ContainedItemType itemType)
     {
-        StockpileScript stockpileScript = new StockpileScript();
+        StockpileScript stockpileScript = null;
         foreach(Transform child in stockpileZone.transform)
         {
             stockpileScript = child.GetComponent<StockpileScript>();
             if (!stockpileScript.containsItem)
             {
-                stockpileScript.itemCount = count;
                 stockpileScript.itemType = itemType;
                 break;
             }
@@ -144,14 +143,10 @@ public class UnitControlScript: MonoBehaviour
                     var controllCount = count + stockpileScript.itemCount;
 
                     if (controllCount > stockpileScript.itemMaxCount)
-                    {
                         continue;
-                    }
+                    
                     else
-                    {
-                        stockpileScript.itemCount = controllCount;
                         break;
-                    }
                 }
                 else
                 { 
@@ -174,8 +169,11 @@ public class UnitControlScript: MonoBehaviour
 
     public GameObject StockpileGetter()
     {
-        GameObject stockpile = zoneParent.transform.Find("Stockpile_zone").gameObject;
-        return stockpile;
+        Transform stockpile = zoneParent.transform.Find("Stockpile_zone");
+        if (stockpile == null)
+            return null;
+
+        return stockpile.gameObject;
     }
 
 }

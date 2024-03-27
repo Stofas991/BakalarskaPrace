@@ -83,6 +83,10 @@ public class BuildingHUD : Singleton<BuildingHUD>
                 img.sprite = t.sprite;
             }
 
+            TMP_Text[] texts = instance.GetComponentsInChildren<TMP_Text>();
+            texts[0].text = buildable.name;
+            texts[1].text = buildable.RequiredResources.ammount.ToString();
+
 
             var script = instance.GetComponent<BuildingButtonHandler>();
             script.Item = buildable;

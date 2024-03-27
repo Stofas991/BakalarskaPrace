@@ -1,8 +1,10 @@
+using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -24,7 +26,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
     BuildableObjectBase selectedObject;
     SelectObject2D SelectionScript;
     GameObject categoryParent;
-
+    ResourcesScript resourceMenu;
 
     Camera _camera;
 
@@ -43,6 +45,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
         base.Awake();
         playerInput = new PlayerBuildInput();
         SelectionScript = GetComponent<SelectObject2D>();
+        resourceMenu = ResourcesScript.GetInstance();
         _camera = Camera.main;
 
         foreach (var item in categoriesTilemaps)
@@ -171,6 +174,9 @@ public class BuildingCreator : Singleton<BuildingCreator>
     private void OnRightClick(InputAction.CallbackContext ctx)
     {
         SelectedObject = null;
+        previewMap.ClearAllTiles();
+        holdActive = false;
+        SelectionScript.startPosition = Input.mousePosition;
     }
 
     public void ObjectSelected(BuildableObjectBase obj)
@@ -267,6 +273,8 @@ public class BuildingCreator : Singleton<BuildingCreator>
 
     private void DrawBounds(Tilemap map, bool previewMode)
     {
+        Dictionary<ContainedItemType, int> requiredResourcesPreview = new Dictionary<ContainedItemType, int>();
+        Dictionary<ContainedItemType, int> requiredResourcesUsed = new Dictionary<ContainedItemType, int>();
         //creating parent for each zone, if it is already created just use the one already existing
         if (!previewMode)
         {
@@ -277,11 +285,29 @@ public class BuildingCreator : Singleton<BuildingCreator>
         {
             for (int y = bounds.yMin; y <= bounds.yMax; y++)
             {
+                var requiredResources = selectedObject.RequiredResources;
+
+                //calculation of total resource cost
+                if (requiredResources.itemType != ContainedItemType.None)
+                {
+                    if (requiredResourcesPreview.ContainsKey(requiredResources.itemType))
+                        requiredResourcesPreview[requiredResources.itemType] += requiredResources.ammount;
+                    else
+                        requiredResourcesPreview[requiredResources.itemType] = requiredResources.ammount;
+                    
+                    if (resourceMenu.resourceList.Any(x => x.requiredResources.itemType == requiredResources.itemType && x.requiredResources.ammount >= requiredResources.ammount))
+                    {
+                        if (requiredResourcesUsed.ContainsKey(requiredResources.itemType))
+                            requiredResourcesUsed[requiredResources.itemType] += requiredResources.ammount;
+                        else
+                            requiredResourcesUsed[requiredResources.itemType] = requiredResources.ammount;
+                    }
+                }
                 if (previewMode)
                 {
                     map.SetTile(new Vector3Int(x, y, 0), tileBase);
 
-                    if (IsForbidden(new Vector3Int(x, y, 0)))
+                    if (IsForbidden(new Vector3Int(x, y, 0)) || NotEnoughResources(requiredResourcesPreview))
                     {
                         if (!IsSameTilemap(new Vector3Int(x, y, 0), selectedObject.Category.tilemap))
                             map.SetColor(new Vector3Int(x, y, 0), Color.red);
@@ -290,8 +316,14 @@ public class BuildingCreator : Singleton<BuildingCreator>
                 else
                 {
                     //cant place on forbidden tilemaps or on another zone
-                    if (!IsForbidden(new Vector3Int(x, y, 0)) && !selectedObject.Category.tilemap.HasTile(new Vector3Int(x, y, 0)))
+                    previewMap.SetTile(new Vector3Int(x, y, 0), null);
+                    if (!IsForbidden(new Vector3Int(x, y, 0)) && !selectedObject.Category.tilemap.HasTile(new Vector3Int(x, y, 0)) && !NotEnoughResources(requiredResourcesPreview))
                     {
+                        //updating status of resource menu
+                        resourceMenu.UpdateAmmount(-requiredResources.ammount, requiredResources.itemType);
+                        if (requiredResourcesPreview.ContainsKey(requiredResources.itemType))
+                            requiredResourcesPreview[requiredResources.itemType] -= requiredResources.ammount;
+
                         map.SetTile(new Vector3Int(x, y, 0), tileBase);
                         GameObject item = Instantiate(selectedObject.Prefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
                         item.transform.parent = categoryParent.transform;
@@ -331,17 +363,39 @@ public class BuildingCreator : Singleton<BuildingCreator>
 
     private void DrawItem()
     {
+        List<RequiredResources> resourcesToUpdate = new List<RequiredResources>();
         if (!IsForbidden(currentGridPosition))
         {
+            var requiredResources = selectedObject.RequiredResources;
+
+            //checking if all needed resources are present
+            foreach (var resource in resourceMenu.resourceList)
+            {
+                if (resource.requiredResources.itemType == requiredResources.itemType)
+                {
+                    if (resource.requiredResources.ammount >= requiredResources.ammount)
+                    {
+                        resourcesToUpdate.Append(resource.requiredResources);
+                    }
+                    else
+                    {
+                        Debug.Log("not enough " + resource.requiredResources.itemType);
+                        RemoveSelectedItem();
+                        return;
+                    }
+                }
+            }
+            foreach (var resource in resourcesToUpdate)
+            {
+                resourceMenu.UpdateAmmount(resource.ammount, resource.itemType);
+            }
+
             //placing tile and prefab
             tilemap.SetTile(currentGridPosition, tileBase);
             GameObject item = Instantiate(selectedObject.Prefab, new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0), Quaternion.identity);
             item.transform.parent = itemParent.transform;
 
-            //removing selected item and position
-            selectedObject = null;
-            holdActive = false;
-            SelectionScript.startPosition = Input.mousePosition;
+            RemoveSelectedItem();
         }
 
     }
@@ -363,6 +417,30 @@ public class BuildingCreator : Singleton<BuildingCreator>
             {
                 if (map == tilemapToCheck)
                     return true;
+            }
+        }
+        return false;
+    }
+
+    //removing selected item and position
+    private void RemoveSelectedItem()
+    {
+        previewMap.SetTile(currentGridPosition, null);
+        selectedObject = null;
+        holdActive = false;
+        SelectionScript.startPosition = Input.mousePosition;
+    }
+
+    private bool NotEnoughResources(Dictionary<ContainedItemType, int> resources)
+    {
+        foreach (var resource in resourceMenu.resourceList)
+        {
+            if (resources.ContainsKey(resource.requiredResources.itemType))
+            {
+                if (resources[resource.requiredResources.itemType] > resource.requiredResources.ammount)
+                {
+                    return true;
+                }
             }
         }
         return false;

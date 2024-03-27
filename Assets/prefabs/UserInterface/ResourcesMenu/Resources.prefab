@@ -329,8 +329,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceList:
   - text: {fileID: 209565980542547975}
-    type: 1
-    ammount: 0
+    requiredResources:
+      itemType: 1
+      ammount: 0
 --- !u!1 &209565982097688815
 GameObject:
   m_ObjectHideFlags: 0

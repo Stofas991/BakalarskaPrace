@@ -51,6 +51,13 @@ public class ItemInteract : Interactable
 
         //destroy menu
         Destroy(instance);
+        if (unitControlScript.StockpileGetter() == null)
+        {
+            Debug.Log("There is no stockpile zone, first create one in Zones -> Stockpile zone");
+            return;
+        }
+
+
 
         //copy values for effectivity and spawn canvas
         ItemSpecifics itemSpecifics = GetComponent<ItemSpecifics>();

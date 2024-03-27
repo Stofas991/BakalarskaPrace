@@ -30,6 +30,10 @@ public class StockpileScript : Interactable
             containsItem = true;
 
         }
+        UnitControlScript control = interactingPlayer.GetComponent<UnitControlScript>();
+        itemCount = control.UCCount;
+        control.UCCount = 0;
+        control.UCItemType = ContainedItemType.None;
         resourceMenu.UpdateAmmount(itemCount, itemType);
         interactingPlayer.GetComponent<UnitControlScript>().DestroyCarriedItem();
 
