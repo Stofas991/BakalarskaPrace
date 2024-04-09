@@ -66,9 +66,12 @@ public class Interactable : MonoBehaviour
 
     public virtual void OnDeFocused(Transform playerTransform)
     {
-        hasInteracted = false;
-        isFocus = false;
         playerList.Remove(playerTransform);
+        if (playerList.Count == 0)
+        {
+            hasInteracted = false;
+            isFocus = false;
+        }
     }
 
 }

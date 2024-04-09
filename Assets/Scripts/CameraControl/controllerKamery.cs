@@ -1,11 +1,14 @@
+using Sentry;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class controllerKamery : MonoBehaviour
 {
     public float panSpeed = 20f;
+    public float minSpeed, maxSpeed;
     public float panBorderThickness = 10f;
     public Vector2 panLimit;
     public MapGenerator Generator;
@@ -16,11 +19,15 @@ public class controllerKamery : MonoBehaviour
     public Camera cam;
     public float maxZ = 25f;
     public float minZ = 5f;
+    private Vector3 origin, difference;
+    private bool drag = false;
 
     private void Start()
     {
         panLimit.y = Generator.mapHeight;
         panLimit.x = Generator.mapWidth;
+        minSpeed = 20f;
+        maxSpeed = 40f;
     }
 
     // Update is called once per frame
@@ -53,9 +60,30 @@ public class controllerKamery : MonoBehaviour
 
         }
 
+        if (Input.GetMouseButton(2))
+        {
+            difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - Camera.main.transform.position;
+            if (!drag)
+            {
+                drag = true;
+                origin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                SentrySdk.CaptureMessage("test message");
+            }
+        }
+        else
+        {
+            drag = false;
+        }
+
+        if (drag)
+        {
+            pos = origin - difference;
+        }
+
         scroll -= Input.GetAxis("Mouse ScrollWheel") * scrollSpeed;
         scroll = Mathf.Clamp(scroll, minZ, maxZ);
-
+        panSpeed = scroll * 2;
+        panSpeed = Mathf.Clamp(panSpeed, minSpeed, maxSpeed);
 
         pos.x = Mathf.Clamp(pos.x, 0+halfWidth, panLimit.x-halfWidth);
         pos.y = Mathf.Clamp(pos.y, 0+halfHeight, panLimit.y-halfHeight);

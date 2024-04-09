@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 
+
 public class MapGenerator : MonoBehaviour
 {
     public enum DrawMode { NoiseMap, ColourMap, TileMap};
@@ -29,108 +30,175 @@ public class MapGenerator : MonoBehaviour
     public GameObject treeParent;
 
     public bool autoUpdate;
+    public GenerationType generationType;
 
     public TerrainType[] regions;
 
     public GameObject treePrefab;
     private int treeCount;
+    private GameObject wfcParent;
 
     private bool end;
-
-    List<GameObject> treePrefabList = new List<GameObject>();
 
     [SerializeField] Tilemap[] tilemaps;
 
     public void GenerateMap()
     {
-        MapDisplay display = FindObjectOfType<MapDisplay>();
+        float[,] noiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
+        float[,] treeNoiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, treeNoisScale, octaves, persistance, lacunarity, new Vector2(2.87f, 1.8f));
+        float[,] vegetationMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, 2, octaves, persistance, lacunarity, new Vector2(2.87f, 1.8f));
 
-        //removing trees from old map
-        if (treePrefabList.Count > 0)
+        WFCGenerator wfcGenerator = GetComponent<WFCGenerator>();
+        Color[] colourMap = new Color[mapWidth * mapHeight];
+
+        //removing old structures on map
+        ClearMap();
+
+        List<List<WFCCell>> tileRows = new List<List<WFCCell>>();
+        for (int y = 0; y< mapHeight; y++)
         {
-            foreach (GameObject tree in treePrefabList)
+            List<WFCCell> tiles = new List<WFCCell>();
+            for (int x = 0; x < mapWidth; x++)
             {
-                DestroyImmediate(tree);
+                if (generationType == GenerationType.Perlin)
+                { 
+                    //Placing tiles according to regions
+                    PlaceRegionTiles(noiseMap, treeNoiseMap, vegetationMap,colourMap, x, y);
+                }
+                else if(generationType == GenerationType.WFC)
+                {
+                    WFCCell cell = wfcGenerator.PlaceTiles(x, y, wfcParent.transform);
+                    cell.entropy = cell.GetPossibilities().Count;
+                    tiles.Add(cell);
+                }
             }
-            treePrefabList.Clear();
+            tileRows.Add(tiles);
         }
-        Debug.Log(treePrefabList.Count);
 
-        if (drawMode == DrawMode.NoiseMap)
+        if (generationType == GenerationType.WFC)
         {
-            float[,] noisemapp = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
-            display.DrawTexture(TextureGenerator.DrawNoiseMap(noisemapp));
-        }
+            for (int y = 0; y < mapHeight; y++)
+            {
+                for (int x = 0; x < mapWidth; x++)
+                {
+                    var tile = tileRows[y][x];
+                    if (y > 0)
+                        tile.AddNeighbour(Direction.Down, tileRows[y - 1][x]);
+                    if (x < mapWidth - 1)
+                        tile.AddNeighbour(Direction.Right, tileRows[y][x + 1]);
+                    if (y < mapHeight - 1)
+                        tile.AddNeighbour(Direction.Up, tileRows[y + 1][x]);
+                    if (x > 0)
+                        tile.AddNeighbour(Direction.Left, tileRows[y][x - 1]);
+                }
+            }
 
+            while (!wfcGenerator.finished)
+            {
+                List<WFCCell> wFCCells;
+
+                //getting list of lowest entropies in grid
+                wFCCells = wfcGenerator.GetLowestEntropy(wfcParent.transform);
+
+                //if no cells were returned, algorithm finished
+                if (wFCCells.Count == 0)
+                    return;
+
+                //getting random one from this list
+                System.Random random = new System.Random();
+                int randomIndex = random.Next(0, wFCCells.Count);
+                WFCCell cell = wFCCells[randomIndex];
+
+                //calling function on this cell
+                wfcGenerator.WaveFunction(cell);
+            }
+        }
+    }
+
+    private void ClearMap()
+    {
+        treeCount = 0;
+        end = false;
         foreach (Tilemap tilemap in tilemaps)
         {
             tilemap.ClearAllTiles();
         }
-
-        float[,] noiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
-        float[,] treeNoiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, treeNoisScale, octaves, persistance, lacunarity, new Vector2(2.87f, 1.8f));
-        float[,] vegetationMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, 2, octaves, persistance, lacunarity, new Vector2(2.87f, 1.8f));
-        Color[] colourMap = new Color[mapWidth * mapHeight];
-        treeCount = 0;
-        end = false;
-
-        for (int y = 0; y< mapHeight; y++)
+        if (wfcParent == null)
         {
-            for (int x = 0; x < mapWidth; x++)
+            wfcParent = new GameObject();
+        }
+        else
+        {
+            DestroyImmediate(wfcParent);
+            wfcParent = new GameObject();
+        }
+
+    }
+
+    private void PlaceRegionTiles(float[,] noiseMap, float[,] treeNoiseMap, float[,] vegetationMap, Color[] colourMap, int x, int y)
+    {
+        float currentHeight = noiseMap[x, y];
+        float treeCurrentHeight = treeNoiseMap[x, y];
+        float vegetationCurrentHeight = vegetationMap[x, y];
+
+        for (int i = 0; i < regions.Length; i++)
+        {
+            if (currentHeight <= regions[i].height)
             {
-                float currentHeight = noiseMap[x, y];
-                float treeCurrentHeight = treeNoiseMap[x, y];
-                float vegetationCurrentHeight = vegetationMap[x, y];
-                
-                for(int i = 0; i < regions.Length; i++)
-                {
-                    if (currentHeight <= regions[i].height)
-                    {
-                        //Generating tilemap with tiles
-                        regions[i].tileMap.SetTile(new Vector3Int(x, y, 0), regions[i].tile);
-                        colourMap[y * mapWidth + x] = regions[i].colour;
-                        break;
-                    }
-                }
-                //adding trees on next layer and objects representing them
-                if (!end && currentHeight > regions[1].height && currentHeight <= regions[2].height && treeCurrentHeight > regions[4].height && vegetationCurrentHeight <= regions[5].height)
-                {
+                //Generating tilemap with tiles
+                regions[i].tileMap.SetTile(new Vector3Int(x, y, 0), regions[i].tile);
 
-                    regions[4].tileMap.SetTile(new Vector3Int(x, y, 0), regions[4].tile);
-                    GameObject tree = Instantiate(treePrefab, new Vector3(x + 0.5f, y + 0.5f, 0f), new Quaternion());
-                    tree.transform.parent = treeParent.transform;
-                    treePrefabList.Add(tree);
-                    treeCount++;
-
-                    if (treeCount > treeLimit)
-                    {
-                        end = true;
-                    }
-                }
-                else if (currentHeight > regions[1].height && currentHeight <= regions[2].height && vegetationCurrentHeight >= regions[5].height)
+                if (x == 0)
                 {
-                    regions[6].tileMap.SetTile(new Vector3Int(x, y, 0), regions[6].tile);
+                    regions[i].tileMap.SetTile(new Vector3Int(x - 1, y, 0), regions[i].tile);
+                    regions[i].tileMap.SetColor(new Vector3Int(x - 1, y, 0), Color.clear);
+                }
+                if (y == 0)
+                {
+                    regions[i].tileMap.SetTile(new Vector3Int(x, y - 1, 0), regions[i].tile);
+                    regions[i].tileMap.SetColor(new Vector3Int(x, y - 1, 0), Color.clear);
+                }
+                if (x >= mapWidth - 1)
+                {
+                    regions[i].tileMap.SetTile(new Vector3Int(x + 1, y, 0), regions[i].tile);
+                    regions[i].tileMap.SetColor(new Vector3Int(x + 1, y, 0), Color.clear);
+                }
+                if (y >= mapHeight - 1)
+                {
+                    regions[i].tileMap.SetTile(new Vector3Int(x, y + 1, 0), regions[i].tile);
+                    regions[i].tileMap.SetColor(new Vector3Int(x, y + 1, 0), Color.clear);
                 }
 
-                //placing nothing everywhere where the trees are not present
-                //used for erasing trees
-                else
+                if (drawMode == DrawMode.ColourMap)
                 {
-                    regions[5].tileMap.SetTile(new Vector3Int(x,y,0), regions[5].tile);
-                } 
+                    colourMap[y * mapWidth + x] = regions[i].colour;
+                }
+                break;
             }
         }
-        Debug.Log(treePrefabList.Count);
 
-        if (drawMode == DrawMode.NoiseMap)
+        //adding trees on next layer and objects representing them
+        if (!end && currentHeight > regions[1].height && currentHeight <= regions[2].height && treeCurrentHeight > regions[4].height && vegetationCurrentHeight <= regions[5].height)
         {
-            //display.DrawTexture(TextureGenerator.TextureFromHeightMap(treeNoiseMap));
+
+            regions[4].tileMap.SetTile(new Vector3Int(x, y, 0), regions[4].tile);
+            treeCount++;
+            if (treeCount > treeLimit)
+            {
+                end = true;
+            }
         }
-        else if (drawMode == DrawMode.ColourMap)
+        else if (currentHeight > regions[1].height && currentHeight <= regions[2].height && vegetationCurrentHeight >= regions[5].height)
         {
-            display.DrawTexture(TextureGenerator.TextureFromColorMap(colourMap, mapWidth, mapHeight));
+            regions[6].tileMap.SetTile(new Vector3Int(x, y, 0), regions[6].tile);
         }
-        
+
+        //placing nothing everywhere where the trees are not present
+        //used for erasing last existent tree tiles
+        else
+        {
+            regions[5].tileMap.SetTile(new Vector3Int(x, y, 0), regions[5].tile);
+        }
     }
 
     //After every change VALIDATES if conditions are ok
@@ -164,4 +232,10 @@ public struct TerrainType
     public TileBase tile;
     public Tilemap tileMap;
     public int ID;
+}
+
+public enum GenerationType
+{
+    Perlin,
+    WFC
 }

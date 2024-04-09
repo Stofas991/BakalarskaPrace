@@ -38,6 +38,7 @@ public class StockpileScript : Interactable
         interactingPlayer.GetComponent<UnitControlScript>().DestroyCarriedItem();
 
         hasInteracted = true;
+        OnDeFocused(interactingPlayer);
     }
 }
 public enum ContainedItemType

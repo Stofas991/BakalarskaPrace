@@ -183,6 +183,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
     {
         SelectedObject = obj;
     }
+
     private void UpdatePreview()
     {
         //removing old tile if existing
