@@ -9,16 +9,12 @@ public class UnitSelection : MonoBehaviour
     private void Awake()
     {
         selectedGameObject = transform.Find("Circle").gameObject;
-        SetSelectedVisible(false);
-    }
-
-    public void SetSelectedVisible(bool visible)
-    {
-        selectedGameObject.SetActive(visible);
+        SetSelectedVar(false);
     }
 
     public void SetSelectedVar(bool selection)
     {
+        selectedGameObject.SetActive(selection);
         UnitControlScript unit = gameObject.GetComponent<UnitControlScript>();
         unit.selected = selection;
     }

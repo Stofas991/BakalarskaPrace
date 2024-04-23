@@ -57,8 +57,6 @@ public class ItemInteract : Interactable
             return;
         }
 
-
-
         //copy values for effectivity and spawn canvas
         ItemSpecifics itemSpecifics = GetComponent<ItemSpecifics>();
         unitControlScript.PickUp(itemCanvas, itemSpecifics.count, itemSpecifics.itemType);

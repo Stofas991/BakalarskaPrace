@@ -36,6 +36,8 @@ public class BuildingCreator : Singleton<BuildingCreator>
 
     bool holdActive;
     bool isOverObject = false;
+    bool horizontalInverted = false;
+    bool verticalInverted = false;
     Vector3Int holdStartPosition;
 
     BoundsInt bounds;
@@ -202,6 +204,8 @@ public class BuildingCreator : Singleton<BuildingCreator>
     {
         if (selectedObject != null)
         {
+            horizontalInverted = false;
+            verticalInverted = false;
             switch (selectedObject.PlaceType)
             {
                 case PlaceType.Single:
@@ -256,7 +260,18 @@ public class BuildingCreator : Singleton<BuildingCreator>
 
         if (lineIsHorizontal)
         {
-            bounds.xMin = currentGridPosition.x < holdStartPosition.x ? currentGridPosition.x : holdStartPosition.x;
+            if (currentGridPosition.x < holdStartPosition.x)
+            {
+                bounds.xMin = currentGridPosition.x;
+                horizontalInverted = true;
+                verticalInverted = false;
+            }
+            else
+            {
+                bounds.xMin = holdStartPosition.x;
+                horizontalInverted = false;
+                verticalInverted = false;
+            }
             bounds.xMax = currentGridPosition.x > holdStartPosition.x ? currentGridPosition.x : holdStartPosition.x;
             bounds.yMin = holdStartPosition.y;
             bounds.yMax = holdStartPosition.y;
@@ -265,7 +280,18 @@ public class BuildingCreator : Singleton<BuildingCreator>
         {
             bounds.xMin = holdStartPosition.x;
             bounds.xMax = holdStartPosition.x;
-            bounds.yMin = currentGridPosition.y < holdStartPosition.y ? currentGridPosition.y : holdStartPosition.y;
+            if (currentGridPosition.y < holdStartPosition.y)
+            {
+                bounds.yMin = currentGridPosition.y;
+                verticalInverted = true;
+                horizontalInverted = false;
+            }
+            else
+            {
+                bounds.yMin = holdStartPosition.y;
+                verticalInverted = false;
+                horizontalInverted = false;
+            }
             bounds.yMax = currentGridPosition.y > holdStartPosition.y ? currentGridPosition.y : holdStartPosition.y;
         }
 
@@ -282,11 +308,13 @@ public class BuildingCreator : Singleton<BuildingCreator>
             categoryParent = InitializeParent();
         }
 
+        int xIndex = 0, yIndex = 0;
         for (int x = bounds.xMin; x <= bounds.xMax; x++)
         {
             for (int y = bounds.yMin; y <= bounds.yMax; y++)
             {
                 var requiredResources = selectedObject.RequiredResources;
+                int posX, posY;
 
                 //calculation of total resource cost
                 if (requiredResources.itemType != ContainedItemType.None)
@@ -304,33 +332,46 @@ public class BuildingCreator : Singleton<BuildingCreator>
                             requiredResourcesUsed[requiredResources.itemType] = requiredResources.ammount;
                     }
                 }
+                if (horizontalInverted)
+                    posX = bounds.xMax - xIndex;
+                else
+                    posX = x;
+
+                if (verticalInverted)
+                    posY = bounds.yMax - yIndex;
+                else
+                    posY = y;
+
                 if (previewMode)
                 {
-                    map.SetTile(new Vector3Int(x, y, 0), tileBase);
+                    map.SetTile(new Vector3Int(posX, posY, 0), tileBase);
 
-                    if (IsForbidden(new Vector3Int(x, y, 0)) || NotEnoughResources(requiredResourcesPreview))
+                    if (IsForbidden(new Vector3Int(posX, posY, 0)) || NotEnoughResources(requiredResourcesPreview))
                     {
-                        if (!IsSameTilemap(new Vector3Int(x, y, 0), selectedObject.Category.tilemap))
-                            map.SetColor(new Vector3Int(x, y, 0), Color.red);
+                        if (!IsSameTilemap(new Vector3Int(posX, posY, 0), selectedObject.Category.tilemap))
+                            map.SetColor(new Vector3Int(posX, posY, 0), Color.red);
                     }
                 }
                 else
                 {
+
                     //cant place on forbidden tilemaps or on another zone
-                    previewMap.SetTile(new Vector3Int(x, y, 0), null);
-                    if (!IsForbidden(new Vector3Int(x, y, 0)) && !selectedObject.Category.tilemap.HasTile(new Vector3Int(x, y, 0)) && !NotEnoughResources(requiredResourcesPreview))
+                    previewMap.SetTile(new Vector3Int(posX, posY, 0), null);
+                    if (!IsForbidden(new Vector3Int(posX, posY, 0)) && !selectedObject.Category.tilemap.HasTile(new Vector3Int(posX, posY, 0)) && !NotEnoughResources(requiredResourcesPreview))
                     {
                         //updating status of resource menu
                         resourceMenu.UpdateAmmount(-requiredResources.ammount, requiredResources.itemType);
                         if (requiredResourcesPreview.ContainsKey(requiredResources.itemType))
                             requiredResourcesPreview[requiredResources.itemType] -= requiredResources.ammount;
 
-                        map.SetTile(new Vector3Int(x, y, 0), tileBase);
-                        GameObject item = Instantiate(selectedObject.Prefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
+                        map.SetTile(new Vector3Int(posX, posY, 0), tileBase);
+                        GameObject item = Instantiate(selectedObject.Prefab, new Vector3(posX + 0.5f, posY + 0.5f, 0), Quaternion.identity);
                         item.transform.parent = categoryParent.transform;
                     }
                 }
+                yIndex++;
             }
+            xIndex++;
         }
     }
 

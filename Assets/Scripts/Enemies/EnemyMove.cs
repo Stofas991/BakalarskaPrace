@@ -13,18 +13,18 @@ public class EnemyMove : ClickableObject
     private NavMeshAgent agent;
 
     private int distance;
-    private GameObject AlertedUnit;
-    private GameObject ChasedEnemy;
-    public Animator Animator;
+    private GameObject alertedUnit;
+    private GameObject chasedObject;
+    public Animator animator;
     public EnemyAttacked enemyAttack;
 
-    private float AttackRange;
-    private float NextAttackEvent;
-    public float AttackDelay = 5f;
-    public int AttackDamage = 20;
+    private float attackRange;
+    private float nextAttackEvent;
+    public float attackDelay = 2f;
+    public int attackDamage = 20;
 
-    public LayerMask EnemyLayers;
-    private bool Chasing = false;
+    public LayerMask enemyLayers;
+    private bool chasing = false;
 
     void Start()
     {
@@ -32,27 +32,27 @@ public class EnemyMove : ClickableObject
         agent.updateRotation = false;
         agent.updateUpAxis = false;
         distance = 10;
-        AttackRange = 1.5f;
-        AlertedUnit = transform.Find("ExclamationRed").gameObject;
+        attackRange = 1.5f;
+        alertedUnit = transform.Find("ExclamationRed").gameObject;
         enemyAttack = GetComponent<EnemyAttacked>();
     }
 
     void Update()
     {
-        if (ChasedEnemy == null)
+        if (chasedObject == null)
         {
-            Chasing = false;
+            chasing = false;
             CancelAttack();
-            AlertedUnit.SetActive(false);
+            alertedUnit.SetActive(false);
         }
 
-        if (!Chasing)
+        if (!chasing)
         {
-            Collider2D[] HitEnemies = Physics2D.OverlapCircleAll(agent.transform.position, distance, EnemyLayers);
+            Collider2D[] HitEnemies = Physics2D.OverlapCircleAll(agent.transform.position, distance, enemyLayers);
             if (HitEnemies.Length > 0)
             {
-                ChasedEnemy = HitEnemies[0].gameObject;
-                Chasing = true;
+                chasedObject = HitEnemies[0].gameObject;
+                chasing = true;
             }
             else
             {
@@ -60,17 +60,17 @@ public class EnemyMove : ClickableObject
             }
         }
 
-        //v dosahu nepøítele, útok
-        if (Vector3.Distance(agent.transform.position, ChasedEnemy.transform.position) <= AttackRange)
+        //in range of enemy, attack
+        if (Vector3.Distance(agent.transform.position, chasedObject.transform.position) <= attackRange)
         {
-            //zastavit animaci
+            //stop animation
             CancelAttack();
 
             agent.SetDestination(agent.transform.position);
-            //pokud už mùžu útoèit, tak zaùtoèí
-            if (Time.time >= NextAttackEvent)
+            //attack cooldown
+            if (Time.time >= nextAttackEvent)
             {
-                NextAttackEvent = Time.time + AttackDelay;
+                nextAttackEvent = Time.time + attackDelay;
                
                 Attack();
             }
@@ -79,36 +79,74 @@ public class EnemyMove : ClickableObject
                 CancelAttack();
             }
         }
-        //Není v dosahu, pøiblíží se na dosah
-        else if (Vector3.Distance(agent.transform.position, ChasedEnemy.transform.position) < distance)
+        //out of chasing range
+        else if (Vector3.Distance(agent.transform.position, chasedObject.transform.position) < distance)
         {
-            agent.SetDestination(ChasedEnemy.transform.position);
-         
-            //Zobrazí vykøièník nad postavou
-            AlertedUnit.SetActive(true);
-            bool flipped = agent.transform.position.x < ChasedEnemy.transform.position.x;
+            //creating empty path
+            NavMeshPath navMeshPath = new NavMeshPath();
+
+            if (agent.CalculatePath(chasedObject.transform.position, navMeshPath) && navMeshPath.status == NavMeshPathStatus.PathComplete)
+            {
+                agent.ResetPath();
+                agent.SetDestination(chasedObject.transform.position);
+            }
+            else
+            {
+                var collider = GetComponent<BoxCollider2D>();
+                collider.enabled = false;
+                RaycastHit2D hit = Physics2D.Linecast(transform.position, chasedObject.transform.position);
+                collider.enabled = true;
+
+                if (hit.collider != null && hit.collider.gameObject.GetComponent<Destroyable>())
+                {
+                    chasedObject = hit.collider.gameObject;
+                }
+                else
+                {
+                    agent.SetDestination(chasedObject.transform.position);
+                }
+            }
+
+            //alert exclamation mark
+            alertedUnit.SetActive(true);
+
+            bool flipped = agent.transform.position.x < chasedObject.transform.position.x;
             transform.rotation = Quaternion.Euler(new Vector3(0f, flipped ? 180f : 0f, 0f));
         }
         else
         {
+            if (chasedObject.GetComponent<Destroyable>() != null)
+                chasedObject.GetComponent<Destroyable>().OnDeFocused(transform);
+
             agent.SetDestination(agent.transform.position);
-            AlertedUnit.SetActive(false);
-            ChasedEnemy = null;
-            Chasing = false;
+            alertedUnit.SetActive(false);
+            chasedObject = null;
+            chasing = false;
         }
     }
 
     void Attack()
     {
-        //zaène útoèící animaci
-        Animator.SetTrigger("InRange");
+        //attack animation
+        animator.SetTrigger("InRange");
+        var destroyableScript = chasedObject.GetComponent<Destroyable>();
 
-        //udìlí poškození nepøíteli
-        ChasedEnemy.GetComponent<UnitStats>().TakeDamage(AttackDamage);
+        //deal damage
+        if (chasedObject.GetComponent<UnitStats>() != null)
+            chasedObject.GetComponent<UnitStats>().TakeDamage(attackDamage);
+
+        else if (destroyableScript != null)
+        {
+            chasedObject.GetComponent<Destroyable>().TakeDamage(attackDamage);
+            destroyableScript.OnFocused(transform);
+        }
+
+        else
+            Debug.Log("Object does not contain component that can be attacked");
     }
 
     void CancelAttack()
     {
-        Animator.ResetTrigger("InRange");
+        animator.ResetTrigger("InRange");
     }
 }

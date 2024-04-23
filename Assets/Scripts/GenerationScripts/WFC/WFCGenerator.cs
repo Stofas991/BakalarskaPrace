@@ -7,6 +7,7 @@ using Sentry;
 
 public class WFCGenerator : MonoBehaviour
 {
+    
     [SerializeField]GameObject WFCTileObject;
     public bool finished = false;
 
@@ -29,23 +30,20 @@ public class WFCGenerator : MonoBehaviour
         {
             WFCCell cell = (WFCCell)stack.Pop();
             var directions = cell.GetDirections();
+            var possibilities = cell.GetPossibilities();
 
             foreach (var direction in directions)
             {
-                List<WFCTile> neighbourAllowedTiles = new List<WFCTile>();
-                foreach (WFCTile possibility in cell.GetPossibilities())
-                {
-                    if (possibility.directionNeighbours.Count == 0)
-                        possibility.SetValues();
-
-                    neighbourAllowedTiles.AddRange(possibility.directionNeighbours[direction]);
-                }
-
-                neighbourAllowedTiles.Distinct();
                 var neighbour = cell.GetNeighbour(direction);
                 if (neighbour.entropy != 0)
                 {
-                    var reduced = neighbour.Constrain(neighbourAllowedTiles, direction);
+                    
+                    var reduced = neighbour.Constrain(possibilities, direction);
+                    if (!neighbour.collapsed && neighbour.entropy == 0)
+                    {
+                        return;
+                    }
+                    
                     if (reduced)
                         stack.Push(neighbour);
                 }
@@ -55,7 +53,6 @@ public class WFCGenerator : MonoBehaviour
 
     public List<WFCCell> GetLowestEntropy(Transform parent)
     {
-        SentrySdk.CaptureMessage("function lowest entropy");
         List<WFCCell> lowestEntropyCells = new List<WFCCell>();
         int lowestEntropy = 100;
 
@@ -73,11 +70,6 @@ public class WFCGenerator : MonoBehaviour
                 {
                     lowestEntropyCells.Add(currentCell);
                 }
-            }
-            if (currentCell.entropy == 0 && !currentCell.collapsed) 
-            {
-                SentrySdk.CaptureMessage("Cell not collapsed and is zero");
-                Debug.Log(currentCell);
             }
         }
         return lowestEntropyCells;

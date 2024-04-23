@@ -13,15 +13,15 @@ public class Gathering : MonoBehaviour
 
     void Update()
     {
-        myStats.cutCooldown -= Time.deltaTime;
+        myStats.gatherCooldown -= Time.deltaTime;
     }
 
-    public void CutTree(TreeScript targetTree)
+    public void GatherResource(ResourceGatherScript targetResource)
     {
-        if (myStats.cutCooldown <= 0)
+        if (myStats.gatherCooldown <= 0)
         {
-            targetTree.TakeDamage(myStats.plantCutDamage);
-            myStats.cutCooldown = 1f / myStats.plantCutSpeed;
+            targetResource.MakeProgress(myStats.gatheringDamage);
+            myStats.gatherCooldown = 1f / myStats.gatheringSpeed;
         }
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class WFCTile : MonoBehaviour
 {
+    public int weight;
     public TypeWeight typeAndWeight = new TypeWeight();
     public TileType tileType;
     public WFCTile[] upNeighbours;

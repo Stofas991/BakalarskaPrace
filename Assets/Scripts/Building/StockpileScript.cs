@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class StockpileScript : Interactable
@@ -9,7 +10,8 @@ public class StockpileScript : Interactable
     public int itemCount;
     public int itemMaxCount = 100;
 
-    [SerializeField] StockpileItemBase stockpileItem;
+    [SerializeField] StockpileItemBase woodItembase;
+    [SerializeField] StockpileItemBase stoneItemBase;
     ResourcesScript resourceMenu;
 
     private void Start()
@@ -20,17 +22,33 @@ public class StockpileScript : Interactable
     public override void Interact(Transform interactingPlayer)
     {
         base.Interact(interactingPlayer);
+
+        UnitControlScript control = interactingPlayer.GetComponent<UnitControlScript>();
         //if does not contain item, spawn new one
         if (!containsItem)
         {
-            GameObject gameObject = stockpileItem.ItemImage;
-            Instantiate(gameObject, transform);
-
-            itemType = stockpileItem.ItemType;
-            containsItem = true;
-
+            GameObject gameObject;
+            switch (control.UCItemType)
+            {
+                case ContainedItemType.Wood:
+                    gameObject = woodItembase.ItemImage;
+                    itemType = woodItembase.ItemType;
+                    break;
+                case ContainedItemType.Stone:
+                    gameObject = stoneItemBase.ItemImage;
+                    itemType = stoneItemBase.ItemType;
+                    break;
+                default:
+                    gameObject = null;
+                    break;
+            }
+            if (gameObject != null)
+            {
+                Instantiate(gameObject, transform);
+                containsItem = true;
+            }
         }
-        UnitControlScript control = interactingPlayer.GetComponent<UnitControlScript>();
+        
         itemCount = control.UCCount;
         control.UCCount = 0;
         control.UCItemType = ContainedItemType.None;
@@ -41,6 +59,7 @@ public class StockpileScript : Interactable
         OnDeFocused(interactingPlayer);
     }
 }
+
 public enum ContainedItemType
 {
     None,

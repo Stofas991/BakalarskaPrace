@@ -40,8 +40,8 @@ public class WFCTileEditor : Editor
 
 public static class GameConstants
 {
-    public const int grassWeight = 16;
-    public const int treesWeight = 8;
-    public const int waterWeight = 4;
-    public const int beachWeight = 2;
+    public const int grassWeight = 32;
+    public const int treesWeight = 1;
+    public const int waterWeight = 5;
+    public const int beachWeight = 1;
 }

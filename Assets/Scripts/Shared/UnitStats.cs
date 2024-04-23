@@ -4,32 +4,32 @@ using UnityEngine;
 
 public class UnitStats : MonoBehaviour
 {
-    public int MaxHealth = 100;
+    public int maxHealth = 100;
     public int attackDamage = 0;
     public float attackSpeed = 2f;
     public float attackCooldown = 0f;
-    public int plantCutDamage = 10;
-    public float plantCutSpeed = 4f;
-    public float cutCooldown = 0f;
-    int CurrentHealth;
+    public int gatheringDamage = 10;
+    public float gatheringSpeed = 4f;
+    public float gatherCooldown = 0f;
+    int currentHealth;
 
-    public HealthBarScript HealthBar;
+    public HealthBarScript healthBar;
     // Start is called before the first frame update
     void Start()
     {
-        CurrentHealth = MaxHealth;
-        HealthBar.SetMaxHealth(MaxHealth);
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
 
     }
 
     public void TakeDamage(int Damage)
     {
-        CurrentHealth -= Damage;
+        currentHealth -= Damage;
 
-        HealthBar.SetHealth(CurrentHealth);
+        healthBar.SetHealth(currentHealth);
         // Play hurt animation
 
-        if (CurrentHealth <= 0)
+        if (currentHealth <= 0)
         {
             Die();
         }

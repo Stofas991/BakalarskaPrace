@@ -9,6 +9,8 @@ TagManager:
   - TreeTilemap
   - Tree
   - NavMesh
+  - Stone
+  - WallTilemap
   layers:
   - Default
   - TransparentFX
@@ -21,7 +23,7 @@ TagManager:
   - Enemy
   - Terrain
   - Effects
-  - 
+  - Buildings
   - 
   - 
   - 

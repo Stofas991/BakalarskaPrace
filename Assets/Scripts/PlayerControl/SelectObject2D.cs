@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static UnityEngine.GraphicsBuffer;
 
 public class SelectObject2D : MonoBehaviour
@@ -36,9 +38,9 @@ public class SelectObject2D : MonoBehaviour
             selectedUnitList = tmp;
         }
 
-        if (!buildingMode) //nejsme v režimu stavìní
+        if (!buildingMode)
         {
-            //vytvoøení selectovacího okna
+            //creating selection box
             if (Input.GetMouseButtonDown(0))
             {
                 startPosition = Input.mousePosition;
@@ -58,7 +60,7 @@ public class SelectObject2D : MonoBehaviour
                 }
             }
 
-            //vybrání jednotek v selection boxu
+            //selecting units inside box
             if (Input.GetMouseButtonUp(0))
             {
                 if (isDragSelect)
@@ -76,7 +78,7 @@ public class SelectObject2D : MonoBehaviour
     }
 
     /// <summary>
-    /// aktivuje selection box a zobrazí obdélník podle pùvodní pozice myši a aktuální
+    /// aktivates selection box i range of mouse start and end position
     /// </summary>
     void UpdateSelectionBox()
     {
@@ -91,17 +93,19 @@ public class SelectObject2D : MonoBehaviour
     }
 
     /// <summary>
-    /// funkce najde všechny jednotky v selection boxu s tagem selectable
+    /// finds all units in selection box and selects them
     /// </summary>
-    /// <returns>seznam všech oznaèených jednotek</returns>
+    /// <returns>list of selected units</returns>
     HashSet<UnitSelection> SelectObjects(bool multipleUnits)
     {
         HashSet<UnitSelection> selectedUnits = new HashSet<UnitSelection>();
 
+        HashSet<UnitSelection> unitCopy = new HashSet<UnitSelection>();
+
         foreach (UnitSelection unit in selectedUnitList)
         {
+            unitCopy.Add(unit);
             unit.SetSelectedVar(false);
-            unit.SetSelectedVisible(false);
         }
 
         selectedUnitList.Clear();
@@ -123,7 +127,6 @@ public class SelectObject2D : MonoBehaviour
                     if (unit != null)
                     {
                         unit.SetSelectedVar(true);
-                        unit.SetSelectedVisible(true);
                         selectedUnits.Add(unit);
                     }
                 }
@@ -131,6 +134,15 @@ public class SelectObject2D : MonoBehaviour
         }
         else
         {
+            if (EventSystem.current.IsPointerOverGameObject() && unitCopy.Count != 0)
+            {
+                foreach (var unit in unitCopy)
+                {
+                    unit.SetSelectedVar(true);
+                }
+                return unitCopy;
+            }
+
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
             if (hit.transform != null && hit.transform.CompareTag("selectable"))
@@ -139,7 +151,6 @@ public class SelectObject2D : MonoBehaviour
                 if (unit != null)
                 {
                     unit.SetSelectedVar(true);
-                    unit.SetSelectedVisible(true);
                     selectedUnits.Add(unit);
                 }
             }

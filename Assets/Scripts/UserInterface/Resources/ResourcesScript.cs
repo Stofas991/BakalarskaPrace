@@ -8,6 +8,15 @@ public class ResourcesScript : Singleton<ResourcesScript>
 {
     [SerializeField] public Resource[] resourceList;
 
+    public void Start()
+    {
+        foreach (var resource in resourceList)
+        {
+            resource.requiredResources.ammount = 100;
+            resource.text.text = resource.requiredResources.ammount.ToString();
+        }
+    }
+
     public void UpdateAmmount(int ammount, ContainedItemType type)
     {
         foreach (var resource in resourceList)

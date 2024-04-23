@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3fd60a79faf0ab41925128f4170c85b, type: 3}
   m_Name: Zone
   m_EditorClassIdentifier: 
-  siblingIndex: 0
+  siblingIndex: 1
   backgroundColor: {r: 0, g: 0, b: 0, a: 0}

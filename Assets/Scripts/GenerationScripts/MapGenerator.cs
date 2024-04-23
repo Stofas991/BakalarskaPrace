@@ -8,7 +8,7 @@ using UnityEngine.Tilemaps;
 
 
 
-public class MapGenerator : MonoBehaviour
+public class MapGenerator : Singleton<MapGenerator>
 {
     public enum DrawMode { NoiseMap, ColourMap, TileMap};
     public DrawMode drawMode;
@@ -27,7 +27,6 @@ public class MapGenerator : MonoBehaviour
 
     public int seed;
     public Vector2 offset;
-    public GameObject treeParent;
 
     public bool autoUpdate;
     public GenerationType generationType;
@@ -37,6 +36,8 @@ public class MapGenerator : MonoBehaviour
     public GameObject treePrefab;
     private int treeCount;
     private GameObject wfcParent;
+    [SerializeField] WFCTile wfcFiller;
+
 
     private bool end;
 
@@ -95,22 +96,30 @@ public class MapGenerator : MonoBehaviour
 
             while (!wfcGenerator.finished)
             {
-                List<WFCCell> wFCCells;
-
                 //getting list of lowest entropies in grid
-                wFCCells = wfcGenerator.GetLowestEntropy(wfcParent.transform);
+                var wFCCells = wfcGenerator.GetLowestEntropy(wfcParent.transform);
 
                 //if no cells were returned, algorithm finished
                 if (wFCCells.Count == 0)
-                    return;
+                    break;
 
                 //getting random one from this list
                 System.Random random = new System.Random();
-                int randomIndex = random.Next(0, wFCCells.Count);
+                int randomIndex = random.Next(0, wFCCells.Count-1);
                 WFCCell cell = wFCCells[randomIndex];
 
                 //calling function on this cell
                 wfcGenerator.WaveFunction(cell);
+            }
+            foreach (Transform child in wfcParent.transform)
+            {
+                WFCCell currentCell = child.GetComponent<WFCCell>();
+                if (currentCell.entropy == 0 && !currentCell.collapsed)
+                {
+                    Instantiate(wfcFiller, child.transform);
+                    currentCell.entropy = 0;
+                    currentCell.collapsed = true;
+                }
             }
         }
     }
@@ -147,6 +156,10 @@ public class MapGenerator : MonoBehaviour
             {
                 //Generating tilemap with tiles
                 regions[i].tileMap.SetTile(new Vector3Int(x, y, 0), regions[i].tile);
+                if (regions[i].name == "mountain")
+                {
+                    regions[2].tileMap.SetTile(new Vector3Int(x, y, 0), regions[2].tile);
+                }
 
                 if (x == 0)
                 {

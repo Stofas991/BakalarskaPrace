@@ -1,22 +1,21 @@
 using Sentry;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class WFCCell : MonoBehaviour
 {
     [SerializeField] List<WFCTile> possibilities;
     public int entropy;
     public bool collapsed = false;
+    public int totalTiles;
     Dictionary<Direction, WFCCell> neighbours = new Dictionary<Direction, WFCCell>();
 
     public void AddNeighbour(Direction direction, WFCCell cell)
     {
         neighbours[direction] = cell;
+        totalTiles = possibilities.Count();
     }
 
     public WFCCell GetNeighbour(Direction direction)
@@ -27,6 +26,12 @@ public class WFCCell : MonoBehaviour
     public List<WFCTile> GetPossibilities()
     {
         return possibilities;
+    }
+
+    public void SetPossibilities(WFCTile possibilitiesGiven)
+    {
+        possibilities.Clear();
+        possibilities.Add(possibilitiesGiven);
     }
 
     public Direction[] GetDirections()
@@ -49,14 +54,17 @@ public class WFCCell : MonoBehaviour
     {
         bool reduced = false;
         var possibilitiesCopy = possibilities;
+
         if (entropy > 0)
         {
+            
             List<WFCTile> connectors = new List<WFCTile>();
             foreach (WFCTile neighbourPossibility in neighbourPossibilities)
             {
-                if (!connectors.Contains(neighbourPossibility))
-                    connectors.Add(neighbourPossibility);
+                connectors.AddRange(neighbourPossibility.directionNeighbours[direction]);
             }
+
+            connectors = connectors.Distinct().ToList();
 
             for (int i = possibilities.Count - 1; i >= 0; i--)
             {
@@ -71,8 +79,8 @@ public class WFCCell : MonoBehaviour
             if (entropy == 0 && !collapsed)
             {
                 Debug.Log(possibilitiesCopy);
-                SentrySdk.CaptureMessage("Test event");
             }
+            
         }
 
         return reduced;
@@ -81,13 +89,40 @@ public class WFCCell : MonoBehaviour
     public WFCTile GetRandomValue()
     {
         System.Random random = new System.Random();
-
+        //solution 1
+        possibilities = possibilities.OrderBy(x => x.weight).ToList();
         Dictionary<TileType, List<WFCTile>> possibilitiesDictionary = GetPossibilityDictionary();
+        possibilitiesDictionary = possibilitiesDictionary.OrderBy(x => WeightForType(x.Key)).ToDictionary(x => x.Key, x => x.Value);
         List<WFCTile> selectedTileList = GetRandomTileList(possibilitiesDictionary);
 
-        int randomValue = random.Next(0, selectedTileList.Count-1);
+        var randomValue = random.Next(0, selectedTileList.Count - 1);
 
-        return selectedTileList[randomValue];
+        return GetRandomItem(selectedTileList, x => x.weight);
+
+        //solution 2
+        /*
+        var maxWeight = possibilities.Max(x => x.weight);
+        int randomValue = random.Next(0, maxWeight);
+        possibilities = possibilities.OrderBy(x => x.weight).ToList();
+
+        List<WFCTile> sameWeightTiles = new List<WFCTile>();
+        foreach (var possibility in possibilities)
+        {
+            if (possibility.weight >= randomValue)
+            {
+                if (!sameWeightTiles.Any(x => x.weight < possibility.weight))
+                {
+                    sameWeightTiles.Add(possibility);
+                }
+            }
+        }
+        randomValue = random.Next(0, sameWeightTiles.Count - 1);
+
+        return sameWeightTiles[randomValue];
+        */
+
+        //solution 3
+        //return GetRandomItem(possibilities, x => x.weight);
     }
 
     private Dictionary<TileType, List<WFCTile>> GetPossibilityDictionary()
@@ -95,14 +130,14 @@ public class WFCCell : MonoBehaviour
         Dictionary<TileType, List<WFCTile>> possibilitiesTypes = new Dictionary<TileType, List<WFCTile>>();
         foreach (WFCTile tile in possibilities)
         {
-            if (!possibilitiesTypes.Keys.Contains(tile.typeAndWeight.type))
+            if (!possibilitiesTypes.Keys.Contains(tile.tileType))
             {
-                possibilitiesTypes.Add(tile.typeAndWeight.type, new List<WFCTile>());
-                possibilitiesTypes[tile.typeAndWeight.type].Add(tile);
+                possibilitiesTypes.Add(tile.tileType, new List<WFCTile>());
+                possibilitiesTypes[tile.tileType].Add(tile);
             }
             else
             {
-                possibilitiesTypes[tile.typeAndWeight.type].Add(tile);
+                possibilitiesTypes[tile.tileType].Add(tile);
             }
 
         }
@@ -143,8 +178,28 @@ public class WFCCell : MonoBehaviour
             return GameConstants.waterWeight;
         else if (tileType == TileType.Beach)
             return GameConstants.beachWeight;
+        else if (tileType == TileType.Trees)
+            return GameConstants.treesWeight;
         else
             return 0;
+    }
+
+    public T GetRandomItem<T>(IEnumerable<T> itemsEnumerable, Func<T, int> weightKey)
+    {
+        System.Random random = new System.Random();
+
+        var items = itemsEnumerable.ToList();
+
+        var totalWeight = items.Sum(x => weightKey(x));
+        var randomWeightedIndex = random.Next(totalWeight);
+        var itemWeightedIndex = 0;
+        foreach (var item in items)
+        {
+            itemWeightedIndex += weightKey(item);
+            if (randomWeightedIndex < itemWeightedIndex)
+                return item;
+        }
+        throw new ArgumentException("Collection count and weights must be greater than 0");
     }
 
 }

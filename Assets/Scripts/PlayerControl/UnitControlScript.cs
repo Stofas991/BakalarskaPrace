@@ -128,12 +128,14 @@ public class UnitControlScript: MonoBehaviour
     public void HaulItem(int count, ContainedItemType itemType)
     {
         StockpileScript stockpileScript = null;
+        bool found = false;
         foreach(Transform child in stockpileZone.transform)
         {
             stockpileScript = child.GetComponent<StockpileScript>();
             if (!stockpileScript.containsItem)
             {
                 stockpileScript.itemType = itemType;
+                found = true;
                 break;
             }
             else
@@ -143,10 +145,15 @@ public class UnitControlScript: MonoBehaviour
                     var controllCount = count + stockpileScript.itemCount;
 
                     if (controllCount > stockpileScript.itemMaxCount)
+                    {
                         continue;
+                    }
                     
                     else
+                    {
+                        found = true;
                         break;
+                    }
                 }
                 else
                 { 
@@ -157,7 +164,12 @@ public class UnitControlScript: MonoBehaviour
         }
         if (stockpileScript != null)
         {
-            SetFocus(stockpileScript);
+            if (found)
+            {
+                SetFocus(stockpileScript);
+            }
+            else
+                Debug.Log("No space in the stockpile");
         }
     }
 

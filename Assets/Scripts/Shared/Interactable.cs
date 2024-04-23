@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Interactable : MonoBehaviour
@@ -19,7 +20,7 @@ public class Interactable : MonoBehaviour
         {
             if (transform != null)
             {
-                foreach (Transform player in playerList)
+                foreach (Transform player in playerList.ToList())
                 {
                     float distance = Vector3.Distance(player.position, transform.position);
                     if (distance <= radius)
@@ -33,7 +34,7 @@ public class Interactable : MonoBehaviour
         {
             if (transform != null)
             {
-                foreach (Transform player in playerList)
+                foreach (Transform player in playerList.ToList())
                 {
                     if (player == null)
                     {
@@ -53,7 +54,7 @@ public class Interactable : MonoBehaviour
 
     public virtual void Interact (Transform interactingPlayer)
     {
-        //tato metoda má být pøepsána objektem ktrý ji bude používat
+        //this method will be overritten by object that is going to use it
     }
 
     public void OnFocused (Transform playerTransform)

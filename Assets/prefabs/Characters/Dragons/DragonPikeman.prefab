@@ -125,7 +125,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 2092938137, guid: 2a0acd9af49d5ef4a94794099bc55113, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab6827ac4a76cd42a7a5c089b6f265b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthBar: {fileID: 8111037101836941130}
 --- !u!114 &7650908556596081821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clickEffect: {fileID: 2699476985937871758, guid: 58733ae8e55d65043addf73ca4bdd716, type: 3}
+  zoneParent: {fileID: 0}
   target: {x: 0, y: 0, z: 0}
   enemy: {fileID: 0}
   animator: {fileID: 356696167367167031}
@@ -170,6 +172,8 @@ MonoBehaviour:
   nextAttackEvent: 0
   attackDelay: 5
   selected: 0
+  UCCount: 0
+  UCItemType: 0
 --- !u!114 &-458671157946646322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,14 +200,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a9b924c59c91843b518d623be82109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 100
+  maxHealth: 100
   attackDamage: 25
   attackSpeed: 1
   attackCooldown: 0
   plantCutDamage: 10
   plantCutSpeed: 0.75
   cutCooldown: 0
-  HealthBar: {fileID: 1439205066363382705}
+  healthBar: {fileID: 1439205066363382705}
 --- !u!114 &8438953995775289405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,9 +406,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 3811d35f6fad7f44ba59752e825d0551, type: 3}
-  m_Color: {r: 0.019607842, g: 0.08120305, b: 1, a: 1}
+  m_Color: {r: 0.019607842, g: 1, b: 0.0627451, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -683,7 +687,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 6
   m_TargetDisplay: 0
 --- !u!114 &8168263521145425393
 MonoBehaviour:

@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: -668357930, guid: 43ec428a58422470fa764bdba9d9bc19, type: 3}
   m_Name: SentryOptions
   m_EditorClassIdentifier: 
-  <Enabled>k__BackingField: 1
-  <Dsn>k__BackingField: https://2caa85a6f29f1ffd677fe47e0023f62b@o4507053105479680.ingest.us.sentry.io/4507055282520064
+  <Enabled>k__BackingField: 0
+  <Dsn>k__BackingField: https://1bfb563755f4feb5668db33500fbed64@o4507053105479680.ingest.us.sentry.io/4507103335677952
   <CaptureInEditor>k__BackingField: 1
   <EnableLogDebouncing>k__BackingField: 1
   <DebounceTimeLog>k__BackingField: 1000
   <DebounceTimeWarning>k__BackingField: 1000
   <DebounceTimeError>k__BackingField: 1000
-  <TracesSampleRate>k__BackingField: 0
+  <TracesSampleRate>k__BackingField: 1
   <AutoStartupTraces>k__BackingField: 1
   <AutoSceneLoadTraces>k__BackingField: 1
-  <AutoAwakeTraces>k__BackingField: 0
+  <AutoAwakeTraces>k__BackingField: 1
   <AutoSessionTracking>k__BackingField: 1
   <AutoSessionTrackingInterval>k__BackingField: 30000
   <ReleaseOverride>k__BackingField: 
