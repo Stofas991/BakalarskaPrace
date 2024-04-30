@@ -7,13 +7,13 @@ using Sentry;
 
 public class WFCGenerator : MonoBehaviour
 {
-    
-    [SerializeField]GameObject WFCTileObject;
+    [SerializeField] GameObject WFCTileObject;
     public bool finished = false;
+    private HashSet<WFCCell> constrainedList = new HashSet<WFCCell>();
 
     public WFCCell PlaceTiles(int posX, int posY, Transform parent)
     {
-        var instance = Instantiate(WFCTileObject, new Vector3(posX, posY, 0), new Quaternion());
+        var instance = Instantiate(WFCTileObject, new Vector3(posX, posY, 0), Quaternion.identity);
         instance.transform.parent = parent;
         return instance.GetComponent<WFCCell>();
     }
@@ -21,31 +21,38 @@ public class WFCGenerator : MonoBehaviour
     public void WaveFunction(WFCCell cellToCollapse)
     {
         cellToCollapse.Collapse();
-        
-        Stack stack = new Stack();
+
+        if (constrainedList.Contains(cellToCollapse))
+            constrainedList.Remove(cellToCollapse);
+
+        Stack<WFCCell> stack = new Stack<WFCCell>();
+        HashSet<WFCCell> processedCells = new HashSet<WFCCell>();
 
         stack.Push(cellToCollapse);
 
         while (stack.Count > 0)
         {
-            WFCCell cell = (WFCCell)stack.Pop();
+            WFCCell cell = stack.Pop();
             var directions = cell.GetDirections();
             var possibilities = cell.GetPossibilities();
 
             foreach (var direction in directions)
             {
                 var neighbour = cell.GetNeighbour(direction);
-                if (neighbour.entropy != 0)
+                if (neighbour.entropy != 0 && !processedCells.Contains(neighbour))
                 {
-                    
                     var reduced = neighbour.Constrain(possibilities, direction);
                     if (!neighbour.collapsed && neighbour.entropy == 0)
                     {
                         return;
                     }
-                    
+
                     if (reduced)
+                    {
+                        constrainedList.Add(neighbour);
                         stack.Push(neighbour);
+                        processedCells.Add(neighbour);
+                    }
                 }
             }
         }
@@ -53,20 +60,38 @@ public class WFCGenerator : MonoBehaviour
 
     public List<WFCCell> GetLowestEntropy(Transform parent)
     {
+        constrainedList.RemoveWhere(x => x == null);
         List<WFCCell> lowestEntropyCells = new List<WFCCell>();
-        int lowestEntropy = 100;
+        int lowestEntropy = int.MaxValue;
 
-        foreach (Transform child in parent)
+        if (constrainedList.Count > 0)
         {
-            WFCCell currentCell = child.GetComponent<WFCCell>();
-            if (currentCell.entropy > 0)
+            foreach(WFCCell currentCell in constrainedList)
             {
-                if (currentCell.entropy < lowestEntropy)
+                if (currentCell.entropy > 0 && currentCell.entropy < lowestEntropy)
                 {
                     lowestEntropyCells.Clear();
                     lowestEntropy = currentCell.entropy;
+                    lowestEntropyCells.Add(currentCell);
                 }
-                if (currentCell.entropy == lowestEntropy)
+                else if (currentCell.entropy == lowestEntropy)
+                {
+                    lowestEntropyCells.Add(currentCell);
+                }
+            }
+        }
+        else
+        {
+            foreach (Transform child in parent)
+            {
+                WFCCell currentCell = child.GetComponent<WFCCell>();
+                if (currentCell.entropy > 0 && currentCell.entropy < lowestEntropy)
+                {
+                    lowestEntropyCells.Clear();
+                    lowestEntropy = currentCell.entropy;
+                    lowestEntropyCells.Add(currentCell);
+                }
+                else if (currentCell.entropy == lowestEntropy)
                 {
                     lowestEntropyCells.Add(currentCell);
                 }

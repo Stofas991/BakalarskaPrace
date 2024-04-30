@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e5d9503e40e0ba43b32caa345b51f23, type: 3}
-  m_Name: Wooden wall
+  m_Name: Wooden Wall
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 279c970e4c5d32743b3cc5e2488eacf1, type: 2}
   tileBase: {fileID: 11400000, guid: 83142ebfc587bd542b178a4681157e47, type: 2}

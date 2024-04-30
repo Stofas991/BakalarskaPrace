@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Tilemaps;
 
 
@@ -13,9 +14,9 @@ public class MapGenerator : Singleton<MapGenerator>
     public enum DrawMode { NoiseMap, ColourMap, TileMap};
     public DrawMode drawMode;
 
-    public int mapWidth;
+    public int mapWidth = 100;
     public int treeLimit = 50;
-    public int mapHeight;
+    public int mapHeight = 100;
     public float noiseScale;
     public float treeNoisScale;
 
@@ -25,7 +26,7 @@ public class MapGenerator : Singleton<MapGenerator>
     public float persistance;
     public float lacunarity;
 
-    public int seed;
+    public int seed = 100000000;
     public Vector2 offset;
 
     public bool autoUpdate;
@@ -37,11 +38,27 @@ public class MapGenerator : Singleton<MapGenerator>
     private int treeCount;
     private GameObject wfcParent;
     [SerializeField] WFCTile wfcFiller;
-
+    [SerializeField] NavMeshSurface2d nmSurface;
 
     private bool end;
 
     [SerializeField] Tilemap[] tilemaps;
+
+    public void Start()
+    {
+        if (SelectedValues.isSet)
+        {
+            seed = SelectedValues.seed;
+            mapWidth = SelectedValues.mapSize;
+            mapHeight = SelectedValues.mapSize;
+            if (mapWidth == 200)
+                treeLimit = 1000;
+
+            GenerateMap();
+        }
+        CameraController.GetInstance().setCameraBorders();
+        nmSurface.BuildNavMeshAsync();
+    }
 
     public void GenerateMap()
     {

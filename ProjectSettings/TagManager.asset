@@ -11,6 +11,10 @@ TagManager:
   - NavMesh
   - Stone
   - WallTilemap
+  - ZoneParent
+  - SmallMap
+  - MediumMap
+  - LargeMap
   layers:
   - Default
   - TransparentFX

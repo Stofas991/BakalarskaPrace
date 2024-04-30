@@ -39,7 +39,7 @@ public enum Direction
 public enum TileType
 {
     Grass,
-    Trees,
+    Mountain,
     Water,
     Beach
 }

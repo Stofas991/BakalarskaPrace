@@ -26,7 +26,7 @@ public class WFCTileEditor : Editor
         {
             case TileType.Grass:
                 return GameConstants.grassWeight;
-            case TileType.Trees:
+            case TileType.Mountain:
                 return GameConstants.treesWeight;
             case TileType.Water:
                 return GameConstants.waterWeight;

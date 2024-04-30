@@ -228,6 +228,9 @@ public class BuildingCreator : Singleton<BuildingCreator>
         {
             switch (selectedObject.PlaceType)
             {
+                case PlaceType.Single:
+                    DrawItem();
+                    break;
                 case PlaceType.Line:
                 case PlaceType.Rectangle:
                     DrawBounds(tilemap, false);
@@ -356,15 +359,16 @@ public class BuildingCreator : Singleton<BuildingCreator>
                 {
 
                     //cant place on forbidden tilemaps or on another zone
-                    previewMap.SetTile(new Vector3Int(posX, posY, 0), null);
-                    if (!IsForbidden(new Vector3Int(posX, posY, 0)) && !selectedObject.Category.tilemap.HasTile(new Vector3Int(posX, posY, 0)) && !NotEnoughResources(requiredResourcesPreview))
+                    Vector3Int targetPosition = new Vector3Int(posX, posY, 0);
+                    previewMap.SetTile(targetPosition, null);
+                    if (!IsForbidden(targetPosition) && !selectedObject.Category.tilemap.HasTile(targetPosition) && !NotEnoughResources(requiredResourcesPreview))
                     {
                         //updating status of resource menu
                         resourceMenu.UpdateAmmount(-requiredResources.ammount, requiredResources.itemType);
                         if (requiredResourcesPreview.ContainsKey(requiredResources.itemType))
                             requiredResourcesPreview[requiredResources.itemType] -= requiredResources.ammount;
 
-                        map.SetTile(new Vector3Int(posX, posY, 0), tileBase);
+                        map.SetTile(targetPosition, tileBase);
                         GameObject item = Instantiate(selectedObject.Prefab, new Vector3(posX + 0.5f, posY + 0.5f, 0), Quaternion.identity);
                         item.transform.parent = categoryParent.transform;
                     }

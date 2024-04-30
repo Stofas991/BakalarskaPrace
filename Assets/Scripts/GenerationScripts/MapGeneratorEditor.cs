@@ -19,8 +19,19 @@ public class MapGeneratorEditor : Editor
         }
         if (GUILayout.Button("Generate"))
         {
-            mapGen.GenerateMap();
+            GenerateFunction(mapGen);
         }
+    }
+    
+    public void GenerateFunction(MapGenerator mapGen)
+    {
+        if (SelectedValues.isSet)
+        {
+            mapGen.seed = SelectedValues.seed;
+            mapGen.mapHeight = SelectedValues.mapSize;
+            mapGen.mapWidth = SelectedValues.mapSize;
+        }
+        mapGen.GenerateMap();
     }
 
 }

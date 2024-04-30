@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e6436e884632545bd3476d1ca5569d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 8
+  weight: 2
   tileType: 0
   upNeighbours:
   - {fileID: -1999561939963316766, guid: 13032d5821cf96342805a564b9d78992, type: 3}

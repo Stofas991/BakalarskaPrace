@@ -20,3 +20,4 @@ MonoBehaviour:
   requiredResources:
     itemType: 0
     ammount: 0
+  destroyer: 1

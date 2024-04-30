@@ -415,6 +415,7 @@ Jednou z hlavních nevýhod výškových map je, že nepodporují tvorbu skalní
 	\label{PeytavieGen}
 \end{figure}
 
+\iffalse
 \chapter{Procedurální generování krajiny}
 \label{terrain}
 Procedurální generování krajiny se řadí ke složitějším tématům PG. Je tomu tak hlavně kvůli tomu, že se k tomuto typu generování většinou používají výškové mapy (height maps), podle kterých se ohodnocují jednotlivé pixely, jak je popsáno v sekci \ref{heightMaps}. Jakmile jsou všechny pixely ohodnoceny, jsou tři různé způsoby jak postupovat:
@@ -452,8 +453,6 @@ Vzhledem k tomu že první dva postupy vyžadují mechanické vykreslování bu�
 	\end{subfigure}
 	\caption{Na obrázcích jsou vidět různé postupy generování obsahu z této hry, na obrázku a je vygenerovaný půdorys oblasti i s mořem a pláží, na obrázku b se k tomu přidaly stromy.}
 \end{figure}
-
-\iffalse
 
 \section{Metody pro procedurální generování krajiny}
 Tato část se zabývá průzkumem procedurálních metod, aplikovaných na modelování terénu. Pojednává o důležitých aspektech, jako je realističnost výstupu, náročnost algoritmu a prostředky pomocí kterých je uživatel schopen ovlivnit a kontrolovat proces generování.~\cite{inproceedings}
@@ -548,14 +547,23 @@ Tato sekce popisuje žánr, styl, cíle a ovládání samotné hry, založené n
 Při výběru hratelné rasy a dvou začínajících postav na začátku hry hráči rozhodují o strategickém směru, kterým se jejich osada bude ubírat. Různé rasy mohou poskytovat specifické výhody a jedinečné schopnosti, což ovlivňuje strategii budování a obrany hráčů. Kromě budování základní infrastruktury, jako jsou farmy pro zajištění potravin, musí hráči také efektivně využívat dostupné prostředky a suroviny k budování různých typů obranných struktur. To může zahrnovat stavbu opevněných hradeb, věží, pastí, které mají za cíl zpomalit nebo zastavit postup nepřátelských sil.
 
 Kromě obrany před nepřáteli se hráči budou muset vypořádat s dalšími přírodními a lidskými hrozbami, jako je nedostatek surovin, nebo náhlé změny počasí. Vývoj ve hře je doprovázen možností rozšíření a vylepšení stávajících budov, což umožňuje vybudovat silnější a odolnější obranné systémy. Zároveň se hráči musí adaptovat na nové výzvy a nepředvídatelné situace.
+\newpage 
 
 \subsection{Grafika}
-Hra je navržena jako 2D hra s pohledem zhora (top-down), což poskytne hráčům přehledný pohled na herní prostředí a umožní jim snadnou navigaci a řízení svých jednotek. Grafický styl hry bude pixelový, s použitím převážně 16x16 pixelových spriteů. Tento styl grafiky je známý svou jednoduchostí. Modelů tohoto stylu je mnoho volně dostupných a v případě potřeby lze bez problémů dotvořit vlastní. Díky tomuto stylu grafiky bude zároveň možné udržet nízké nároky na hardwarové prostředky, což umožní hladký běh hry i na starších zařízeních.
+Hra je navržena jako 2D hra s pohledem zhora (top-down), jak je vyobrazeno na obrázku \ref{GraphicStyle}, což poskytne hráčům přehledný pohled na herní prostředí a umožní jim snadnou navigaci a řízení svých jednotek. Grafický styl hry bude pixelový, s použitím převážně 16x16 pixelových spriteů. Tento styl grafiky je známý svou jednoduchostí. Modelů tohoto stylu je mnoho volně dostupných a v případě potřeby lze bez problémů dotvořit vlastní. Díky tomuto stylu grafiky bude zároveň možné udržet nízké nároky na hardwarové prostředky, což umožní hladký běh hry i na starších zařízeních.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.55]{obrazky-figures/GraphicStyle.png}
+	\caption{Ukázka grafického stylu hry, s postavami hráčů a stromů. V levém dolním rohu je vidět stavební menu a v horním rohu panel se surovinami.}
+	\label{GraphicStyle}
+\end{figure}
 
 \subsection{Jednoduchá umělá inteligence nepřátel}
 Umělá inteligence nepřátel bude implementována pomocí skriptů, které budou mít za úkol detekovat hráče v okolí a podle toho reagovat, včetně pronásledování a útoku na hráče. Pro pohyb po mapě bude využit vestavěný systém v Unity nazývaný NavMesh. Každá jednotka, která se má pohybovat po mapě, bude mít přiděleného NavMesh agenta, který bude schopen reagovat na podloží definované NavMesh surface. Tímto způsobem bude umožněno nepřátelským jednotkám plánovat svůj pohyb po herním světě s ohledem na dostupné průchody a neprůchodné oblasti definované v NavMesh surface, což vytvoří realističtější a dynamické chování nepřátel.
 
 \subsection{NavMesh funkcionalita}
+\label{NavMesh}
 NavMesh je vestavěný systém v Unity, který umožňuje jednotkám v herním světě plánovat svůj pohyb a navigovat přes prostředí. Jedná se o komplexní nástroj pro tvorbu navigačních dat, která definují, kde se mohou jednotky pohybovat a kudy nemohou. NavMesh systém v Unity funguje následovně:
 
 \begin{enumerate}
@@ -643,9 +651,6 @@ public struct TerrainType
 }
 \end{lstlisting}
 Kde \textbf{name} je pojmenování daného regionu, \textbf{height} definuje horní limit pro šumovou hodnotu, to znamená že všechny hodnoty na mapě, které jsou nižší než tato a vyšší než hodnota předchozího regionu sem spadají. proměnná \textbf{colour} je barva která se používá pouze při nastavení generačního algoritmu a slouží pro testovací účely jako vyobrazení obarvených bodů mapy. Hodnota \textbf{tile} je sprite který se používá jako grafická podoba bodu mapy, může se jednat o sprite hory, vody, trávy a dalších. \textbf{tileMap} je tilemapa na kterou se má nanášet \textbf{tile} a \textbf{ID} je identifikační číslo. Každý region má vlastní tilemapu, z důvodu následného generování NavMesh plochy více popsané v sekci \ref{NavMesh}.
-
-\subsubsection{NavMesh}
-\label{NavMesh}
  
 \subsection{Třída Noise}
 \label{noiseClass}
@@ -667,7 +672,202 @@ Tento algoritmus pracuje na ohodnocování buněk mapy a jejich následném \tex
 
 Každá buňka \textit{WFCCell} má na začátku nastavené všechny možné tily, kterých může nabývat. Tyto tily jsou typu \textit{WFCTile} a obsahují informace jako jsou, váha, typ a povolené sousední tily, které se nastavují v editoru.
 
-\section{}
+\section{Hráčovy jednotky}
+Tato kapitola se podrobněji zabývá implementací hráčových jednotek ve hře. Detailně se zde popisují jednotlivé skripty, které řídí chování jednotek, jejich interakci s okolím a výkon v boji.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{obrazky-figures/PlayerComponents.png}
+	\caption{Na obrázku jsou vidět komponenty hráčových jednotek.}
+	\label{PlayerScripts}
+\end{figure}
+
+\subsection{Řízení a pohyb jednotek}
+Hlavním skriptem zajišťujícím řízení pohybu hráčových jednotek je \textbf{UnitControlScript}. Obsahuje metody pro interakci s uživatelským vstupem, pohyb k cílovým bodům, manipulaci s objekty a výběr cílů pro útok. Jeho hlavní funkce zahrnují:
+
+\begin{description}
+	\item [Zpracování uživatelského vstupu:] Skript sleduje uživatelský vstup a reaguje na něj, například detekuje kliknutí myší na herní plochu.
+	\item [Pohyb k bodům kliknutí] Po kliknutí myší na herní plochu skript řídí pohyb jednotky k danému cílovému bodu, či nepříteli.
+	\item [Interakce s objekty:] Jednotky mohou interagovat s různými objekty ve hře, například sbírat suroviny, nebo provádět útoky na nepřátelské jednotky.
+\end{description}
+
+Další důležitou součástí pohybu jednotky je skript \textbf{PlayerMotor}, jehož funkcionalita zahrnuje navigaci po herním světe. Pomocí komponenty \textbf{NavMeshAgent}, která je detailně popsána v sekci \ref{NavMesh}.
+
+\subsection{Ostatní třídy}
+Dalšími skripty které jednotky využívají, jsou \textbf{UnitStats} a \textbf{Gathering}. Skript UnitStats je zodpovědný za správu statistik a vlastností hráčových jednotek v herním světě. Poskytuje klíčové informace o zdraví, útočné síle, rychlosti útoku, dosahu a dalších parametrech, které ovlivňují chování a výkon jednotek v boji. 
+
+Skript Gathering řídí funkce jednotky související se sběrem surovin v herním světe. Jednotka s tímto skriptem je schopna interagovat s herními objekty reprezentujícími suroviny a může je těžit. Tento skript úzce spolupracuje se skriptem \textbf{ResourceGatherScript}, který je více popsán v sekci \ref{ResourceGatherScript}.
+
+\subsection{Interakce a funkcionalita}
+Interakce mezi jednotlivými skripty umožňuje jednotkám provádět různé akce v herním světě. Základní funkčnost je zaručena správnou provázaností a interakcí skriptů mezi sebou, ta je vyobrazena na diagramu \ref{}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.55]{obrazky-figures/keep-calm.png}
+	\caption{Diagram zobrazující komunikaci skriptů UnitControlScript, Gathering, PlayerMotor, UnitStats a CharacterCombat.}
+	\label{UnitControlRelation}
+\end{figure}
+
+\section{Umělá inteligence nepřátel}
+Umělá inteligence (AI) nepřátel je jedním z nejdůležitějších prvků v této hře, přináší dynamiku a výzvy pro hráče. AI nepřátel je zodpovědná za jejich chování, rozhodování a reakce v průběhu hry. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{obrazky-figures/EnemyComponents.png}
+	\caption{Na obrázku jsou vidět komponenty nepřátelských jednotek.}
+	\label{EnemyScripts}
+\end{figure}
+
+Skript \textbf{EnemyMove} je jedním z kritických komponentů implementace tohoto chování. Tento skript řídí pohyb, detekci hráče a obstrukcí, pronásledování a útoky nepřátel. Díky tomuto skriptu jsou nepřátelé schopni inteligentně reagovat na hráčovy akce a poskytovat tak vyváženou a zábavnou herní zkušenost. Skript také obsahuje řešení animací a rotací nepřítele směrem k hráči, což dodává hře vizuální efekty.
+
+\subsection{Detekce hráče}
+Skript neustále skenuje okolí nepřítele a hledá hráče v dosahu. Provádí to pomocí metody \textbf{CheckForPlayer()}, která využívá vestavěnou funkci \textbf{Physics2D.OverlapCircleAll} k detekci všech hráčů v určené vzdálenosti nepřítele. Jakmile je v dosahu nalezen hráč, proměnná \textbf{chasedObject} je nastavena a nepřítel začne hráče pronásledovat.
+
+\subsection{Pronásledování hráče}
+Pronásledování je prováděno metodou \textbf{HandleChase()}, která zjišťuje, zda je hráč v dosahu útoku, zda není překážka mezi nepřítelem a hráčem a zda je hráč stále v dosahu sledování. Každá z těchto možností je dále popisována v následujících sekcích.
+
+\subsubsection{Útok}
+Jakmile je hráč v dosahu útoku, nepřítel spustí útok pomocí metody \textbf{Attack()}. Při útoku nepřítel sleduje svou rychlost útoku, aby neútočil příliš často, přičemž všechny statistiky jednotky jsou uváděny ve skriptu \textbf{UnitStats.cs}. Pokud je hráč v dosahu útoku a je možné zaútočit, nepřítel způsobí škodu hráči, k tomu se používá funkce vestavěná v rozhraní \textbf{IAttackable} jménem \textbf{TakeDamage(int damage)}, kterou implementuje skript \textbf{UnitStats}. V případě že je nepřítel střelec, používá útoky na dálku, tak vystřelí projektil směrem k hráči.
+
+\begin{lstlisting}
+void Attack()
+{
+	agent.SetDestination(agent.transform.position);
+	if (Time.time >= nextAttackEvent)
+	{
+		nextAttackEvent = Time.time + stats.attackSpeed;
+		animator.SetTrigger("InRange");
+		var target = chasedObject.GetComponent<IAttackable>();
+		if (target != null)
+		{
+			if (stats.isRanged)
+			{
+				CreateBulletInDirection();
+			}
+			else
+			target.TakeDamage(stats.attackDamage);
+		}
+	}
+}
+\end{lstlisting}
+
+\subsubsection{Řešení překážek}
+Nepřítel se vyhýbá překážkám, pokud se nejedná o stavby hráče, v případě že se mezi hráčem a nepřítelem nachází zeď, tak je novým cílem a nepřítel na ni útočí doku ji nezničí.
+
+\subsubsection{Rozhraní IAttackable}
+Toto rozhraní implementuje jak hráč, tak stavby. Jedná se o rozhraní, které obsahuje funkci \textbf{TakeDamage(int damage)}, Tímto způsobem je navržený proto, aby nepřítel nemusel zjišťovat a nahrávat pro hráče a zničitelnou stavbu jiné skripty. Díky IAttackable stačí pouze načíst tento interface a následně použít funkci TakeDamage(int damage).
+
+\section{Dynamický systém stavění}
+\label{buildingSystem}
+Stavební systém hry je založen na principu podobném jako vytváření herní mapy, hráči zde umisťují vybrané dlaždice na určená místa v herním světě na tilemapy. Tento systém umožňuje hráčům vytvářet a umisťovat stavby za běhu hry, přičemž každá stavba vyžaduje určité materiály a může být umístěna pouze na místa, kde ještě žádná jiná stavba nebyla postavena.
+
+Stavební menu je dynamicky vytvářeno při spuštění hry, což umožňuje snadné rozšiřování systému o nové kategorie a stavby v nich. Tento přístup byl zvolen pro zajištění škálovatelnosti a jednoduchosti přidávání nových prvků do hry.
+
+Jednotlivé kategorie stavěných objektů jsou reprezentovány jako skriptovatelné objekty, tzv. scriptable objects. Tyto kategorie jsou viditelné ve hře v dolní části obrazovky a jsou načítány dynamicky. Každá kategorie uchovává tilemapu, na kterou se budou stavby pokládat, a také PlaceType, což je enum, který určuje způsob, jakým lze danou stavbu umístit (např. jednotlivě, v řadě, do obdélníku atd.).
+
+Skriptovatelný objekt \textbf{BuildableObjectBase} je abstraktní třída, která reprezentuje jednotlivé stavitelné objekty ve hře. Každá instance této třídy obsahuje informace a vlastnosti specifické pro daný typ budovy, jako je kategorie, typ umístění, prefabrikát budovy a požadované materiály pro stavbu.
+
+\subsection{Vytváření stavebního menu}
+\textbf{BuildingHUD} je třída, která řídí vytváření uživatelského rozhraní (UI) pro stavitelské menu ve hře. Tento skript je zodpovědný za vytváření kategorií budov a položek v těchto kategoriích, aby hráč mohl jednoduše vybírat, které budovy chce postavit. Tento skript umožňuje:
+
+\begin{description}
+	\item[Dynamické vytváření UI] Skript automaticky vytváří tlačítka pro různé kategorie budov a zobrazuje je ve stavitelském menu. To umožňuje hráčům snadno procházet různé typy budov, které mohou postavit.
+	\item[Dynamické načítání dat] Data o stavitelných budovách jsou načítána ze speciálních souborů ve složce "Resources/ScriptableObjects/Buildables". To umožňuje jednoduché přidávání nových budov do hry bez nutnosti úpravy kódu.
+\end{description}
+
+Tento skript je navržený tak, aby bylo možné dynamicky přidávat nové kategorie a položky a to bez nutnosti jakékoli úpravy kódu. Na obrázku \ref{GraphicStyle} je v levém dolním rohu vidět stavební menu.
+
+\subsection{Používání stavebního menu}
+Klíčovou třídou odpovědnou za tvorbu a umisťování stavebních objektů ve hře je \textbf{BuildingCreator}. Tato třída je navržena tak, aby byla flexibilní a snadno rozšiřitelná pro budoucí vývoj.
+
+Jedním z klíčových prvků BuildingCreator je jeho schopnost dynamicky vytvářet a umisťovat stavební objekty na herní mapu. To umožňuje hráčům vybírat z různých typů budov a umisťovat je na vybraná místa pomocí myši. Třída také poskytuje náhledovou mapu, která hráčům ukazuje, kam bude budova umístěna a zda je to možné z hlediska terénu, či surovin.
+
+Další klíčovou funkcí je správa kategorií stavebních objektů. Objekty jsou rozděleny do kategorií, po rozkliknutí se zobrazí podmenu, ze kterého lze vybrat konkrétní stavbu. Kategorie jsou definovány pomocí skriptovatelných objektů popsaných v sekci \ref{buildingSystem}. BuildingCreator také zajišťuje, aby hráči nemohli umístit stavební objekty na zakázaná místa nebo na místa, kde již existuje jiná stavba. 
+
+Každá budova je reprezentována prefabrikátem, který obsahuje potřebné komponenty jako \textit{collider2D}, komponentu na detekci kolizí, skript odpovídající dané stavbě a popřípadě \textit{NavMeshObstacle}, což je komponenta která v NavMesh povrchu vytváří neprůchodnou oblast.
+
+\subsubsection{Metoda DrawBounds}
+Metoda \textbf{DrawBounds} se stará o vykreslení obdélníkových a lineárních struktur na mapě a zároveň provádí kontrolu dostupnosti zdrojů a umístění na mapě. Metoda kombinuje výpočet hranic oblast, kontrolu a aktualizaci stavu surovin a umisťování prefabrikátů na mapu. Tato metoda je klíčovou součástí procesu tvorby a umísťování stavebních objektů a ukazuje, jakým způsobem se zde řeší komplexní problémy spojené s tímto procesem. Zde je ukázka kódu:
+
+\begin{lstlisting}
+if (previewMode)
+{
+	map.SetTile(new Vector3Int(posX, posY, 0), tileBase);
+	
+	if (IsForbidden(new Vector3Int(posX, posY, 0)) || NotEnoughResources(requiredResourcesPreview))
+	{
+		if (!IsSameTilemap(new Vector3Int(posX, posY, 0), selectedObject.Category.tilemap))
+		map.SetColor(new Vector3Int(posX, posY, 0), Color.red);
+	}
+}
+else
+{
+	Vector3Int targetPosition = new Vector3Int(posX, posY, 0);
+	previewMap.SetTile(targetPosition, null);	
+	if (IsBuildablePosition)
+	{
+		resourceMenu.UpdateAmmount(-requiredResources.ammount, requiredResources.itemType);
+		if (requiredResourcesPreview.ContainsKey(requiredResources.itemType))
+			requiredResourcesPreview[requiredResources.itemType] -= requiredResources.ammount;
+		
+		map.SetTile(targetPosition, tileBase);
+		GameObject item = Instantiate(selectedObject.Prefab, targetPosition, Quaternion.identity);
+		item.transform.parent = categoryParent.transform;
+	}
+}
+\end{lstlisting}
+
+tento úryvek ukazuje, jak se dynamicky pracuje s rozložením zdrojů a umístěním stavby. Prochází se celý obdélníkový rozměr stavby a provádí se analýza dostupných zdrojů pro stavbu. Pokud jsou zdroje dostupné a na cestě není překážka, stavba se umístí a zdroje jsou odebrány. V opačném případě se dokončí pouze ty části, kde to je možné a v náhledu se ty části které nebudou postaveny zabarví červeně.
+
+\section{Náhodné události}
+Náhodné události představují důležitý prvek v herním designu, který přináší do hry dynamiku, variabilitu a nepředvídatelnost. Jejich implementace je klíčová pro zajímavý a zábavný herní zážitek. Na obrázku \ref{RandomEvent} je vyobrazené informativní okno při spuštění náhodné události Invasion.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.55]{obrazky-figures/RandomEventPicture.png}
+	\caption{Snímek obrazovky v moment kdy nastala náhodná událost, v tomto případě konkrétně Invasion, která vytvoří nepřátele útočící na hráče.}
+	\label{RandomEvent}
+\end{figure}
+
+\subsection{Třída EventManager}
+Třída EventManager slouží jako centrální prvek pro správu náhodných událostí v herním prostředí. Její hlavní funkcí je spravovat seznam dostupných událostí a umožňovat jejich vyvolání v reakci na určité podmínky nebo události ve hře. Implementace třídy EventManager zahrnuje následující klíčové prvky:
+
+\begin{description}
+	\item[Správa seznamu událostí] Třída EventManager udržuje seznam všech dostupných událostí, které mohou být vyvolány v průběhu hry. Tyto události mohou zahrnovat různé situace, jako jsou útoky nepřátel, získání nových jednotek atd.
+	\item[Generování náhodných událostí] EventManager obsahuje metody pro generování náhodných událostí z dostupného seznamu událostí. Tato funkcionalita umožňuje vytvoření dynamického a nepředvídatelného herního prostředí, které udržuje hráče zapojené a zaujaté.
+\end{description}
+
+Každý GameEvent má atribut GameEventAttribute, díky kterému lze dynamicky a automaticky pomocí reflexe načítat a inicializovat všechny možné události ze skriptu EventManager, pro což byla vytvořena následující funkce:
+
+\begin{lstlisting}
+	void LoadEvents()
+	{
+		var eventTypes = Assembly.GetExecutingAssembly().GetTypes()
+		.Where(type => type.GetCustomAttributes(typeof(GameEventAttribute), true).Length > 0);
+
+		foreach (var eventType in eventTypes)
+		{
+			var eventInstance = Activator.CreateInstance(eventType) as IGameEvent;
+			if (eventInstance != null)
+			{
+				events.Add(eventInstance);
+			}
+		}
+	}
+\end{lstlisting}
+
+Tato funkce slouží k načtení dostupných událostí do paměti z aktuálně běžícího assembly (souboru s kódem aplikace) a jejich uložení do kolekce událostí. První řádek \textbf{Assembly.GetExecutingAssembly().GetTypes()} vrací aktuálně běžící assembly, ve kterém je tato funkce vykonávána a všechny typy v jeho rámci. Následně se pomocí Linq filtrují všechny typy událostí, na základě toho, zda mají atribut \textbf{GameEventAttribute}. Následuje iterace přes všechny nalezené typy událostí a instanciace daného typu události za pomoci reflexe. Reflexe umožňuje manipulaci s typy a objekty za běhu programu. Zde je použita k vytvoření instance třídy a přetypování na \textbf{IGameEvent}. Nakonec se každá událost přidává do seznamu, ze kterého se následovně náhodně vybírají.
+
+Tato třída navíc obsahuje seznam prefabů nepřátelských jednotek, zařizuje manipulaci s informativním oknem a má pomocné funkce díky kterým mohou GameEventy načítat potřebné hodnoty.
+
+\subsection{Rozhraní IGameEvent}
+Rozhraní IGameEvent definuje základní strukturu a metody, které musí být implementovány v jednotlivých náhodných událostech. Toto rozhraní poskytuje framework pro vytváření a správu konkrétních událostí v rámci herního prostředí. Klíčové prvky implementace rozhraní IGameEvent zahrnují:
+\begin{description}
+	\item[Metody pro inicializaci a spuštění události] Rozhraní obsahuje metody \textit{InitEvent()} a \textit{StartEvent()}, které slouží k inicializaci a spuštění konkrétní události v rámci herního světa. Tyto metody umožňují přípravu a spuštění události v reakci na určité podmínky ve hře.
+	\item[Metoda pro aktualizaci události] Rozhraní definuje metodu \textit{UpdateEvent()}, která slouží k aktualizaci stavu události v průběhu hry. Tato metoda umožňuje monitorování a řízení průběhu události a provádění potřebných akcí v závislosti na aktuálním stavu hry.
+	\item[Metoda pro ukončení události] Rozhraní obsahuje metodu \textit{EndEvent()}, která slouží k ukončení dané události po jejím dokončení nebo po dosažení určitých podmínek. Tato metoda umožňuje vyčištění prostředků a provedení konečných akcí spojených s danou událostí. Metoda \textit{EndEvent()} navíc vrací hodnotu typu WindowInfo, což jsou hodnoty, které jsou potřebné pro zobrazení informativního okna hráči, po dokončení náhodné události.
+\end{description}
+
 \iffalse
 \section{Perlinův šum}
 \label{PerlinNoiseImplement}

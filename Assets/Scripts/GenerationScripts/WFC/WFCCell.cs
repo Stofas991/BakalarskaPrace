@@ -41,13 +41,39 @@ public class WFCCell : MonoBehaviour
 
     public WFCTile Collapse()
     {
-        WFCTile colapsedTile = GetRandomValue();
+        // Vyber náhodný prvek z možností podle váhy
+        WFCTile collapsedTile = GetRandomWeightedTile();
+
+        // Vyèisti seznam možností a pøidej pouze vybraný prvek
         possibilities.Clear();
-        possibilities.Add(colapsedTile);
-        Instantiate(colapsedTile, transform);
+        possibilities.Add(collapsedTile);
+
+        // Instantializuj vybraný prvek
+        Instantiate(collapsedTile, transform);
+
+        // Nastav entropii na nulu a oznaè buòku jako collapsed
         entropy = 0;
         collapsed = true;
-        return colapsedTile;
+
+        return collapsedTile;
+    }
+
+    private WFCTile GetRandomWeightedTile()
+    {
+        System.Random random = new System.Random();
+
+        // Seøaï možnosti podle váhy (vzestupnì)
+        possibilities = possibilities.OrderBy(x => x.weight).ToList();
+
+        // Seøaï možnosti podle typu dlaždice pro další vyvážený výbìr
+        Dictionary<TileType, List<WFCTile>> possibilityDictionary = GetPossibilityDictionary();
+        possibilityDictionary = possibilityDictionary.OrderBy(x => WeightForType(x.Key)).ToDictionary(x => x.Key, x => x.Value);
+
+        // Vytvoø seznam dlaždic podle váhy pro další výbìr
+        List<WFCTile> selectedTiles = GetRandomTileList(possibilityDictionary);
+
+        // Vyber náhodný prvek z vyváženého seznamu
+        return GetRandomItem(selectedTiles, x => x.weight);
     }
 
     public bool Constrain(List<WFCTile> neighbourPossibilities, Direction direction)
@@ -61,6 +87,9 @@ public class WFCCell : MonoBehaviour
             List<WFCTile> connectors = new List<WFCTile>();
             foreach (WFCTile neighbourPossibility in neighbourPossibilities)
             {
+                if (neighbourPossibility.directionNeighbours.Count == 0)
+                    neighbourPossibility.SetValues();
+
                 connectors.AddRange(neighbourPossibility.directionNeighbours[direction]);
             }
 
@@ -178,7 +207,7 @@ public class WFCCell : MonoBehaviour
             return GameConstants.waterWeight;
         else if (tileType == TileType.Beach)
             return GameConstants.beachWeight;
-        else if (tileType == TileType.Trees)
+        else if (tileType == TileType.Mountain)
             return GameConstants.treesWeight;
         else
             return 0;

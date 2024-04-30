@@ -11,6 +11,7 @@ public class PlayerMotor : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        agent.speed = GetComponent<UnitStats>().movementSpeed;
     }
 
     void Update()

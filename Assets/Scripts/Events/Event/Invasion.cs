@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -5,6 +6,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 [GameEvent]
 public class Invasion : IGameEvent
@@ -16,6 +18,7 @@ public class Invasion : IGameEvent
     int width;
     int unitsToSpawn;
     int callAmmount = 0;
+    float difficulty = 1;
 
     public void InitEvent()
     {
@@ -25,6 +28,8 @@ public class Invasion : IGameEvent
         var eventManager = EventManager.GetInstance();
         unitPrefabList = eventManager.GetEnemyPrefabList();
         bannedTilemaps = eventManager.GetBannedTilemaps();
+        if (SelectedValues.isSet)
+            difficulty = SelectedValues.difficulty;
     }
 
     public void StartEvent()
@@ -62,7 +67,7 @@ public class Invasion : IGameEvent
 
     public PopupWindowInfo GetPopupWindowInfo()
     {
-        unitsToSpawn = (callAmmount+1) * 3;
+        unitsToSpawn = Convert.ToInt32((callAmmount+1) * 3 * difficulty);
         PopupWindowInfo windowInfo;
         windowInfo.isDenieable = false;
         windowInfo.textBoxContent = "A group of <color=red>" + unitsToSpawn + "</color> blood thirsty demons has grouped close to your settlement. Get ready for battle.";

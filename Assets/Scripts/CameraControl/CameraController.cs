@@ -24,8 +24,6 @@ public class CameraController : Singleton<CameraController>
 
     private void Start()
     {
-        panLimit.y = Generator.mapHeight;
-        panLimit.x = Generator.mapWidth;
         minSpeed = 20f;
         maxSpeed = 40f;
     }
@@ -92,5 +90,9 @@ public class CameraController : Singleton<CameraController>
         transform.position = pos;
     }
 
-
+    public void setCameraBorders()
+    {
+        panLimit.y = Generator.mapHeight;
+        panLimit.x = Generator.mapWidth;
+    }
 }

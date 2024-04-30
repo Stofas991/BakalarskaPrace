@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Tilemaps;
 
-public class Destroyable : MonoBehaviour
+public class Destroyable : MonoBehaviour, IAttackable
 {
     public int maxHealth = 100;
     public HealthBarScript healthBar;
@@ -26,6 +26,7 @@ public class Destroyable : MonoBehaviour
     {
         currentHealth -= Damage;
 
+        healthCanvas.SetActive(true);
         healthBar.SetHealth(currentHealth);
         // Play hurt animation
 
@@ -38,12 +39,10 @@ public class Destroyable : MonoBehaviour
 
     void Die()
     {
-        //die animation
-
-        //disable enemy
-        Destroy(gameObject);
+        //disable building
         objectTilemap.SetTile(new Vector3Int ((int)transform.position.x, (int)transform.position.y, 0), null);
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        Destroy(gameObject);
     }
 
     public void OnFocused(Transform focusedObject)

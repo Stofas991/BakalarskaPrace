@@ -21,10 +21,8 @@ public class EnemyMove : ClickableObject
     private GameObject alertedUnit;
     public Animator animator;
     public EnemyAttacked enemyAttack;
-    public float attackRange = 1.5f;
     private float nextAttackEvent;
-    public float attackDelay = 2f;
-    public int attackDamage = 20;
+    private UnitStats stats;
 
     //promÏnn· pro detekci hr·Ëe
     private int distance = 10;
@@ -36,6 +34,8 @@ public class EnemyMove : ClickableObject
         agent.updateUpAxis = false;
         alertedUnit = transform.Find("ExclamationRed").gameObject;
         enemyAttack = GetComponent<EnemyAttacked>();
+        stats = GetComponent<UnitStats>();
+        agent.speed = stats.movementSpeed;
     }
 
     void Update()
@@ -58,6 +58,7 @@ public class EnemyMove : ClickableObject
         chasing = false;
         CancelAttack();
         alertedUnit.SetActive(false);
+        chasedObject = null;
     }
 
     // Metoda pro detekci hr·Ëe
@@ -79,63 +80,61 @@ public class EnemyMove : ClickableObject
             CancelAttack();
             Attack();
         }
-        else if (IsInChasingRange())
+        else if (IsObstacleInWay())
         {
-            MoveTowardsPlayer();
+
+            HandleObstacle();
         }
         else
-        {
-            StopChasing();
-        }
-    }
+            MoveTowardsPlayer();
 
-    // Method to check if player is in range
-    bool IsInRangeOfEnemy()
-    {
-        return Vector3.Distance(agent.transform.position, chasedObject.transform.position) <= attackRange;
     }
 
     // Method to check if player is in attacking range
-    bool IsInChasingRange()
+    bool IsInRangeOfEnemy()
     {
-        return Vector3.Distance(agent.transform.position, chasedObject.transform.position) < distance;
+        return Vector3.Distance(agent.transform.position, chasedObject.transform.position) <= stats.attackRange;
     }
 
-    // Metoda pro pohyb smÏrem k hr·Ëi
+    // Method to check if player is in chasing range
+    bool IsInChasingRange()
+    {
+        return Vector3.Distance(agent.transform.position, chasedObject.transform.position) <= distance;
+    }
+
+    // Method for movement towards target
     void MoveTowardsPlayer()
     {
-        NavMeshPath navMeshPath = new NavMeshPath();
-
-        if (agent.CalculatePath(chasedObject.transform.position, navMeshPath) && navMeshPath.status == NavMeshPathStatus.PathComplete)
+        if (agent.destination != chasedObject.transform.position)
         {
-            agent.ResetPath();
             agent.SetDestination(chasedObject.transform.position);
-        }
-        else
-        {
-            HandleObstacle();
-        }
 
-        alertedUnit.SetActive(true);
-        RotateTowardsPlayer();
+            alertedUnit.SetActive(true);
+            RotateTowardsPlayer();
+        }
     }
 
     // Metoda pro zpracov·nÌ p¯ek·ûky mezi nep¯Ìtelem a hr·Ëem
+    bool IsObstacleInWay()
+    {
+        NavMeshPath navMeshPath = new NavMeshPath();
+
+        return !(agent.CalculatePath(chasedObject.transform.position, navMeshPath) && navMeshPath.status == NavMeshPathStatus.PathComplete);
+    }
+
     void HandleObstacle()
     {
         var collider = GetComponent<BoxCollider2D>();
         collider.enabled = false;
-        RaycastHit2D hit = Physics2D.Linecast(transform.position, chasedObject.transform.position);
+        int buildingsLayerMask = 1 << LayerMask.NameToLayer("Buildings");
+        RaycastHit2D hit = Physics2D.Linecast(transform.position, chasedObject.transform.position, buildingsLayerMask);
         collider.enabled = true;
 
-        if (hit.collider != null && hit.collider.gameObject.GetComponent<Destroyable>())
+        if (hit.collider != null && hit.collider.gameObject.GetComponent<Destroyable>() && hit.collider.gameObject != chasedObject)
         {
             chasedObject = hit.collider.gameObject;
         }
-        else
-        {
-            agent.SetDestination(chasedObject.transform.position);
-        }
+        agent.SetDestination(chasedObject.transform.position);
     }
 
     void Attack()
@@ -145,17 +144,22 @@ public class EnemyMove : ClickableObject
         //Checking if attack cooldown is off
         if (Time.time >= nextAttackEvent)
         {
-            nextAttackEvent = Time.time + attackDelay;
+            nextAttackEvent = Time.time + stats.attackSpeed;
 
             animator.SetTrigger("InRange");
+            var target = chasedObject.GetComponent<IAttackable>();
 
-            var destroyableScript = chasedObject.GetComponent<Destroyable>();
-            if (chasedObject.GetComponent<UnitStats>() != null)
-                chasedObject.GetComponent<UnitStats>().TakeDamage(attackDamage);
-            else if (destroyableScript != null)
+            if (target != null)
             {
-                chasedObject.GetComponent<Destroyable>().TakeDamage(attackDamage);
-                destroyableScript.OnFocused(transform);
+                if (stats.isRanged)
+                {
+                    var bulletTransform = Instantiate(stats.projectilePrefab, transform.position, Quaternion.identity);
+
+                    Vector3 shootDirection = (chasedObject.transform.position - bulletTransform.transform.position).normalized;
+                    bulletTransform.Setup(shootDirection, stats.attackDamage, tag);
+                }
+                else
+                    target.TakeDamage(stats.attackDamage);
             }
             else
                 Debug.Log("Object does not contain component that can be attacked");

@@ -25,8 +25,18 @@ public class CharacterCombat : MonoBehaviour
     {
         if (myStats.attackCooldown <= 0)
         {
-            animator.SetTrigger("inRange");
-            targetStats.TakeDamage(myStats.attackDamage);
+            animator.SetTrigger("InRange");
+
+            if (myStats.isRanged)
+            {
+                var bulletTransform = Instantiate(myStats.projectilePrefab, transform.position, Quaternion.identity);
+
+                Vector3 shootDirection = (targetStats.transform.position - bulletTransform.transform.position).normalized;
+                bulletTransform.Setup(shootDirection, myStats.attackDamage, tag);
+            }
+            else
+                targetStats.TakeDamage(myStats.attackDamage);
+
             myStats.attackCooldown = 1f / myStats.attackSpeed;
         }
     }

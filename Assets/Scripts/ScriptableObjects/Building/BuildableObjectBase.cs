@@ -12,6 +12,7 @@ public class BuildableObjectBase : ScriptableObject
     [SerializeField] UICategory uiCategory;
     [SerializeField] GameObject prefab;
     [SerializeField] RequiredResources requiredResources;
+    [SerializeField] bool destroyer = false;
 
     public TileBase TileBase
     {
@@ -42,6 +43,11 @@ public class BuildableObjectBase : ScriptableObject
     public RequiredResources RequiredResources
     {
         get { return requiredResources;}
+    }
+
+    public bool Destroyer
+    {
+        get { return destroyer; }
     }
 }
 

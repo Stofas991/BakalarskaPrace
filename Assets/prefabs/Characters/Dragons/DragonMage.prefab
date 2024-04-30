@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3377633813944631930}
-  - component: {fileID: 35802674226386479}
   - component: {fileID: 5904259467658559720}
+  - component: {fileID: 35802674226386479}
   - component: {fileID: 7650908556596081821}
   - component: {fileID: 356696167367167031}
   - component: {fileID: 4533981252407204535}
@@ -19,6 +19,8 @@ GameObject:
   - component: {fileID: 5997612312725051997}
   - component: {fileID: 8570137996297588649}
   - component: {fileID: -6267771263162931206}
+  - component: {fileID: 128815606}
+  - component: {fileID: 128815607}
   m_Layer: 6
   m_Name: DragonMage
   m_TagString: selectable
@@ -43,19 +45,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &35802674226386479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 67380354070866521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab6827ac4a76cd42a7a5c089b6f265b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBar: {fileID: 8524853678995928681}
 --- !u!195 &5904259467658559720
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -78,6 +67,18 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
+--- !u!114 &35802674226386479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67380354070866521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab6827ac4a76cd42a7a5c089b6f265b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7650908556596081821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,16 +93,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickEffect: {fileID: 2699476985937871758, guid: 58733ae8e55d65043addf73ca4bdd716, type: 3}
   zoneParent: {fileID: 0}
-  target: {x: 0, y: 0, z: 0}
-  enemy: {fileID: 0}
-  animator: {fileID: 356696167367167031}
-  focus: {fileID: 0}
-  attackRange: 5
-  nextAttackEvent: 0
-  attackDelay: 5
-  selected: 0
   UCCount: 0
   UCItemType: 0
+  selected: 0
 --- !u!95 &356696167367167031
 Animator:
   serializedVersion: 4
@@ -112,7 +106,7 @@ Animator:
   m_GameObject: {fileID: 67380354070866521}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: cff55b363d4e2b34094304fb60a9a1f7, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7bdba247984298d41b9249eb86f58711, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -201,13 +195,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  healthRegeneration: 2
   attackDamage: 50
-  attackSpeed: 2
+  attackSpeed: 0.5
   attackCooldown: 4
-  plantCutDamage: 10
-  plantCutSpeed: 1
-  cutCooldown: 0
+  gatheringDamage: 10
+  gatheringSpeed: 4
+  gatherCooldown: 0
+  attackRange: 10
+  movementSpeed: 2
   healthBar: {fileID: 3568833214334632642}
+  projectilePrefab: {fileID: 4398161380250030652, guid: 5a5d9f72c83086c4caec37af19d7d8a3, type: 3}
+  isRanged: 1
 --- !u!61 &5997612312725051997
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -258,6 +257,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ce5f1d0b9fc6b6479792be38592f63a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &128815606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67380354070866521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c29cff538c195c249b69c6f2236de67b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library:
+  - m_Name: Attack
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: Entry
+      m_Hash: 0
+      m_Sprite: {fileID: 1223251963, guid: 2a0acd9af49d5ef4a94794099bc55113, type: 3}
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 233c21aa7fbafd74899f1e90cfa6b48e, type: 3}
+--- !u!114 &128815607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 67380354070866521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CategoryHash: 0
+  m_labelHash: 0
+  m_SpriteKey: -2.3547506e-24
 --- !u!1 &161245697680456192
 GameObject:
   m_ObjectHideFlags: 0

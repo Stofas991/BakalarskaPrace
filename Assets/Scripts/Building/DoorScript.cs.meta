@@ -1,9 +1,11 @@
 fileFormatVersion: 2
-guid: 410f623c634026b498287bd75bf9ac95
+guid: f8b34fe8bf27fcb4591d3662f5763279
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - tilemap: {instanceID: 0}
+  - doorTile: {fileID: 11400000, guid: 17a30f9c5827ba140a861796a8ba7dc5, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

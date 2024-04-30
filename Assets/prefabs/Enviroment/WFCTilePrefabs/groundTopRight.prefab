@@ -97,17 +97,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e6436e884632545bd3476d1ca5569d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 8
+  weight: 2
   tileType: 0
   upNeighbours:
   - {fileID: 8070532179161317336, guid: 3fe9a8f0041548a4bbf3e2cbc74378b7, type: 3}
   - {fileID: 8070532179161317336, guid: 4222c532c3e680e409217c3f30e941d1, type: 3}
   - {fileID: 8070532179161317336, guid: d1c5f34d23e25734a935079aa0927114, type: 3}
   - {fileID: 8070532179161317336, guid: 476fa1d509c90144b81a712afcabebe2, type: 3}
-  - {fileID: 8070532179161317336, guid: cc59ffa69a7390747a6ca47367af1727, type: 3}
+  - {fileID: 8070532179161317336, guid: 8118c0047165ca14c8f36d15033d0bcf, type: 3}
   - {fileID: 8070532179161317336, guid: 1dbb11c03d3bff644816774b839c9cc8, type: 3}
   - {fileID: 8070532179161317336, guid: c052062260853754181249d997568c32, type: 3}
-  - {fileID: 8070532179161317336, guid: 783090ed23e6daf439904964f226aa73, type: 3}
   downNeighbours:
   - {fileID: 5194605550266966681, guid: b0c92913b58c46340bd0c658bfadc56c, type: 3}
   - {fileID: 5974326636718289709, guid: da3a0fa70cecf6347b66e405d6ac1afb, type: 3}
@@ -120,6 +119,7 @@ MonoBehaviour:
   - {fileID: 8070532179161317336, guid: 9e9dca35901009942a244168466d565b, type: 3}
   - {fileID: 8070532179161317336, guid: d761cddf6858be5479dadd6297d04d24, type: 3}
   - {fileID: 8070532179161317336, guid: 90257b5649cc4294ba7213a0f00f9f5d, type: 3}
+  - {fileID: 8070532179161317336, guid: adf327a5f3181604f99a0112ba8d8b73, type: 3}
   leftNeighbours:
   - {fileID: -5166346846983715011, guid: 2456db62aab21c64594630d57c33b26a, type: 3}
   - {fileID: 8070532179161317336, guid: bcec8e9fe3b8f5d489fe11003c24e387, type: 3}

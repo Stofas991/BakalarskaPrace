@@ -416,11 +416,11 @@ MonoBehaviour:
   - text: {fileID: 5528142714452884895}
     requiredResources:
       itemType: 1
-      ammount: 0
+      ammount: 500
   - text: {fileID: 4453344354145576244}
     requiredResources:
       itemType: 2
-      ammount: 0
+      ammount: 500
 --- !u!1 &5528142713778017010
 GameObject:
   m_ObjectHideFlags: 0

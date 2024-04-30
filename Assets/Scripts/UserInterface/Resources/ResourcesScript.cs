@@ -12,7 +12,7 @@ public class ResourcesScript : Singleton<ResourcesScript>
     {
         foreach (var resource in resourceList)
         {
-            resource.requiredResources.ammount = 100;
+            resource.requiredResources.ammount = 500;
             resource.text.text = resource.requiredResources.ammount.ToString();
         }
     }
