@@ -69,7 +69,7 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 1
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
@@ -236,11 +236,11 @@ TextureImporter:
         serializedVersion: 2
         x: 96
         y: 288
-        width: 16
+        width: 48
         height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 8, y: 6, z: 8, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -255,8 +255,8 @@ TextureImporter:
       name: GUI0_7
       rect:
         serializedVersion: 2
-        x: 112
-        y: 288
+        x: 207
+        y: 285
         width: 16
         height: 16
       alignment: 0
@@ -276,8 +276,8 @@ TextureImporter:
       name: GUI0_8
       rect:
         serializedVersion: 2
-        x: 128
-        y: 288
+        x: 223
+        y: 285
         width: 16
         height: 16
       alignment: 0
@@ -969,10 +969,10 @@ TextureImporter:
       name: GUI0_41
       rect:
         serializedVersion: 2
-        x: 96
-        y: 240
-        width: 16
-        height: 16
+        x: 97
+        y: 244
+        width: 14
+        height: 8
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

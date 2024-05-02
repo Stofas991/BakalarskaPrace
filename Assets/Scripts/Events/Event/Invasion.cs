@@ -29,7 +29,11 @@ public class Invasion : IGameEvent
         unitPrefabList = eventManager.GetEnemyPrefabList();
         bannedTilemaps = eventManager.GetBannedTilemaps();
         if (SelectedValues.isSet)
+        {
             difficulty = SelectedValues.difficulty;
+            height = SelectedValues.mapSize;
+            width = SelectedValues.mapSize;
+        }
     }
 
     public void StartEvent()

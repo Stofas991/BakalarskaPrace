@@ -39,6 +39,8 @@ public class MapGenerator : Singleton<MapGenerator>
     private GameObject wfcParent;
     [SerializeField] WFCTile wfcFiller;
     [SerializeField] NavMeshSurface2d nmSurface;
+    private int currentIteration;
+    private int maxIteration;
 
     private bool end;
 
@@ -54,6 +56,7 @@ public class MapGenerator : Singleton<MapGenerator>
             if (mapWidth == 200)
                 treeLimit = 1000;
 
+            maxIteration = mapWidth * mapHeight;
             GenerateMap();
         }
         CameraController.GetInstance().setCameraBorders();

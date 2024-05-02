@@ -12,12 +12,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField] TextMeshProUGUI seedText;
     [SerializeField] GameObject sizeToggleParent;
     [SerializeField] GameObject difficultyToggleParent;
+
+    [SerializeField] List<GameObject> easyPlayerUnits = new List<GameObject>();
+    [SerializeField] List<GameObject> normalPlayerUnits = new List<GameObject>();
+    [SerializeField] List<GameObject> hardPlayerUnits = new List<GameObject>();
     static SelectedValues SelectedValues = new SelectedValues();
-    public void PlayGame()
-    {
-        setValues();
-        SceneManager.LoadScene("DefaultScene");
-    }
 
     public void QuitGaime()
     {
@@ -52,12 +51,15 @@ public class MainMenu : MonoBehaviour
         {
             case "SmallMap":
                 SelectedValues.difficulty = 0.5f;
+                SelectedValues.playerPrefabList = easyPlayerUnits;
                 break;
             case "MediumMap":
                 SelectedValues.difficulty = 1f;
+                SelectedValues.playerPrefabList = normalPlayerUnits;
                 break;
             case "LargeMap":
                 SelectedValues.difficulty = 2f;
+                SelectedValues.playerPrefabList = hardPlayerUnits;
                 break;
         }
         SelectedValues.isSet = true;
@@ -78,4 +80,5 @@ public class SelectedValues
     static public int seed;
     static public int mapSize;
     static public float difficulty;
+    static public List<GameObject> playerPrefabList = new List<GameObject>();
 }

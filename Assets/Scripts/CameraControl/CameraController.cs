@@ -22,12 +22,6 @@ public class CameraController : Singleton<CameraController>
     private Vector3 origin, difference;
     private bool drag = false;
 
-    private void Start()
-    {
-        minSpeed = 20f;
-        maxSpeed = 40f;
-    }
-
     // Update is called once per frame
 
     void Update()
@@ -94,5 +88,9 @@ public class CameraController : Singleton<CameraController>
     {
         panLimit.y = Generator.mapHeight;
         panLimit.x = Generator.mapWidth;
+        maxZ = Generator.mapHeight/4;
+        minSpeed = 20f;
+        maxSpeed = Generator.mapHeight / 2;
+        transform.position = new Vector3(Generator.mapWidth / 2, Generator.mapHeight / 2, -1);
     }
 }

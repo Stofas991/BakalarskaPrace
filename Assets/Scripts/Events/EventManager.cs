@@ -28,22 +28,26 @@ public class EventManager : Singleton<EventManager>
     public int playerUnitCount;
     public GameObject blackoutPanel;
     private bool ended = false;
+    private int mapHeight, mapWidth;
+    private float squareSize = 5f;
+    [SerializeField] List<GameObject> playerUnitsToSpawn = new List<GameObject>();
 
     void Start()
     {
+        mapHeight = MapGenerator.GetInstance().mapHeight;
+        mapWidth = MapGenerator.GetInstance().mapWidth;
+        if (SelectedValues.isSet)
+        {
+            mapHeight = SelectedValues.mapSize;
+            mapWidth = SelectedValues.mapSize;
+            playerUnitsToSpawn = SelectedValues.playerPrefabList;
+        }
+
+        SpawnPlayerUnits();
         // Inicializace
         LoadEvents();
         InitializeEvents();
         playerUnitCount = GameObject.FindGameObjectsWithTag("selectable").Length;
-        switch (SelectedValues.difficulty)
-        {
-            case 0.5f:
-                timeBetweenEvents = 40f;
-                break;
-            case 2:
-                timeBetweenEvents = 40f;
-                break;
-        }
     }
 
     void Update()
@@ -71,6 +75,35 @@ public class EventManager : Singleton<EventManager>
         {
             ShowGameOverPopup();
         }
+    }
+
+    private void SpawnPlayerUnits()
+    {
+        Vector3 centerPosition = CalculateSpawnPosition();
+
+        foreach (var playerUnitPrefab in playerUnitsToSpawn)
+        {
+            Vector3 spawnPosition = GetRandomPositionInsideSquare(centerPosition, squareSize);
+            Instantiate(playerUnitPrefab, spawnPosition, Quaternion.identity);
+        }
+    }
+
+    private Vector3 CalculateSpawnPosition()
+    {
+        Vector3 centerOfMap = new Vector3(mapWidth/2, mapHeight/2, 0);
+        centerOfMap.z = 0;
+
+        return centerOfMap;
+    }
+
+    private Vector3 GetRandomPositionInsideSquare(Vector3 centerPosition, float size)
+    {
+        // Vypoèítání náhodné pozice uvnitø ètverce
+        float halfSize = size / 2f;
+        float randomX = UnityEngine.Random.Range(-halfSize, halfSize);
+        float randomZ = UnityEngine.Random.Range(-halfSize, halfSize);
+
+        return centerPosition + new Vector3(randomX, 0, randomZ);
     }
 
     //Loading all events using reflection by type
