@@ -1,9 +1,5 @@
 using Sentry;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CameraController : Singleton<CameraController>
 {
@@ -31,6 +27,7 @@ public class CameraController : Singleton<CameraController>
 
         Vector3 pos = transform.position;
 
+        // Handle keyboard input for panning
         if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - panBorderThickness)
         {
             pos.y += panSpeed * Time.deltaTime;
@@ -52,6 +49,7 @@ public class CameraController : Singleton<CameraController>
 
         }
 
+        // Handle middle mouse button drag movement
         if (Input.GetMouseButton(2))
         {
             difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - Camera.main.transform.position;
@@ -77,18 +75,20 @@ public class CameraController : Singleton<CameraController>
         panSpeed = scroll * 2;
         panSpeed = Mathf.Clamp(panSpeed, minSpeed, maxSpeed);
 
-        pos.x = Mathf.Clamp(pos.x, 0+halfWidth, panLimit.x-halfWidth);
-        pos.y = Mathf.Clamp(pos.y, 0+halfHeight, panLimit.y-halfHeight);
+        // Clamp camera position to stay within the map bounds
+        pos.x = Mathf.Clamp(pos.x, 0 + halfWidth, panLimit.x - halfWidth);
+        pos.y = Mathf.Clamp(pos.y, 0 + halfHeight, panLimit.y - halfHeight);
 
         cam.orthographicSize = scroll;
         transform.position = pos;
     }
 
+    // Method to set camera borders based on map size
     public void setCameraBorders()
     {
         panLimit.y = Generator.mapHeight;
         panLimit.x = Generator.mapWidth;
-        maxZ = Generator.mapHeight/4;
+        maxZ = Generator.mapHeight / 4;
         minSpeed = 20f;
         maxSpeed = Generator.mapHeight / 2;
         transform.position = new Vector3(Generator.mapWidth / 2, Generator.mapHeight / 2, -1);

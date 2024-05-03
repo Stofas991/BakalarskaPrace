@@ -21,7 +21,7 @@ namespace UnityEngine.AI
         public CollectObjects2d CollectObjects;
         public GameObject parent;
         public bool hideEditorLogs;
-        
+
         protected IEnumerable<GameObject> _root;
         public IEnumerable<GameObject> Root => _root ?? GetRoot();
 
@@ -76,20 +76,20 @@ namespace UnityEngine.AI
             switch (CollectObjects)
             {
                 case CollectObjects2d.Children: return new[] { parent };
-                case CollectObjects2d.Volume: 
+                case CollectObjects2d.Volume:
                 case CollectObjects2d.All:
                 default:
-                {
-                    var list = new List<GameObject>();
-                    var testlist = new List<GameObject>();
-                    for (int i = 0; i < SceneManager.sceneCount; ++i)
                     {
-                        var s = SceneManager.GetSceneAt(i);
-                        s.GetRootGameObjects(list);
-                        testlist.AddRange(list);
+                        var list = new List<GameObject>();
+                        var testlist = new List<GameObject>();
+                        for (int i = 0; i < SceneManager.sceneCount; ++i)
+                        {
+                            var s = SceneManager.GetSceneAt(i);
+                            s.GetRootGameObjects(list);
+                            testlist.AddRange(list);
+                        }
+                        return testlist;
                     }
-                    return testlist;
-                }
             }
         }
     }
@@ -100,7 +100,7 @@ namespace UnityEngine.AI
         {
             foreach (var it in builder.Root)
             {
-                if(!it.activeSelf){continue;}
+                if (!it.activeSelf) { continue; }
                 CollectSources(it, sources, builder);
             }
             if (!builder.hideEditorLogs) Debug.Log("Sources " + sources.Count);
@@ -203,7 +203,7 @@ namespace UnityEngine.AI
         }
 
         public static void CollectSources(List<NavMeshBuildSource> sources, Collider2D collider, int area, NavMeshBuilder2dState builder)
-        { 
+        {
             if (collider.usedByComposite)
             {
                 collider = collider.GetComponent<CompositeCollider2D>();

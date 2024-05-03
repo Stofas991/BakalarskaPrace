@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitStats : MonoBehaviour, IAttackable
@@ -73,7 +71,7 @@ public class UnitStats : MonoBehaviour, IAttackable
         }
     }
 
-    void Die() 
+    void Die()
     {
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         Destroy(gameObject);

@@ -1,14 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements.Experimental;
 
 
-public class UnitControlScript: MonoBehaviour
+public class UnitControlScript : MonoBehaviour
 {
     [SerializeField] private GameObject clickEffect;
     [SerializeField] private GameObject zoneParent;

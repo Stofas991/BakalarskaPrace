@@ -1,12 +1,12 @@
 
 using UnityEngine;
-[RequireComponent (typeof(UnitStats))]
+[RequireComponent(typeof(UnitStats))]
 public class EnemyAttacked : Interactable
 {
     UnitStats myStats;
 
     void Start()
-    { 
+    {
         myStats = GetComponent<UnitStats>();
     }
     public override void Interact(Transform interactingPlayer)

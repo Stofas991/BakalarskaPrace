@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,7 +34,7 @@ public class Inventory : MonoBehaviour
             }
             items.Add(item);
 
-            if(OnItemChangedCallBack != null)
+            if (OnItemChangedCallBack != null)
                 OnItemChangedCallBack.Invoke();
         }
         return true;

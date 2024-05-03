@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class StockpileScript : Interactable
@@ -48,7 +45,7 @@ public class StockpileScript : Interactable
                 containsItem = true;
             }
         }
-        
+
         itemCount = control.UCCount;
         control.UCCount = 0;
         control.UCItemType = ContainedItemType.None;

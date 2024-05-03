@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Tilemaps;
 
 public class Destroyable : MonoBehaviour, IAttackable
@@ -40,7 +38,7 @@ public class Destroyable : MonoBehaviour, IAttackable
     void Die()
     {
         //disable building
-        objectTilemap.SetTile(new Vector3Int ((int)transform.position.x, (int)transform.position.y, 0), null);
+        objectTilemap.SetTile(new Vector3Int((int)transform.position.x, (int)transform.position.y, 0), null);
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         Destroy(gameObject);
     }

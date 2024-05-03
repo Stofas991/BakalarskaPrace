@@ -90,7 +90,7 @@ public class EventManager : Singleton<EventManager>
 
     private Vector3 CalculateSpawnPosition()
     {
-        Vector3 centerOfMap = new Vector3(mapWidth/2, mapHeight/2, 0);
+        Vector3 centerOfMap = new Vector3(mapWidth / 2, mapHeight / 2, 0);
         centerOfMap.z = 0;
 
         return centerOfMap;
@@ -214,7 +214,7 @@ public class EventManager : Singleton<EventManager>
         textBox.text = "Game Over";
         textBox.fontSize = 20;
         textBox.alignment = TextAlignmentOptions.Center;
-        
+
         popupDenie.SetActive(false);
 
         popupAccept.GetComponentInChildren<TextMeshProUGUI>().text = "Continue to main menu";

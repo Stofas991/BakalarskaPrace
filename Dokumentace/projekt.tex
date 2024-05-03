@@ -86,6 +86,38 @@
 % "hyperref" package create clickable links in pdf if you are using pdflatex.
 % Problem is that this package have to be introduced as the last one so it 
 % can not be placed in the template file.
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{main-color}{rgb}{0.6627, 0.7176, 0.7764}
+\definecolor{back-color}{rgb}{0.1686, 0.1686, 0.1686}
+\definecolor{string-color}{rgb}{0.3333, 0.5254, 0.345}
+\definecolor{key-color}{rgb}{0.8, 0.47, 0.196}
+
+\lstdefinestyle{mystyle}{
+	otherkeywords={Vector3, var, foreach, ;, TileBase, string, Vector3Int, public, override},
+	backgroundcolor = {\color{back-color}},
+	commentstyle=\color{codegreen},
+	keywordstyle = {\color{key-color}},
+	numberstyle=\tiny\color{codegray},
+	stringstyle = {\color{string-color}},
+	basicstyle = {\ttfamily \color{main-color}},
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2,
+	language = C++,
+}
+
+
+\lstset{style=mystyle}
 \ifWis
 \ifx\pdfoutput\undefined % nejedeme pod pdflatexem / we are not using pdflatex
 \else

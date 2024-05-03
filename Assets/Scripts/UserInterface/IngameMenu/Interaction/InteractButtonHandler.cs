@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class InteractButtonHandler : MonoBehaviour
 {
@@ -20,7 +17,7 @@ public class InteractButtonHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     private void ButtonClicked()
     {

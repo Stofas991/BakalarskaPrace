@@ -1,11 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static UnityEngine.GraphicsBuffer;
 
 public class SelectObject2D : MonoBehaviour
 {
@@ -88,8 +83,8 @@ public class SelectObject2D : MonoBehaviour
         float height = endPosition.y - startPosition.y;
 
         selectionBox.sizeDelta = new Vector2(Mathf.Abs(width), Mathf.Abs(height));
-        //ukotvuje na poèátku vytváøení obdélníku
-        selectionBox.anchoredPosition = new Vector2(startPosition.x, startPosition.y) + new Vector2(width/2, height/2);
+        //anchoring box to start
+        selectionBox.anchoredPosition = new Vector2(startPosition.x, startPosition.y) + new Vector2(width / 2, height / 2);
     }
 
     /// <summary>

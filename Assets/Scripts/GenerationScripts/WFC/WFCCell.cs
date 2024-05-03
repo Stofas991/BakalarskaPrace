@@ -1,4 +1,3 @@
-using Sentry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +82,7 @@ public class WFCCell : MonoBehaviour
 
         if (entropy > 0)
         {
-            
+
             List<WFCTile> connectors = new List<WFCTile>();
             foreach (WFCTile neighbourPossibility in neighbourPossibilities)
             {
@@ -109,7 +108,7 @@ public class WFCCell : MonoBehaviour
             {
                 Debug.Log(possibilitiesCopy);
             }
-            
+
         }
 
         return reduced;

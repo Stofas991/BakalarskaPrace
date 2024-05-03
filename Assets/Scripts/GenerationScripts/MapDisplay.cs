@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class MapDisplay : MonoBehaviour
 {
@@ -11,7 +8,7 @@ public class MapDisplay : MonoBehaviour
     {
 
         textureRenderer.sharedMaterial.mainTexture = texture;
-        textureRenderer.transform.localScale = new Vector3 (texture.width, 1, texture.height);
+        textureRenderer.transform.localScale = new Vector3(texture.width, 1, texture.height);
 
     }
 

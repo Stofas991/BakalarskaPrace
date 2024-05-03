@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
@@ -33,7 +30,7 @@ public class MainMenu : MonoBehaviour
     {
         SelectedValues.seed = Convert.ToInt32(seedText.text);
         var activeToggle = getActiveToggle(sizeToggleParent);
-        switch (activeToggle.tag) 
+        switch (activeToggle.tag)
         {
             case "SmallMap":
                 SelectedValues.mapSize = 50;

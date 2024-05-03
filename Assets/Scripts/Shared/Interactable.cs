@@ -1,28 +1,35 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
+    // Reference to the health of the interactable object
     public UnitStats myHealth { get; private set; }
 
+    // Interaction radius
     public float radius = 2f;
 
+    // Flags to track focus and interaction status
     bool isFocus = false;
     public bool hasInteracted = false;
     public bool isEnemy = false;
+
+    // List of players currently interacting with this object
     public List<Transform> playerList;
 
     void Update()
     {
+        // Check if the object is focused and hasn't been interacted with yet (for non-enemy objects)
         if (isFocus && !hasInteracted && !isEnemy)
         {
             if (transform != null)
             {
                 foreach (Transform player in playerList.ToList())
                 {
+                    // Calculate distance between player and interactable object
                     float distance = Vector3.Distance(player.position, transform.position);
+                    // If player is within interaction radius, trigger interaction
                     if (distance <= radius)
                     {
                         Interact(player);
@@ -30,6 +37,8 @@ public class Interactable : MonoBehaviour
                 }
             }
         }
+
+        // Check if the object is focused and is an enemy
         if (isFocus && isEnemy)
         {
             if (transform != null)
@@ -38,11 +47,13 @@ public class Interactable : MonoBehaviour
                 {
                     if (player == null)
                     {
+                        // Remove null player references from the list
                         playerList.Remove(player);
                         continue;
                     }
+                    // Calculate distance between player and interactable object
                     float distance = Vector3.Distance(player.position, transform.position);
-
+                    // If player is within attack range, trigger interaction
                     if (distance <= player.GetComponent<UnitStats>().attackRange)
                     {
                         Interact(player);
@@ -52,27 +63,33 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    public virtual void Interact (Transform interactingPlayer)
+    // Method to handle interaction with the object (to be overridden by derived classes)
+    public virtual void Interact(Transform interactingPlayer)
     {
-        //this method will be overritten by object that is going to use it
+        // This method will be overridden by objects that use it
     }
 
-    public void OnFocused (Transform playerTransform)
+    // Method to handle focus on the object
+    public void OnFocused(Transform playerTransform)
     {
+        // Reset interaction status and set focus to true
         hasInteracted = false;
         isFocus = true;
+        // Add the player to the list of interacting players if not already present
         if (!playerList.Contains(playerTransform))
             playerList.Add(playerTransform);
     }
 
+    // Method to handle loss of focus on the object
     public virtual void OnDeFocused(Transform playerTransform)
     {
+        // Remove the player from the list of interacting players
         playerList.Remove(playerTransform);
+        // If there are no more interacting players, reset interaction status and focus
         if (playerList.Count == 0)
         {
             hasInteracted = false;
             isFocus = false;
         }
     }
-
 }

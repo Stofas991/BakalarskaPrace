@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using Sentry;
 
 public class WFCGenerator : MonoBehaviour
 {
@@ -66,7 +62,7 @@ public class WFCGenerator : MonoBehaviour
 
         if (constrainedList.Count > 0)
         {
-            foreach(WFCCell currentCell in constrainedList)
+            foreach (WFCCell currentCell in constrainedList)
             {
                 if (currentCell.entropy > 0 && currentCell.entropy < lowestEntropy)
                 {

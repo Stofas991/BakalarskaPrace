@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 [CustomEditor(typeof(MapGenerator))]
 public class MapGeneratorEditor : Editor
@@ -22,7 +20,7 @@ public class MapGeneratorEditor : Editor
             GenerateFunction(mapGen);
         }
     }
-    
+
     public void GenerateFunction(MapGenerator mapGen)
     {
         if (SelectedValues.isSet)

@@ -1,10 +1,5 @@
-using Mono.Cecil;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -69,7 +64,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
             UpdatePreview();
         }
     }
-    
+
     private Tilemap tilemap
     {
         get
@@ -82,7 +77,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
             return defaultMap;
         }
     }
-    
+
     private void OnEnable()
     {
         playerInput.Enable();
@@ -326,7 +321,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
                         requiredResourcesPreview[requiredResources.itemType] += requiredResources.ammount;
                     else
                         requiredResourcesPreview[requiredResources.itemType] = requiredResources.ammount;
-                    
+
                     if (resourceMenu.resourceList.Any(x => x.requiredResources.itemType == requiredResources.itemType && x.requiredResources.ammount >= requiredResources.ammount))
                     {
                         if (requiredResourcesUsed.ContainsKey(requiredResources.itemType))
@@ -446,7 +441,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
 
     }
 
-    private bool IsForbidden (Vector3Int pos)
+    private bool IsForbidden(Vector3Int pos)
     {
         return forbidPlacingMaps.Any(map =>
         {

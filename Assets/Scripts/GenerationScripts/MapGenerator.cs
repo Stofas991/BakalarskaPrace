@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Tilemaps;
@@ -11,7 +8,7 @@ using UnityEngine.Tilemaps;
 
 public class MapGenerator : Singleton<MapGenerator>
 {
-    public enum DrawMode { NoiseMap, ColourMap, TileMap};
+    public enum DrawMode { NoiseMap, ColourMap, TileMap };
     public DrawMode drawMode;
 
     public int mapWidth = 100;
@@ -76,17 +73,17 @@ public class MapGenerator : Singleton<MapGenerator>
         ClearMap();
 
         List<List<WFCCell>> tileRows = new List<List<WFCCell>>();
-        for (int y = 0; y< mapHeight; y++)
+        for (int y = 0; y < mapHeight; y++)
         {
             List<WFCCell> tiles = new List<WFCCell>();
             for (int x = 0; x < mapWidth; x++)
             {
                 if (generationType == GenerationType.Perlin)
-                { 
+                {
                     //Placing tiles according to regions
-                    PlaceRegionTiles(noiseMap, treeNoiseMap, vegetationMap,colourMap, x, y);
+                    PlaceRegionTiles(noiseMap, treeNoiseMap, vegetationMap, colourMap, x, y);
                 }
-                else if(generationType == GenerationType.WFC)
+                else if (generationType == GenerationType.WFC)
                 {
                     WFCCell cell = wfcGenerator.PlaceTiles(x, y, wfcParent.transform);
                     cell.entropy = cell.GetPossibilities().Count;
@@ -125,7 +122,7 @@ public class MapGenerator : Singleton<MapGenerator>
 
                 //getting random one from this list
                 System.Random random = new System.Random();
-                int randomIndex = random.Next(0, wFCCells.Count-1);
+                int randomIndex = random.Next(0, wFCCells.Count - 1);
                 WFCCell cell = wFCCells[randomIndex];
 
                 //calling function on this cell

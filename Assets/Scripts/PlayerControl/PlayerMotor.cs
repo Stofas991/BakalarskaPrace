@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.GraphicsBuffer;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class PlayerMotor : MonoBehaviour
@@ -41,7 +40,7 @@ public class PlayerMotor : MonoBehaviour
         {
             agent.stoppingDistance = 1f;
         }
-        
+
 
     }
 
@@ -50,7 +49,7 @@ public class PlayerMotor : MonoBehaviour
         agent.stoppingDistance = 0f;
         target = null;
     }
-    
+
     private Vector3 FlipAgent(Vector3 point)
     {
         bool flipped = point.x > agent.transform.position.x;

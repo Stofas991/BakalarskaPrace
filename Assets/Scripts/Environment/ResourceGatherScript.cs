@@ -1,11 +1,5 @@
-using Mono.Cecil;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Tilemaps;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class ResourceGatherScript : Interactable
 {
@@ -42,7 +36,7 @@ public class ResourceGatherScript : Interactable
         healthCanvas.SetActive(true);
 
         playerGather = interactingPlayer.GetComponent<Gathering>();
-        
+
         if (playerGather != null)
         {
             playerGather.GatherResource(this);

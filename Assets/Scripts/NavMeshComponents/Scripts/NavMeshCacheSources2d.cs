@@ -6,7 +6,7 @@ namespace NavMeshComponents.Extensions
 {
     [ExecuteAlways]
     [AddComponentMenu("Navigation/NavMeshCacheSources2d", 30)]
-    public class NavMeshCacheSources2d: NavMeshExtension
+    public class NavMeshCacheSources2d : NavMeshExtension
     {
         List<NavMeshBuildSource> _sources;
         Dictionary<UnityEngine.Object, NavMeshBuildSource> _lookup;
@@ -45,7 +45,7 @@ namespace NavMeshComponents.Extensions
         public bool UpdateSource(GameObject gameObject)
         {
             var res = _lookup.ContainsKey(gameObject);
-            if(res)
+            if (res)
             {
                 IsDirty = true;
                 var source = _lookup[gameObject];

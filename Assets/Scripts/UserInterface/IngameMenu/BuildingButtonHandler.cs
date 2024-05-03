@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +17,7 @@ public class BuildingButtonHandler : MonoBehaviour
 
     public BuildableObjectBase Item
     {
-        set 
+        set
         {
             item = value;
         }

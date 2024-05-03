@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,7 +6,7 @@ namespace NavMeshComponents.Extensions
 {
     [ExecuteAlways]
     [AddComponentMenu("Navigation/NavMeshCollectRootSources2d", 30)]
-    public class NavMeshCollectRootSources2d: NavMeshExtension
+    public class NavMeshCollectRootSources2d : NavMeshExtension
     {
         [SerializeField]
         private List<GameObject> _rootSources;

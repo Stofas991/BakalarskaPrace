@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -61,7 +59,7 @@ public class BuildingHUD : Singleton<BuildingHUD>
         foreach (var buildable in buildables)
         {
             if (buildable == null)
-                continue; 
+                continue;
 
             var itemsParent = elementItemSlot[uiElements[buildable.UICategory]];
 

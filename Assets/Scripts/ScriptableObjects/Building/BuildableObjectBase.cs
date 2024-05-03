@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu (fileName = "Buildable", menuName = "Building/Create Buildable")]
+[CreateAssetMenu(fileName = "Buildable", menuName = "Building/Create Buildable")]
 public class BuildableObjectBase : ScriptableObject
 {
     [SerializeField] BuildingCategory category;
@@ -19,14 +17,14 @@ public class BuildableObjectBase : ScriptableObject
         get { return tileBase; }
     }
 
-    public BuildingCategory Category 
-    { 
-        get { return category; } 
+    public BuildingCategory Category
+    {
+        get { return category; }
     }
 
     public PlaceType PlaceType
-    { 
-        get { return placeType == PlaceType.None ? category.PlaceType : placeType; } 
+    {
+        get { return placeType == PlaceType.None ? category.PlaceType : placeType; }
     }
     //Write about this, every buildable object has placeType, can be None, if it is none it gets value from BuildingCategory which also has placeType
 
@@ -42,7 +40,7 @@ public class BuildableObjectBase : ScriptableObject
 
     public RequiredResources RequiredResources
     {
-        get { return requiredResources;}
+        get { return requiredResources; }
     }
 
     public bool Destroyer

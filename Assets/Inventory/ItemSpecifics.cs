@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -9,7 +7,7 @@ public class ItemSpecifics : MonoBehaviour
     public int count;
     public ContainedItemType itemType;
 
-    [SerializeField]GameObject textObject;
+    [SerializeField] GameObject textObject;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +19,6 @@ public class ItemSpecifics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

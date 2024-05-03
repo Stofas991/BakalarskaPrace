@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Tilemaps;
@@ -40,12 +37,12 @@ public class Invasion : IGameEvent
     {
         callAmmount++;
         unitList.AddRange(SpawnUnit(height, width, callAmmount));
-        Debug.Log("Spawned: " +  unitList.Count + " units");
+        Debug.Log("Spawned: " + unitList.Count + " units");
     }
 
     public bool UpdateEvent()
     {
-        for (int i = unitList.Count-1; i >= 0; i--)
+        for (int i = unitList.Count - 1; i >= 0; i--)
         {
             if (unitList[i] == null)
             {
@@ -71,7 +68,7 @@ public class Invasion : IGameEvent
 
     public PopupWindowInfo GetPopupWindowInfo()
     {
-        unitsToSpawn = Convert.ToInt32((callAmmount+1) * 3 * difficulty);
+        unitsToSpawn = Convert.ToInt32((callAmmount + 1) * 3 * difficulty);
         PopupWindowInfo windowInfo;
         windowInfo.isDenieable = false;
         windowInfo.textBoxContent = "A group of <color=red>" + unitsToSpawn + "</color> blood thirsty demons has grouped close to your settlement. Get ready for battle.";

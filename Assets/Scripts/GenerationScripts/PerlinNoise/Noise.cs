@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class noise
@@ -51,13 +49,13 @@ public static class noise
                     amplitude *= persistance;
                     frequency *= lacunarity;
 
-                    
+
                 }
                 if (noiseHeight > maxNoiseHeight)
                 {
                     maxNoiseHeight = noiseHeight;
                 }
-                else if(noiseHeight < minNoiseHeight)
+                else if (noiseHeight < minNoiseHeight)
                 {
                     minNoiseHeight = noiseHeight;
                 }
@@ -69,7 +67,7 @@ public static class noise
             //going over width too
             for (int x = 0; x < mapWidth; x++)
             {
-                noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x,y]);
+                noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
             }
         }
         return noiseMap;

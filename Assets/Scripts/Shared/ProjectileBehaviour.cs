@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ProjectileBehaviour : MonoBehaviour
@@ -22,7 +19,7 @@ public class ProjectileBehaviour : MonoBehaviour
         this.casterTag = targetTag;
         shootDirection = shootDirection.normalized;
         float n = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
-        transform.eulerAngles = new Vector3 (0, 0, n);
+        transform.eulerAngles = new Vector3(0, 0, n);
     }
 
     private void OnTriggerEnter2D(Collider2D collider)

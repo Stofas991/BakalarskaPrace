@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Tilemaps;
@@ -11,7 +7,7 @@ namespace NavMeshComponents.Extensions
 {
     [ExecuteAlways]
     [AddComponentMenu("Navigation/NavMeshCollectSources2d", 30)]
-    public class NavMeshCollectSources2d: NavMeshExtension
+    public class NavMeshCollectSources2d : NavMeshExtension
     {
         [SerializeField]
         bool m_OverrideByGrid;

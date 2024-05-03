@@ -1,11 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.TextCore.Text;
 
 //tøída dìdí ClickableObject která mìní cursor
 public class EnemyMove : ClickableObject
