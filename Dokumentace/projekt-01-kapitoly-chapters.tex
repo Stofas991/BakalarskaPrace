@@ -1,11 +1,11 @@
 % Autor: Kryštof Glos
 
 \chapter*{Úvod}
-Procedurálně vytvářený obsah v herním průmyslu je velmi důležitou součástí her už po několik let. Mnoho her postavených na tomto principu se již prosadilo na trhu, a stále více se uplatňuje. Náhodné vytváření obsahu se používá například na tvoření herních map, věcí v místnosti, skládání různých dopředu vytvořených místností tak, aby vznikla jedinečná mapa. Takto implementované hry mají výhodu v opakované hratelnosti a nepředvídatelnosti.
+Procedurálně vytvářený obsah v herním průmyslu je velmi důležitou součástí her už po několik let. Mnoho her postavených na tomto principu se již prosadilo na trhu, a stále více se uplatňuje. Vytváření obsahu na základě generátorů pseudonáhodných čísel se používá například na tvoření herních map, věcí v místnosti, skládání různých dopředu vytvořených místností tak, aby vznikla jedinečná mapa. Takto implementované hry mají výhodu v opakované hratelnosti a nepředvídatelnosti.
 
-Cílem této bakalářské práce je návrh a vytvoření prototypu 2D hry v herním enginu Unity, založené na procedurálním generování herního obsahu. Samotný generační algoritmus pracuje s Perlinovým šumem a výškovými mapami, ty slouží k vytvoření elevace různých bodů na mapě.
+Cílem této bakalářské práce je návrh a vytvoření prototypu 2D hry v herním enginu Unity, založené na procedurálním generování herního obsahu. Samotný algoritmus pro generování pracuje s Perlinovým šumem a výškovými mapami, ty slouží k vytvoření elevace různých bodů na mapě.
 
-Inspirací na téma hry je počítačová hra RimWorld, která se řadí do her typu Colony-sim. Jedná se o žánr, ve kterém hráč ovládá skupinu lidí (kolonii), kterou se snaží pomocí dobrého vedení dovést k nějakému danému cíli. V navržené hře je úkolem hráče vydržet co nejdéle nájezdy nepřátel a přečkat další náhodné události. Pohyb kolonistů využívá takzvané NavMesh agenty, kteří spolupracují s vytvořenou navigační sítí (NavMesh) popsané v kapitole \ref{NavMesh}.
+Inspirací na téma hry je počítačová hra RimWorld, která se řadí do her typu Colony-sim. Jedná se o žánr, ve kterém hráč ovládá skupinu lidí (kolonii), kterou se snaží pomocí dobrého vedení dovést k nějakému danému cíli. V navržené hře je úkolem hráče vydržet co nejdéle nájezdy nepřátel a přečkat další náhodné události.
 
 Vytváření mapy je stěžejní částí celé hry. Určuje zdroje pro hráče, a tudíž částečně i obtížnost celé hry. Ve hře se objevují nepřátelé, kteří mají jednoduchou umělou inteligenci a jsou jednou z překážek, se kterou se hráč musí během hry vypořádávat. Implementace generačních algoritmů, AI nepřátel a dalšího je popsána v kapitole \ref{implementace}.
 
@@ -22,23 +22,23 @@ Herní engine představuje platformu složenou z interagujícího softwaru, kter
 Platforem na vývoj her existuje mnoho, některými z nejvýznamnějších jsou: Unity, Construct 2, MonoGame, Unreal Engine nebo GameMaker Studio 2. Každý herní engine je v něčem jiný, a tudíž se hodí na jiné žánry, nebo styly her. Při rozhodování, který engine použít, se z hlediska vývojáře musí zohlednit vícero faktorů, například podporovaný programovací jazyk nebo platformu, na kterou je hra vyvíjena~\cite{vohera2021game}.
 
 \section{Construct 2}
-Tento engine dovoluje lidem, kteří nejsou programátoři, vytvářet 2D hry. Používá drag and drop editor pro všechnu logiku založenou na událostech a chování. Může být rozšířen a skriptován pomocí JavaScriptu. 
-
-I když Construct tvrdí, že zveřejňují hry na většině mobilních a desktopových platformách, jejich primární cíl je HTML5/JavaScript. Tudíž jakákoliv verze, která není ve vyhledávači, je obsažena v DOM a obalovacím rozhraní umožňujícím použití JavaScriptu. Tato architektura obecně snižuje výkon ~\cite{engines}.a
+Tento engine dovoluje lidem, kteří nejsou programátoři, vytvářet 2D hry. Používá drag and drop editor pro všechnu logiku založenou na událostech a chování. Může být rozšířen a skripty pak lze psát také v jazyku JavaScript. I když Construct tvrdí, že zveřejňují hry na většině mobilních a desktopových platformách, jejich primární cíl je HTML5/JavaScript.~\cite{engines}.
 
 \section{Unreal engine}
-Podporuje multiplatformní vydávání her, jmenovitě DirectX, OpenGL, nebo WebGL. Jedná se o engine, který je zdarma, ale pouze pro nekomerční užití a ve všech ostatních případech licencování softwaru za malé předplatné a licenční poplatek. Přesto, že původně byl vyvinut pro podporu \textit{Unreal} her z první osoby a neměl tolik nástrojů jako Unity, vyrostl Unreal Engine do podoby velmi výkonného enginu schopného podporovat jakýkoli žánr her ~\cite{engines}. Unreal engine využívá programovacího jazyka C++.
+Podporuje multiplatformní vydávání her, jmenovitě DirectX, OpenGL, nebo WebGL. Jedná se o engine, který je zdarma, ale pouze pro nekomerční užití a ve všech ostatních případech licencování softwaru za předplatné a licenční poplatek. Přesto, že původně byl vyvinut pro podporu \textit{Unreal} her z první osoby, vyrostl Unreal Engine do podoby velmi výkonného enginu schopného podporovat jakýkoli žánr her ~\cite{engines}. Unreal engine využívá programovacího jazyka C++.
 
 \section{Unity}
 \label{unity}
 Unity je multiplatformní herní engine podporující vývoj her na Windows, Linux i macOS.
 Vyvinula ho společnost Unity Technologies v roce 2005. Oproti jiným herním enginům podporuje vývoj her ve 2D, 3D, rozšířenou realitu (AR), nebo virtuální realitu (VR). 
 
-Unity má více plánů, které mohou vývojáři využívat, jedná se o personal, pro, enterprise a industry. Ze základu je pro všechny vývojáře zdarma k užívání, ale po překročení 100 000\$ za posledních dvanáct měsíců, je nutné pořídit si jeden z placených plánů. Tyto plány mají i jisté výhody, jako je třeba Havok Physics, přidávající robustní detekci kolizí a fyzikální simulace, technickou podporu, nebo prioritní frontu na zákaznickou podporu.~\cite{UnityPlans} 
+Jedním z hlavních rysů Unity Engine je jeho silný grafický editor, který umožňuje snadnou tvorbu herních scén, animací, rozhraní a dalšího obsahu bez nutnosti psaní kódu. Tento editor je doplněn rozsáhlou knihovnou zdrojových kódů a pluginů, které umožňují rozšíření funkcí enginu dle potřeb konkrétního projektu.
 
-Další výhodou je integrované fyzikální jádro PhysX, které pracuje v reálném čase a je vyvíjeno společností Nvidia. Toto jádro zahrnuje efektivní podporu pro multithreading a využívá akceleraci fyzikální simulace prostřednictvím GPU. Programování je v enginu zařízené pomocí jazyka C\#.
+Další výhodou je integrované fyzikální jádro PhysX, které je vyvíjeno společností Nvidia. Toto jádro zahrnuje efektivní podporu pro multithreading a využívá akceleraci fyzikální simulace prostřednictvím GPU. Programování je v enginu zařízené pomocí jazyka C\#.
 
-Z unity vzešlo mnoho oblíbených herních titulů. Řadí se mezi ně hra ve virtuální realitě Beat Saber \ref{fig:beatSaber}, mobilní hra Pokémon Go, nebo multiplatformní Cuphead~\ref{fig:cuphead}.
+Díky své aktivní komunitě nabízí Unity Engine bohaté zdroje a materiály pro vzdělávání a podporu vývojářů. To zahrnuje tutoriály, rozsáhlou dokumentaci, fóra, online kurzy a mnoho dalšího. Unity je také oblíbené pro svou schopnost rychle vytvářet prototypy a experimentovat s různými herními mechanikami a designem.
+
+Herní engine Unity byl použit při vývoji mnoha oblíbených herních titulů. Řadí se mezi ně hra ve virtuální realitě Beat Saber (viz obrázek \ref{fig:beatSaber}), mobilní hra Pokémon Go, nebo multiplatformní Cuphead~(zobrazena na obrázku \ref{fig:cuphead}).
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.61]{obrazky-figures/Cuphead.png}
@@ -56,10 +56,7 @@ Z unity vzešlo mnoho oblíbených herních titulů. Řadí se mezi ně hra ve v
 
 \chapter{Vytváření obsahu v herním světě} 
 \label{theory}
-Ve světě herního vývoje existují dvě základní metody pro tvorbu herního obsahu. Jednou z nich je tradiční, nazývaná také mechanická, o této metodě je více napsáno v sekci \ref{traditional}. Tato metoda se vyznačuje ručním a přímým přístupem k tvorbě obsahu. Na rozdíl od algoritmických přístupů není nutné vytvářet složité algoritmy či programovat logiku pro generování obsahu. Namísto toho se obsah tvoří manuálně, často pomocí specializovaných nástrojů a editačních programů. Přestože je tento přístup časově náročnější a vyžaduje více práce, umožňuje větší kontrolu nad výsledným produktem a často poskytuje tvůrcům větší míru kreativity a individuálního projevu. Další možností vytváření obsahu je pomocí metod implementující náhodné nebo také \hyperref[procedural]{procedurální generování obsahu}. 
-
-Hry, které mají pouze dvě dimenze se nazývají 2D (z anglického two dimensions). Existuje mnoho žánrů 2D her, RPG (role playing game) hry na hrdiny s příběhem, strategií, Co-op (kooperační), které jsou postavené na spolupráci více hráčů, survival (hry o přežití), colony-sim (z anglického colonization simulation), které mají simulovat kolonizaci ovládanou hráčem atd. Tato bakalářská práce se zabývá hrou žánru colony-sim. Je mnoho způsobů, jak vyvíjet takovou hru.
-
+Ve světě herního vývoje existují dvě základní metody pro tvorbu herního obsahu. Jednou z nich je tradiční, nazývaná také mechanická, o této metodě je více napsáno v sekci \ref{traditional}. Tato metoda se vyznačuje ručním a přímým přístupem k tvorbě obsahu. Na rozdíl od algoritmických přístupů není nutné vytvářet složité algoritmy či programovat logiku pro generování obsahu. Namísto toho se obsah tvoří manuálně, často pomocí specializovaných nástrojů a editačních programů. Přestože je tento přístup časově náročnější a vyžaduje více práce, umožňuje větší kontrolu nad výsledným produktem a často poskytuje tvůrcům větší míru kreativity a individuálního projevu. Další možností vytváření obsahu je pomocí metod implementující náhodné nebo také procedurální generování obsahu, viz kapitola \ref{procedural}. 
 
 \section{Metody generování herního obsahu}
 
@@ -73,21 +70,22 @@ V této sekci je srovnání mechanického generování herního obsahu s procedu
 \item[Aspekt designu hry] Záleží také na tom, zda design hry klade důraz na jednotlivé ručně navržené úrovně s pečlivě vyladěnými herními mechanikami a interakcemi, nebo zda je hlavním cílem dosažení rozmanitosti a dynamiky prostřednictvím procedurálního generování. V prvním případě je preferováno mechanické navrhování obsahu s důrazem na detailní ruční práci, zatímco v druhém případě může být procedurální generování klíčové pro dosažení požadovaného stupně variability a překvapení v herním světě.
 \end{description}
 
-\subsection{Mechanické generování obsahu}
+\subsection{Mechanické vytváření obsahu}
 \label{traditional}
-Mechanický typ generování je jedním z nejobvyklejších tvoření obsahu ve hrách. Používá se převážně v žánrech, jako je RPG (Role Play Game), RTS (Real Time Strategy) a další, ve kterých pozice objektů a struktura mapy hraje velkou roli a bez lidské tvorby by nebylo dosaženo potřebných výsledků. Toto tvoření lze interpretovat jako proces u něhož se návrhář za pomoci různých nástrojů, které postupně aplikuje, snaží dosáhnout požadovaného výsledku. Jde tedy o metodu ručního vytváření obsahu kde designér, nebo grafik navrhuje a postupně vytváří úroveň, či jinou část hry tak, aby vyhovovala potřebám, ať už se jedná o pozici stromu, nebo o to co hráči sděluji NPC.
+Jedná se o jeden z nejobvyklejších způsobů vytváření obsahu ve hrách. Toto tvoření lze interpretovat jako proces u něhož se návrhář za pomoci různých nástrojů, které postupně aplikuje, snaží dosáhnout požadovaného výsledku. Jde tedy o metodu ručního vytváření obsahu kde designér, nebo grafik navrhuje a postupně vytváří úroveň, či jinou část hry tak, aby vyhovovala potřebám, ať už se jedná o pozici stromu, nebo o to co hráči sděluji NPC.
 
 Díky tomuto přístupu je eliminováno riziko vzniku nesrovnalostí ve výsledném herním prostředí, jako je nedostupnost části mapy nebo vznik absurdních herních situací. Další výhodou je zaručení, že výsledný herní obsah bude přesně odpovídat plánovaným specifikacím. Nicméně, je důležité zdůraznit, že tento přístup je časově náročný, zejména při vývoji rozsáhlejších her, kde je požadována opakovaná hratelnost a velké množství detailního obsahu.
 
 \subsection{Procedurální generování obsahu}
-Tento typ vytváření obsahu se používá ve více žánrech, ale asi nejznámější z hlediska generování map je Roguelike, kde každá nová hra má unikátní náhodnou mapu. Procedurální generování se ovšem nepoužívá pouze na generování map, ale také na vytváření objektů, jako jsou stromy, textury, animace, text a další. Procedurální generování obsahu není úplně to stejné, jako náhodné generování obsahu. Více do hloubky je tento typ modelování krajiny a textur rozebrán v kapitole \hyperref[procedural]{Procedurální generování}.
+Tento typ vytváření obsahu se používá ve více žánrech, ale asi nejznámější z hlediska generování map je Roguelike, kde každá nová hra má unikátní náhodnou mapu (viz obrázek \ref{bindingOfIsaac}). Procedurální generování se ovšem nepoužívá pouze na generování map, ale také na vytváření objektů, jako jsou stromy, textury, animace, text a další. Procedurální generování obsahu není úplně to stejné, jako náhodné generování obsahu. Více do hloubky je tento typ modelování krajiny a textur rozebrán v kapitole \ref{procedural}.
 
-V zásadě se jedná o proces obrácený, jako u mechanického generování obsahu. Uživatel sice stále definuje různé nástroje, které jsou použity pro vytváření obsahu, ale nikoli pro své vlastní použití, ale naopak je vytváří pro algoritmus. Uživatel dále určuje pravidla podle kterých se generátor musí řídit, tak aby se dobral kýženého výsledku.
+V zásadě se jedná o proces obrácený, jako u mechanického generování obsahu. Uživatel sice stále používá nástroje, pomocí kterých definuje parametry, na jejichž základě se provádí generování obsahu. Uživatel dále určuje pravidla podle kterých se generátor musí řídit, tak aby se dobral kýženého výsledku.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.33]{obrazky-figures/BindingOfIsaac.jpg}
+	\includegraphics[scale=0.28]{obrazky-figures/BindingOfIsaac.jpg}
 	\caption{Příklad hry Roguelike žánru jménem Binding of Isaac, vpravo nahoře je vidět mapa dungeonu, která je procedurálně vygenerovaná.}
+	\label{bindingOfIsaac}
 \end{figure}
 
 \subsubsection{Příklad procedurálního generování vegetace}
@@ -96,19 +94,17 @@ Simulace lesních prostředí má mnoho aplikací, a to od zábavní po výzkumn
 
 Program má funkci procedurálního generátoru lesů na mapě. Cílem tohoto programu je náhodně naskládat stromy s rozumnými rozestupy od sebe. Metody pro vegetaci se dají opět řadit jako procedurální a mechanické. Neprocedurální přístup k tvorbě obsahu poskytuje vývojářům širokou kontrolu nad celým procesem a umožňuje detailní modelování prostředí a objektů. Tato kontrola však přichází s cenou, neboť vyžaduje značné množství ručních úprav a intervencí. Vývojáři často stráví hodně času laděním a umisťováním jednotlivých prvků, jako je například ruční výsadba rostlin nebo úprava každého detailu prostředí. V případě procedurálního generování se jedná o modely, které jsou zkonstruovány algoritmicky a kontrolovány skrze parametrické hodnoty bez nutnosti vyšší úrovně manuálního vstupu nebo specializace v daném oboru.
 
-Jednou z nejvíce prozkoumanou modelační technikou postavenou na rekurzivních hierarchiích je koncept \hyperref[lsystems]{L-systémů}. Existuje mnoho typů a rozšíření těchto systémů\cite{prusinkiewicz1986graphical}, včetně stochastických, parametrických, diferenciálních \cite{animationOfPlantDevelopment.}, citlivých na okolí \cite{syntheticTopiary}, nebo otevřených~\cite{PrusinkiewiczModelsOfPlants}.
+Jednou z nejvíce prozkoumanou modelační technikou postavenou na rekurzivních hierarchiích je koncept L-systémů, popsaný v sekci~\ref{lsystems}. Existuje mnoho typů a rozšíření těchto systémů~\cite{prusinkiewicz1986graphical}, včetně stochastických, parametrických, diferenciálních~\cite{animationOfPlantDevelopment.}, citlivých na okolí~\cite{syntheticTopiary}, nebo otevřených~\cite{PrusinkiewiczModelsOfPlants}.
 
-Distribuce stromů na scéně lze udělat například pomocí simulace ekosystému. To vytváří více realistickou distribuci vegetace, než náhodné rozestavení, protože vznikají přirozená chování, jako je shlukování druhů a oblasti negativního růstu kolem stromů.~\cite{newlands2022procedural} Jedná se o simulace, ve kterých každá rostlina žije vlastní život, je ovlivňována ostatními rostlinami a vnějšími podmínkami.~\cite{Benes02ICCVG} 
+Distribuce stromů na scéně je založena na metodě simulace ekosystému. To vytváří více realistickou distribuci vegetace, než náhodné rozestavení, protože vznikají přirozená chování, jako je shlukování druhů a oblasti negativního růstu kolem stromů.~\cite{newlands2022procedural} Jedná se o simulace, ve kterých každá rostlina žije vlastní život, je ovlivňována ostatními rostlinami a vnějšími podmínkami.~\cite{Benes02ICCVG} 
 
-Při inicializaci simulace se pro každý specifický druh stromu vytvoří určité množství stromů (pro výpočet slouží rovnice~\ref{eq:treeCount}) ve věku $a_i\in\langle0,a_M\rangle$-, kde $a_M$ je maximální věk stromu pro daný druh a jsou náhodně rozestavěny po oblasti od největšího po nejmenší.~\cite{newlands2022procedural}
+Při inicializaci simulace (viz obrázek \ref{trees0}) se pro každý specifický druh stromu vytvoří určité množství stromů (pro výpočet slouží rovnice~\ref{eq:treeCount}) ve věku $a_i\in\langle0,a_M\rangle$, kde $a_M$ je maximální věk stromu pro daný druh a jsou náhodně rozestavěny po oblasti od největšího po nejmenší.~\cite{newlands2022procedural}
 \begin{equation}
 \label{eq:treeCount} 
 	n_I=\frac{d_0\cdot\rho}{n_T}w^2 
 \end{equation}
 
-Hodnota $n_I$ představuje počet instancí k vytvoření, $w$ je šířka scény, $d_0$ původní hustota pro objekt a $\rho$ je parametr hustoty jednotlivých objektů.
-
-Po úspěšné inicializaci simulace běží $N$ kroků, kde $N_Y$ kroků utváří rok. Pro každý krok se děje následující:
+Hodnota $n_I$ představuje počet instancí k vytvoření, $w$ je šířka scény, $d_0$ původní hustota pro objekt a $\rho$ je parametr hustoty jednotlivých objektů. Po úspěšné inicializaci simulace běží $N$ kroků, kde $N_Y$ kroků utváří rok. Pro každý krok se děje následující:
 
 \begin{enumerate}
 	\item Pokud je konec roku, všechny stromy vysejí počet nových rostlin, v kruhu okolo nich.
@@ -117,6 +113,7 @@ Po úspěšné inicializaci simulace běží $N$ kroků, kde $N_Y$ kroků utvá�
 	\item Všechny rostliny rostou (jejich věk se zvýší o 1).
 \end{enumerate}
 
+Konečný výsledek vypadá následovně, viz obrázek \ref{trees1}.
 
 \begin{figure}[h]
 	\centering
@@ -124,13 +121,15 @@ Po úspěšné inicializaci simulace běží $N$ kroků, kde $N_Y$ kroků utvá�
 		\centering
 		\includegraphics[scale=1]{obrazky-figures/treesStart.png}
 		\caption{n=0}
+		\label{trees0}
 	\end{subfigure}
 	\begin{subfigure}{0.475\textwidth}
 		\centering
 		\includegraphics[scale=1]{obrazky-figures/treesEnd.png}
 		\caption{n=1000}
+		\label{trees1}
 	\end{subfigure}
-	\caption[generatedTrees]{Vzhled ekosystému po inicializaci a rozložení vegetace po prvních 1000 iteracích. Je vidět že se vytváří shluky rostlinných druhů, tyto klastry zůstávají, pouze se mění jejich pozice.}
+	\caption[generatedTrees]{Vzhled ekosystému po inicializaci a rozložení vegetace po prvních 1000 iteracích. Je vidět že se vytváří shluky rostlinných druhů, tyto klastry zůstávají, pouze se mění jejich pozice. Obrázek byl převzat z \cite{newlands2022procedural}}
 \end{figure}
 
 \section{Procedurální generování v herním průmyslu}
@@ -140,7 +139,7 @@ Algoritmů na generování obsahu existuje mnoho, každý používá jiné nást
 \subsection{Text}
 Skoro všechny hry používají text. Z důvodu, že každá informace v textu musí odpovídat realitě, je nutné velké množství omezení pro generování. Například, když je v textu informace, že král je mrtvý \cite{liuDeep}, musí být toto tvrzení pravdivé.
 
-Velkou výhodou procedurálního generování textu je vyprávění \cite{madoc59000}, takto vytvořené příběhy jsou často kreativnější a zajímavější, než ty, co by vytvořil člověk, neboť lidé mají sklony psát příběhy, které již slyšeli, nebo ze svých zkušeností, což dost omezuje kreativitu.
+Moderní metody generování textu pomocí umělé inteligence, jako je ChatGPT, využívají pokročilé algoritmy založené na architektuře transformerů. Tyto modely, jako jsou BERT a GPT-2, se staly základem pro mnoho aplikací díky své schopnosti porozumět a generovat přirozený jazyk s vysokou přesností.~\cite{montesinos2020}
 
 \subsection{Krajina a úrovně}
 Nejvíce obvyklý obsah, který se ve hrách generuje, a který je zároveň hlavním zaměřením této bakalářské práce, jsou krajiny a úrovně. Generování lokací, úrovní, nebo obsahu mapy lze jak u 2D her (generování krajiny demonstruje obrázek \ref{proceduralWorld}), tak u 3D her. Za úroveň, nebo oblast lze označovat otevřené (například krajina s lesy), i uzavřené prostranství, vnitřek budovy, nebo jeskyně.
@@ -155,17 +154,17 @@ Nejvíce obvyklý obsah, který se ve hrách generuje, a který je zároveň hla
 \subsection{Zvuky a hudba}
 Většina her má soundtrack a zvukové efekty. Soundtrack obvykle nemá nijak zvlášť přísná pravidla, ale zvukové efekty musejí být výstižné a odpovídající akci v daný moment. 
 
-Jukebox \cite{Dhariwal2020JukeboxAG} je model, který dokáže generovat hudbu se zpěvem v originální nezpracované formě zvukových dat s délkou v řádu minut, i s určením žánru a vokálního stylu. Modelů jako je tento již existuje více, avšak zatím to nejsou plně hodnotné soundtracky pro hry a ještě chvíli potrvá, než bude možné jednoduše vygenerovat hudbu a efekty pro hru pomocí pouhého nástroje.
+Jedním z nejzajímavějších modelů, který představili Dhariwal a spol. je Jukebox~\cite{Dhariwal2020JukeboxAG}. Jedná se o model, který dokáže generovat hudbu se zpěvem v originální nezpracované formě zvukových dat s délkou v řádu minut, i s určením žánru a vokálního stylu. Modelů jako je tento již existuje více, avšak zatím to nejsou plně hodnotné soundtracky pro hry a ještě chvíli potrvá, než bude možné jednoduše vygenerovat hudbu a efekty pro hru pomocí pouhého nástroje.
 
 \newpage
 
 \subsection{Textury}
-Jedná se o techniku vytváření textur pomocí algoritmů a matematických funkcí, namísto ručního malování, nebo použití statických obrázků. Tato metoda umožňuje tvůrcům vytvářet rozmanité textury s různými vlastnostmi a efekty, jako jsou organické vzory, terénní detaily, mraky nebo textury dřeva. Jednou z nejčastějších metod, která se používá na tvoření textur, jsou \hyperref[lsystems]{L-systémy}, nebo Perlinův šum, který je detailněji popsán v sekci \ref{noise}.
+Jedná se o techniku vytváření textur pomocí algoritmů a matematických funkcí, namísto ručního malování, nebo použití statických obrázků. Tato metoda umožňuje tvůrcům vytvářet rozmanité textury s různými vlastnostmi a efekty, jako jsou organické vzory, terénní detaily, mraky nebo textury dřeva. Jednou z nejčastějších metod, která se používá na tvoření textur jsou L-systémy (popsány v sekci \ref{lsystems}), nebo Perlinův šum, který je detailněji popsán v sekci \ref{noise}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{obrazky-figures/ProceduralTexture.png}
-	\caption{Procedurálně vygenerovaná textura představující lávu.}
+	\caption{Procedurálně vygenerovaná textura připomínající dřevo na konvici. Obrázek převzat z \cite{ola05}}
 	\label{proceduralTexture}
 \end{figure}
 
@@ -173,9 +172,9 @@ Jedná se o techniku vytváření textur pomocí algoritmů a matematických fun
 
 \chapter{Metody procedurálního generování}
 \label{procedural}
-Tato kapitola popisuje metody pro generování geometrie, vegetace, celulární automaty, Perlinův šum a použití procedurálního generování v herním průmyslu, dále do detailu popisuje PG krajiny, generování fraktálů.
+Tato kapitola se zaměřuje na různé metody generování geometrie, vegetace a použití procedurálního generování v herním průmyslu. Dále detailně popisuje koncepty jako procedurální generování krajiny, nebo fraktálů a aplikace celulárních automatů a Perlinova šumu.
 
-Procedurální modelování je téma, které se aktivně zkoumá už přes čtyřicet let. Myšlenka je, jak již bylo zmíněno, aby obsah který se vytvářel ručně, dal modelovat pomocí navržené procedury automaticky. Takovýto přístup se již uplatnil na generování například textur, geometrických modelů, zvukových nahrávek, nebo animací. V roce 1980 se začalo pracovat s různými metodami na vytváření terénu (hory, pláně a jezera). Začal se také řešit růst rostlin a obecně práce s přírodou. \cite{inproceedings}
+Procedurální modelování je téma, které se aktivně zkoumá už přes čtyřicet let. Myšlenka je, jak již bylo zmíněno, aby obsah který se vytvářel ručně, dal modelovat pomocí navržené procedury automaticky. Takovýto přístup se již uplatnil na generování například textur, geometrických modelů, zvukových nahrávek, nebo animací. V roce 1980 se začalo pracovat s různými metodami na vytváření terénu (hory, pláně a jezera). Postupně se začal také zkoumat růst rostlin a další aspekty generování v přírodě. \cite{inproceedings}
 
 Roden and Parberry \cite{FromArtistry} pojmenovávají tento druh algoritmů \textit{amplifikační algoritmy (amplification algorithms)}, přijímají menší množství vstupních informací, které zpracují a vracejí větší objem dat na výstupu. Hendrikx et al. \cite{Hendrikx} pojímají procedurální generování jako alternativu k mechanickému navrhování obsahu, ale kladou důraz na zdokonalování a přidávání parametrů umožňujících zásah návrháře do takto vygenerovaných objektů.
 
@@ -185,7 +184,7 @@ Celulární automaty se ve hrách používají intenzivně zejména pro modelov�
 
 Původně byly CA vymyšleny Johnem Von Neumannem jako formální model sebereprodukujících se organismů. Šlo o dvou-dimenzionální celulární automat, kde každá buňka tzv. cell, je malý čtverec na velkém čtverečkovaném papíru. Každá buňka má dva možné stavy černý a červený, které jsou určeny jejich sousedstvím. V John Von Neumannově teorii je sousedství tvořené čtyřmi přilehlými čtverci a na obrázku \ref{vonNeumann} jsou vyznačeny červenou barvou. \cite{Gong2017}
 
-Nejznámější celulární automat byl vytvořen v roce 1970 britským matematikem Johnem Hortonem Conwayem, který byl nazýván Game Of Life. Stejně jako Von Neumannův byl i tento automat dvou-dimenzionální a buňky mohly nabývat pouze hodnot živá, nebo mrtvá. Využívá Moorovo sousedství, které oproti Von Neumannově považuje za sousední buňky všech osm přilehlých, vyobrazené na obrázku \ref{moore}. Fungování automatu je následovné, buňka zůstává naživu, pokud má dvě, nebo tři sousedící buňky živé. Což simuluje, že buňka nepřežije pokud je osamělá, ale zároveň pokud je okolí přeplněné organismy, tak je utlačována. Další pravidlo je, že pokud je libovolná buňka mrtvá, může se "narodit", pokud jsou v sousedství alespoň tři živé buňky. Toto pravidlo má simulovat rození, kde každá buňka musí mít tři rodiče. Automat díky těmto jednoduchým pravidlům dokáže vytvářet simulace které působily jako živý organismus. \cite{Gong2017}
+Nejznámější celulární automat byl vytvořen v roce 1970 britským matematikem Johnem Hortonem Conwayem, který byl nazýván Game Of Life. Stejně jako Von Neumannův byl i tento automat dvou-dimenzionální a buňky mohly nabývat pouze hodnot živá, nebo mrtvá. Využívá Moorovo sousedství, které oproti Von Neumannově považuje za sousední buňky všech osm přilehlých, vyobrazené na obrázku \ref{moore}. Fungování automatu je následovné, buňka zůstává naživu, pokud má dvě, nebo tři sousedící buňky živé. Což simuluje, že buňka nepřežije pokud je osamělá, ale zároveň pokud je okolí přeplněné organismy, tak je utlačována. Další pravidlo umožňuje, aby se neaktivní (mrtvá) buňka aktivovala (narodila) v případě, že jsou v sousedství alespoň tři živé buňky. Toto pravidlo má simulovat rození, kde každá buňka musí mít tři rodiče. Automat díky těmto jednoduchým pravidlům dokáže vytvářet simulace které působily jako živý organismus. \cite{Gong2017}
 
 \begin{figure}[h]
 	\centering
@@ -206,70 +205,64 @@ Nejznámější celulární automat byl vytvořen v roce 1970 britským matemati
 
 \section{L-systémy}
 \label{lsystems}
-L-systémy (Lindenmayerovy systémy) jsou formálním nástrojem \cite{prusinkiewicz1986graphical}, který se používá pro modelování vývoje rostlin (ukazuje obrázek \ref{lSystem}) a buněčných struktur. Tyto systémy byly zavedeny biologem Aristidem Lindenmayerem v roce 1968. \cite{inverseL-systems} Jedná se o paralelní řetězce přepisující systémy, za účelem modelovat růst celulárních organismů. L-systém $\mathcal{L}$ je entice
+L-systémy (Lindenmayerovy systémy) jsou formálním nástrojem \cite{prusinkiewicz1986graphical}, který se používá pro modelování vývoje rostlin (ukazuje obrázek \ref{lSystem}) a buněčných struktur. Tyto systémy byly zavedeny biologem Aristidem Lindenmayerem v roce 1968. \cite{inverseL-systems} Jedná se o paralelní řetězce přepisující systémy, za účelem modelovat růst celulárních organismů. L-systém $\mathcal{L}$ je n-tice
 
-\[\mathcal{L} = \langle M,\omega,R\rangle ,\]
-
-
+\begin{equation}
+	\mathcal{L} = \langle M,\omega,R\rangle ,
+\end{equation}
 kde $M$ je abeceda L-systému, $\omega$ je axiom a $R$ je množina pravidel přepisování. Abeceda obsahuje parametrizované moduly $M = {A(P),B(P),\ldots}$, kde $P=p_1,p_2,\ldots,p_n$ jsou modulové parametry, jako jsou rotace, zvětšení, zmenšení.
 Axiom $\omega \in M^+$ je neprázdná sekvence modulů a $M^+$ jsou všechny možné prázdné řetězce z $M$. Pravidla pro přepisování mají následující formu:
 
 \[id_1:A(P):cond\rightarrow x,x \in M^*,\]
-\[id_1:A(P):cond\rightarrow x,x \in M^*,\]
+\begin{equation}
+id_1:A(P):cond\rightarrow x,x \in M^*,
+\end{equation}
 \[\ldots\]
+kde $M^*$ jsou všechny možné řetězce z $M$ včetně prázdného $\epsilon$. Pravidlo $id_i$ přepisuje znak na levé straně z abecedy $A(P)$ posloupností písmen z pravé strany, pokud je podmínka $cond$ pravdivá. Modul, který se nenachází na levé straně pravidla, se nazývá \textit{terminální symbol}, neboť se nemůže dál měnit, všechny ostatní moduly se nazývají \textit{neterminální symboly}.~\cite{prusinkiewicz2012algorithmic}
 
-kde $M^*$ jsou všechny možné řetězce z $M$ včetně prázdného $\epsilon$. Pravidlo $id_i$ přepisuje znak na levé straně z abecedy $A(P)$ posloupností písmen z pravé strany, pokud je podmínka $cond$ pravdivá. Modul, který se nenachází na levé straně pravidla, se nazývá \textit{terminální symbol}, neboť se nemůže dál měnit, všechny ostatní moduly se nazývají \textit{neterminální symboly}.\cite{prusinkiewicz2012algorithmic}
+Každé písmeno v řetězci má své vlastní pravidlo, jak se z něj odvodí nový řetězec, úprava probíhá paralelním provedením aplikovatelných pravidel, z množiny $R$ pro každé písmeno které obsahuje. Produkční pravidla přepisují začínající symbol sekvencí modulů a pokračují v úspěšných derivacích $\omega \Rightarrow m_1 \Rightarrow m_2 \Rightarrow \ldots,$ dokud není možné žádný další modul přepsat (řetězec končí pouze terminálními symboly), řetězec modulů je prázdný, kvůli aplikaci pravidla epsilon, nebo byl proces ukončen kvůli maximálnímu počtu iterací, které stanovil uživatel.~\cite{lindenmayer1968mathematical}
 
-Každé písmeno má vlastní pravidlo derivace řetězce, ale probíhá paralelním provedením aplikovatelných pravidel, z množiny $R$ pro každé písmeno které obsahuje. Produkční pravidla přepisují začínající symbol sekvencí modulů a pokračují v úspěšných derivacích $\omega \Rightarrow m_1 \Rightarrow m_2 \Rightarrow \ldots,$ dokud není možné žádný další modul přepsat (řetězec končí pouze terminálními symboly), řetězec modulů je prázdný, kvůli aplikaci pravidla epsilon, nebo byl proces ukončen kvůli maximálnímu počtu iterací, které stanovil uživatel.\cite{lindenmayer1968mathematical}
-
-Rekurze nastává v L-systémech tehdy, když se symbol z levé strany objevuje na pravé straně toho stejného pravidla (i když ne přímo). Nedeterminismus povoluje více pravidel pro jeden znak z abecedy. Toto navíc vyžaduje specifikaci pravděpodobnosti jejich aplikace.\cite{lindenmayer1968mathematical}
+Rekurze nastává v L-systémech tehdy, když se symbol z levé strany objevuje na pravé straně toho stejného pravidla (i když ne přímo). Nedeterminismus povoluje více pravidel pro jeden znak z abecedy. Toto navíc vyžaduje specifikaci pravděpodobnosti jejich aplikace.~\cite{lindenmayer1968mathematical}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=1]{obrazky-figures/LTrees.pdf}
-	\caption{L-systém generující fraktály řídící se pravidly. Výsledky připomínají rostliny.}
+	\includegraphics[scale=0.9]{obrazky-figures/LTrees.pdf}
+	\caption{L-systém generující fraktály řídící se pravidly. Výsledky připomínají rostliny. Obrázek převzat z \cite{prusinkiewicz2012algorithmic}.}
 	\label{lSystem}
 \end{figure}
 
 \subsection{Geometrie pomocí L-systémů}
 \label{lsystemGeometry}
-Pro tvoření geometrie z textových řetězců, je každý řetězec reprezentován želvou, která vytváří geometrické symboly, jako jsou čáry, nebo dokonce 3D geometrii.
-Ve 2D má želva stav $S(p,0)$ kde $p=[x,y]$ je její pozice a $0$ je směrový vektor, který udává směr jejího pohybu. 
+Tyto systémy pracují s abecedou symbolů a souborem pravidel, která určují, jak se tyto symboly mohou transformovat v nové řetězce symbolů. K interpretaci a vykreslení těchto fraktálních struktur je obvykle používána Želva. Reprezentuje virtuální objekt, který se pohybuje v rovině nebo v trojrozměrném prostoru a interpretuje jednotlivé symboly a příkazy L-systému jako instrukce pro kreslení. Ve 2D má želva stav $S(p,0)$ kde $p=[x,y]$ je její pozice a $0$ je směrový vektor, který udává směr jejího pohybu. 
 
-Želva sekvenčně čte písmena interpretovaného řetězce z modulu od začátku po konec, kde každé písmeno je interpretované jako příkaz. Písmeno F si překládá jako "pohyb od $p$ směrem k $0$ o vzdálenosti d, která je zadaná a nakreslí linku mezi starou pozicí a novou." Příkazy +($\alpha$) a $-(\alpha)$ mění směr pohybu želvy, jejím otočením doleva, či doprava o $\alpha$. Cokoliv v závorkách $[M^+]$ je geometricky interpretováno, jako větev vygenerované struktury. Výhodou je, že ne všechna písmena abecedy musí mít nastavenou geometrickou interpretaci, pokud ji nemají, tak je želva ignoruje.
-\cite{prusinkiewicz1986graphical}
+Želva sekvenčně čte písmena interpretovaného řetězce z modulu od začátku po konec, kde každé písmeno je interpretované jako příkaz. Písmeno F si překládá jako \emph{pohyb od $p$ směrem k $0$ o vzdálenosti d, která je zadaná a nakreslí linku mezi starou pozicí a novou.} Příkazy +($\alpha$) a $-(\alpha)$ mění směr pohybu želvy, jejím otočením doleva, či doprava o $\alpha$. Cokoliv v závorkách $[M^+]$ je geometricky interpretováno, jako větev vygenerované struktury. Výhodou je, že ne všechna písmena abecedy musí mít nastavenou geometrickou interpretaci, pokud ji nemají, tak je želva ignoruje.~\cite{prusinkiewicz1986graphical} Želvou vygenerovaná obrázek je uvedený zde \ref{lsysgeometry}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{obrazky-figures/L-system.pdf}
-	\caption[L-system]{Vygenerovaných obrázek L-systémy želví interpretací, jsou zde vidět jednotlivé posuvy i hodnoty, o které se posouvá.}
+	\caption[L-system]{Vygenerovaných obrázek L-systémy želví interpretací, jsou zde vidět jednotlivé posuvy i hodnoty, o které se posouvá. Obrázek převzat z \cite{prusinkiewicz1986graphical}.}
+	\label{lsysgeometry}
 \end{figure}
 \newpage
 
 \section{Šumy}
 \label{noise}
-Šumy se v počítačové grafice využívají například pro přidání kvalitních detailů do synteticky vytvořených obrázků. Perlinův šum, navržený Kenem Perlinem \cite{PerlinKen}, se v dnešní době používá ve vytváření procedurálních textur včetně mraků, vln, tornád, raketových cest, atd. Tato kapitola poskytuje detailní přehled jednotlivých funkcí generujících šum. Rozděluje tyto funkce do tří kategorií: gradientní mřížkové šumy \ref{LatticeNoises}, explicitní šumy \ref{ExplicitNoises} a řídké konvoluční šumy \ref{SparseNoises}. V každé z těchto kapitol je popsáno několik reprezentativních šumových funkcí (rozebraných do detailu) a další související příklady \cite{Lagae10}. 
+Šumy jsou v počítačové grafice často využívány k různým účelům, jako je simulace přírodních jevů, tvorba realističtějších textur, generování terénů nebo vytváření efektů jako je mlha. Perlinův šum, navržený Kenem Perlinem \cite{PerlinKen}, se v dnešní době používá ve vytváření procedurálních textur včetně mraků, vln, tornád, tvorba trajektorií raket, atd. Tato kapitola poskytuje detailní přehled jednotlivých funkcí generujících šum. Rozděluje tyto funkce do tří kategorií: gradientní mřížkové šumy \ref{LatticeNoises}, explicitní šumy \ref{ExplicitNoises} a řídké konvoluční šumy \ref{SparseNoises}. V každé z těchto kapitol je popsáno několik reprezentativních šumových funkcí (rozebraných do detailu) a další související příklady \cite{Lagae10}. 
 
 \subsection{Definice šumu}
-Šum je generátor náhodných čísel počítačové grafiky. \cite{PerlinKen} Jedná se o náhodný a neuspořádaný vzor, který je užitečný všude tam, kde je potřebný detail bez evidentní struktury. Jednoduchý šum pracuje takto:
+Šum v procedurálním generování je náhodný signál, který je charakterizován nepravidelným chováním a rozložením hodnot v určitém rozsahu. \cite{PerlinKen} Jedná se o náhodný a neuspořádaný vzor, který je užitečný všude tam, kde je potřebný detail bez evidentní struktury. Jednoduchý šum pracuje takto:
 \begin{enumerate}
-	\item Uvažujme množinu všech bodů v prostoru, jejichž souřadnice x, y, z jsou všechny celočíselné. Tuto množinu nazveme celočíselná mřížka. Každému bodu v této mřížce je přiřazena pseudonáhodná hodnota a gradientní hodnoty x, y a z. Přesněji, zobrazte každou uspořádanou posloupnost tří celých čísel do nekorelované uspořádané posloupnosti čtyř reálných čísel: $[a,b,c,d] = H([x,y,z])$, kde $[a,b,c,d]$ definují lineární rovnici s gradientem [a,b,c] a hodnotou d v bodě $[x,y,z]$. H 0 je nejlépe implementováno jako hashovací funkce.
-	\item Pokud $[x,y,z]$ je na celočíselné mřížce, definujeme $Noise([x,y,z]) = d_{[x,y,z]}$. Pokud $[x,y,z]$ není v celočíselné mřížce, spočítáme hladkou (např. kubickou polynomickou) interpolaci mezi koeficienty rovnic mřížky, aplikovanou nejprve v x(podél hran mřížky), pak v y(ve vnitřních plochách mřížky z) a nakonec v z. Poté vyhodnotíme tuto interpolovanou rovnici v bodě [x,y,z]. 
+	\item Uvažujme množinu všech bodů v prostoru, jejichž souřadnice x, y, z jsou všechny celočíselné. Tuto množinu nazveme celočíselná mřížka. Každému bodu v této mřížce je přiřazena pseudonáhodná hodnota a gradientní hodnoty x, y a z. Konkrétně, každé uspořádané trojici celých čísel je přiřazena nekorelovaná uspořádaná čtveřice reálných čísel: $[a,b,c,d] = H([x,y,z])$, kde $[a,b,c,d]$ definují lineární rovnici s gradientem [a,b,c] a hodnotou d v bodě $[x,y,z]$. H 0 je nejlépe implementováno jako hashovací funkce.
+	\item Pokud $[x,y,z]$ je na celočíselné mřížce, definujeme $Noise([x,y,z]) = d_{[x,y,z]}$. Pokud $[x,y,z]$ není v celočíselné mřížce, spočítáme hladkou (např. kubickou polynomickou) interpolaci mezi koeficienty rovnic mřížky, aplikovanou nejprve v x (podél hran mřížky), pak v y(ve vnitřních plochách mřížky z) a nakonec v z. Poté vyhodnotíme tuto interpolovanou rovnici v bodě [x,y,z]. 
 \end{enumerate}
 
-Ohodnocením hodnot takového šumu jsme schopni vytvářet jednoduché náhodné textury povrchu. \cite{PerlinKen} 
-
-Například při ohodnocení šumu pouze bílou barvou:
+Ohodnocením hodnot takového šumu jsme schopni vytvářet jednoduché náhodné textury povrchu, což je popsáno v Perlinově práci \cite{PerlinKen}. Například, při ohodnocení šumu pouze bílou barvou, má výsledná textura omezený frekvenční charakter a není zde žádný detail mimo určitý rozsah velikosti. Vzniklá textura je zobrazena na obrázku \ref{SpottedDoughnut}.
 
 \[color = white * Noise(point)\]
 
-Výše uvedená textura má omezený frekvenční charakter, není zde žádný detail mimo určitý rozsah velikosti. Vzniklý obrázek je \ref{SpottedDoughnut}.
-
-S hodnotou vrácenou funkcí Noise() \cite{Perlin2002ImprovingN} lze dále dělat mnoho různých věcí, s pomocí funkční kompozice, lze například mapovat různé rozsahy hodnot do různých barev:
+S hodnotou vrácenou funkcí Noise() \cite{Perlin2002ImprovingN} lze dělat mnoho různých věcí, například pomocí funkční kompozice je možné mapovat různé rozsahy hodnot do různých barev. V příkladu níže je textura škálovaná pomocí násobení domény funkce Noise() konstantou k. Jednou z výhod tohoto přístupu je jednoduchost, se kterou lze takovéto úpravy provádět. Výsledná textura je zobrazena na obrázku \ref{ColoredDoughnut}.
 
 \[color = Colorful(Noise(k * point))\]
-
-V příkladu výše, byla textura škálovaná pomocí násobení domény funkce Noise() konstantou k. Jednou z výhod přístupu funkční kompozice je jednoduchost, se kterou lze takovéto úpravy provádět. Výsledný obrázek je níže \ref{ColoredDoughnut}.
 
 \begin{figure}[H]
 	\centering
@@ -291,11 +284,11 @@ V příkladu výše, byla textura škálovaná pomocí násobení domény funkce
 
 \subsection{Gradientní mřížkové šumy}
 \label{LatticeNoises}
-\textit{Gradientní mřížkové šumy} vytvářejí šum pomocí interpolace, nebo konvolucí náhodných hodnot, nebo gradientů definovaných v bodech celočíselné mřížky. Reprezentativním příkladem je \hyperref[perlinNoise]{Perlinův šum} \cite{Lagae10}.
+\textit{Gradientní mřížkové šumy} vytvářejí šum pomocí interpolace, nebo konvolucí náhodných hodnot, nebo gradientů definovaných v bodech celočíselné mřížky. Reprezentativním příkladem je Perlinův šum, který je více popsán v sekci \ref{perlinNoise}. \cite{Lagae10}
 
 \subsubsection{Perlinův šum}
 \label{perlinNoise}
-Roku 1985 Perlin představil \textit{Perlinův šum}, jeho slavnou procedurální funkci pro generování šumu.~\cite{PerlinKen, Perlin2002ImprovingN} Perlinův šum určuje šum v bodě prostoru výpočtem pseudonáhodného gradientu u každého z osmi nejbližších vrcholů na celočíselné krychlové mřížce a následným provedením spline interpolace. Pseudonáhodný gradient je získán hashováním mřížkového bodu a použitím výsledku k výběru gradientu. Mřížkové body jsou hashovány pomocí postupné aplikace pseudonáhodné permutace na souřadnice k dekorelaci indexů do pole pseudonáhodných jednotkových gradientových vektorů. Sada gradientů se skládá z 12 vektorů definovaných směry od středu krychle k jejím hranám. Interpolantem je kvintický polynom, který zajišťuje spojitou derivaci šumu, neboli hladké přechody mezi jednotlivými body.
+Roku 1985 Perlin představil \textit{Perlinův šum}, jeho slavnou procedurální funkci pro generování šumu.~\cite{PerlinKen, Perlin2002ImprovingN} Perlinův šum určuje šum v bodě prostoru výpočtem pseudonáhodného gradientu u každého z osmi nejbližších vrcholů na celočíselné krychlové mřížce a následným provedením spline interpolace. Gradienty jsou získány hashováním mřížkových bodů a následným výběrem gradientu na základě tohoto hashování. Mřížkové body jsou hashovány pomocí postupné aplikace pseudonáhodné permutace na souřadnice, což dekoreluje indexy do pole pseudonáhodných jednotkových gradientových vektorů. Sada gradientů obsahuje 12 vektorů, které jsou definovány směrem od středu krychle k jejím hranám. Interpolantem je kvintický polynom, který zajišťuje spojitou derivaci šumu, neboli hladké přechody mezi jednotlivými body.
 
 Již od svého uvedení před skoro čtyřmi desetiletími se Perlinův šum široce využívá v grafice, například při generování textur, které je vidět na obrázku \ref{PerlinVase}. Perlinův šum je rychlý, jednoduchý a nadále zůstává pilířem průmyslu.
 
@@ -306,19 +299,19 @@ Již od svého uvedení před skoro čtyřmi desetiletími se Perlinův šum ši
 	\label{PerlinVase}
 \end{figure}
 
-\subsubsection{Lepší gradientový šum}
-Modifikovaná hashovací funkce kombinovaná s oddělenou gradientní tabulkou vylepšuje axialní dekorelaci. Jiné rekonstrukční jádro zlepšuje omezení pásma. Metoda projekce zlepšuje kvalitu šumu na 2D površích pomocí pevného šumu. Je třeba poznamenat, že tyto zlepšení platí pro několik druhů gradientových šumů mřížky. \cite{Kensler2008}
+\subsubsection{Vylepšený gradientový šum}
+Tento vylepšený gradientový šum přináší tři klíčové inovace. První vylepšení spočívá v malé úpravě hashovací funkce permutace, která spolu s oddělenými pseudonáhodnými tabulkami výrazně snižuje axiální korelaci. Druhá úprava se zaměřuje na rekonstrukční jádro, které lépe aproximuje globální diferenciální operátor vyššího řádu, což umožňuje efektivnější omezení pásmové šířky. Třetí technika zlepšuje kvalitu dvourozměrných povrchů pomocí pevného třírozměrného šumu, který rekonstruuje šablonu promítnutou na normálu povrchu. \cite{Kensler2008}
 
 \subsubsection{Hardwarové implementace}
-Již mnoho autorů představilo hardwarové implementace funkcí podobných Perlinovu šumu. Hart a spol. \cite{hart1999antialiased} prezentovali VLSI hardwarovou implementaci Perlinova šumu. Dále byly prezentovány GPU implementace Perlinova šumu, jak od Harta \cite{hart01}, tak i od Olano \cite{ola05}. Dále je Perlinův šum nedílnou součástí OpenGL Shading Language (GLSL).
+Již mnoho autorů představilo hardwarové implementace funkcí podobných Perlinovu šumu. Hart a spol. \cite{hart1999antialiased} prezentovali VLSI hardwarovou implementaci Perlinova šumu. Dále byly prezentovány GPU implementace Perlinova šumu, jak od Harta \cite{hart01}, tak i od Olano. \cite{ola05}
 
 \subsection{Explicitní šumy}
 \label{ExplicitNoises}
-\textit{Explicitní šumy} generují šum explicitním způsobem (předzpracováním) a ukládají ho. Doslovně vzato, explicitní šumy nejsou procedurální šumové funkce, ale i tak jsou velmi podstatné. Dva reprezentativní příklady jsou: \hyperref[WaveletNoise]{vlnkový šum} a \hyperref[AnisotropNoise]{anisotropní šum}~\cite{Lagae10}.
+\textit{Explicitní šumy} generují šum explicitním způsobem (předzpracováním) a ukládají ho. Doslovně vzato, explicitní šumy nejsou procedurální šumové funkce, ale i tak jsou velmi podstatné. Dva reprezentativní příklady jsou: Vlnkový šum (popsaný v sekci \ref{WaveletNoise}) a anisotropní šum (detailněji popsán v sekci \ref{AnisotropNoise}).~\cite{Lagae10}
 
 \subsubsection{Vlnkový šum}
 \label{WaveletNoise}
-Poprvé představen autory Cook a DeRose roku 2005 \cite{Cook05}. Perlinův šum ve větších vzdálenostech mívá problém s aliasingem a ztrátou detailů, z důvodu slabého pásmového omezení, kvůli tomu byla představena nová šumová funkce, která je téměř perfektně pásmově omezená.
+Poprvé představen autory Cook a DeRose roku 2005. \cite{Cook05} Perlinův šum ve větších vzdálenostech mívá problém s aliasingem a ztrátou detailů, z důvodu slabého pásmového omezení, kvůli tomu byla představena nová šumová funkce, která je téměř perfektně pásmově omezená.
 
 Podstata algoritmu spočívá v následujících čtyřech krocích, které jsou vyobrazeny na obrázku \ref{fig:WaveletNoise}:
 
@@ -358,28 +351,28 @@ Hlavní myšlenkou bylo vygenerovat šumové textury tak, že frekvenční obor 
 
 Každý orientovaný pod-pásmový obraz je zabalen do jednoho kanálu 32bitového RGBA obrazu, což vede ke čtyřem orientacím na každou texturu. Obvykle použití čtyř nebo osmi pásů, tj. jedné nebo dvou textur, představuje dobrý kompromis mezi úložným prostorem, rychlostí vykreslování a kvalitou obrazu. Pod-pásma šumu jsou vypočítána dopředu pouze na jedné škále najednou. Všechny ostatní škály jsou generovány za běhu jednoduše pomocí stupňování předem vypočítaných textur. \cite{Lagae10}
 
-\subsubsection{Stochastické poddělení}
-Fournier a spol. \cite{Fournier98}, který představil metodu středního posunu, uvedl také stochastický algoritmus dělení pro generování přírodních nepravidelných fraktálních objektů a jevů, jako je terén. Lewis \cite{Lewis86,Lewis87} předvedl zobecněné stochastické poddělení a generalizoval Fournierovu práci na libovolné autokorelační funkce.
+\subsubsection{Stochastické dělení}
+Fournier a spol. \cite{Fournier98}, který představil metodu středního posunu, uvedl také stochastický algoritmus dělení pro generování přírodních nepravidelných fraktálních objektů a jevů, jako je terén. Lewis \cite{Lewis86,Lewis87} předvedl zobecněné stochastické dělení a generalizoval Fournierovu práci na libovolné autokorelační funkce.
 
 \subsubsection{Fourierova spektrální syntéza}
 \label{Fourier}
-Generuje šum s konkrétním výkonovým spektrem filtrováním bílého šumu ve frekvenční oblasti. Fourierova spektrální syntéza byla uvedena v počítačové grafice autorem Anjyo \cite{Anjyo88}, Saupe a Voss \cite{Saupe1988}, kteří ji využili, aby vygenerovali náhodné fraktály a simulovaly přírodní jevy. Fourierova spektrální syntéza může být užitečná i při generování referenčních řešení pro šumové funkce, u kterých je známé očekávané výkonové spektrum.
+Generuje šum s konkrétním výkonovým spektrem filtrováním bílého šumu ve frekvenční oblasti. Fourierova spektrální syntéza byla uvedena v počítačové grafice autorem Anjyo \cite{Anjyo88}, Saupe a Voss \cite{Saupe1988}, kteří ji využili, aby vygenerovali náhodné fraktály a simulovali přírodní jevy. Fourierova spektrální syntéza může být užitečná i při generování referenčních řešení pro šumové funkce, u kterých je známé očekávané výkonové spektrum.
 
 \subsection{Řídké konvoluční šumy}
 \label{SparseNoises}
-Generují šum jako sumu náhodně pozicovaných a vážených kernelů. Třemi reprezentativními příklady jsou: šum řídké konvoluce, \hyperref[SpotNoise]{bodový šum} a \hyperref[GaborNoise]{Gaborův šum}.
+Generují šum jako sumu náhodně pozicovaných a vážených kernelů. Třemi reprezentativními příklady jsou: šum řídké konvoluce, bodový šum (více popsán v sekci \ref{SpotNoise}) a Gaborův šum.
 
 \subsubsection{Definice}
-V sérii prací mezi lety 1984 a 1989 Lewis představil \textit{řídký konvoluční šum} \cite{Lewis84, Lewis86, Lewis89}.
+V sérii prací mezi lety 1984 a 1989 Lewis představil \textit{řídký konvoluční šum} \cite{Lewis84, Lewis86, Lewis89}. Konstrukce řídkého konvolučního šumu je jednoduchá: libovolné jádro $k$ je konvoluováno se šumem Poissonova procesu $\gamma$.
 
-Konstrukce řídkého konvolučního šumu je jednoduchá: libovolné jádro $k$ je konvoluváno se šumem Poissonova procesu $\gamma$.
+\begin{equation}
+	N(x,y) = \int\gamma(u,v)k(x-u,y-v)dudv
+\end{equation}
+Poissonův proces sestává z impulsů nekorelovaných intenzit $a_k$ situovaných na náhodných nezávisle na sobě zvolených pozicích $(x_k,y_k)$. Výsledkem je například šum na obrázku \ref{fig:SparseConvolutionNoise}.
 
-\[N(x,y) = \int\gamma(u,v)k(x-u,y-v)dudv\]
-
-Poissonův proces sestává z impulsů nekorelovaných intenzit $a_k$ situovaných na náhodných nezávisle na sobě zvolených pozicích $(x_k,y_k)$.
-
-\[\gamma(x,y) = \sum_k a_k \delta(x-x_k,y-y_k)\]
-
+\begin{equation}
+	\gamma(x,y) = \sum_k a_k \delta(x-x_k,y-y_k)
+\end{equation}
 Poissonův proces je řídký, což znamená, že nedefinuje každý pixel nebo bod v prostoru, od toho je odvozený název \textit{řídká konvoluce}. Tento způsob použití řídkého impulsního šumu umožňuje alespoň nějakou výpočetní efektivitu, vzhledem k tomu, že konvoluce efektivně rozprostírá jádro se škálou amplitudy pouze na určitých místech $(x_k, y_k)$.
 
 Abychom vyhodnotili šum v konkrétním bodě, je nutné použít pouze jádra, která se s tímto bodem překrývají. Toto je urychleno zavedením virtuální mřížky, kde velikost buňky mřížky odpovídá poloměru jádra. Vyhodnocení pak zahrnuje pouze jádra, která jsou umístěna v buňce obsahující daný bod a těch v sousedních buňkách. Souřadnice buňky jsou také použity k zasazení generátoru náhodných čísel pro generování Poissonových impulzů umístěných v této buňce. Více podrobností a vylepšených schémat pro tento krok jsou uvedeny u Worleyho \cite{worley1996} a Lagae a spol. \cite{Lagae09}. I když Lewis \cite{Lewis89} popisuje několik optimalizací, jako je ukládání konstruovaných Poissonových impulzů za předpokladu koherentního přístupu, je řídká konvoluční metoda trochu pomalejší než jedna oktáva Perlinova šumu. Jelikož výkonové spektrum výstupu konvoluce je součinem vstupů a výkonové spektrum Poissonova impulsu je konstantní, je jednoduše škálovanou verzí tohoto jádra.
@@ -395,7 +388,7 @@ Abychom vyhodnotili šum v konkrétním bodě, je nutné použít pouze jádra, 
 \label{SpotNoise}
 Jedná se o metodu generování stochastických textur pro vizualizaci skalárních a vektorových polí nad plochami. Na bodový šum lze nahlížet jako na explicitní formu řídkého konvolučního šumu vypočítaného konverzí bodů, nebo Fourierovou spektrální syntézou (popsána v sekci \ref{Fourier}).
 
-Van Wijk \cite{Wijk91} diskutuje vztah mezi bodem a texturou v detailech. Poukázal na několik důležitých konceptů, které později uvedl v kontextu šumu například: mapování textur na parametrických plochách, syntézu textur nad zakřivenými plochami jako alternativu pevnému šumu, a lokální kontrolu variací bodu. Dále lze pracovat s tvary, ostrostí hran, nebo různými vzory.
+Van Wijk \cite{Wijk91} diskutuje vztah mezi bodem a texturou v detailech (viz obrázky \ref{fig:SpotNoise} a \ref{fig:SpotNoiseNonProportional}). Poukázal na několik důležitých konceptů, které později uvedl v kontextu šumu například: mapování textur na parametrických plochách, syntézu textur nad zakřivenými plochami jako alternativu pevnému šumu, a lokální kontrolu variací bodu. Dále lze pracovat s tvary, ostrostí hran, nebo různými vzory.
 
 \begin{figure}[H]
 	\centering
@@ -406,26 +399,26 @@ Van Wijk \cite{Wijk91} diskutuje vztah mezi bodem a texturou v detailech. Pouká
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.7]{obrazky-figures/SpotNoiseNonProportional.png}
-	\caption{Na třech dvojicích obrázků je vidět jak se textury mění, když se velikost obrázku mění ne-proporcionálně. Obrázek převzat z \cite{Wijk91}.}
+	\caption{Bodový šum. Na třech dvojicích obrázků je vidět jak se textury mění, když se velikost obrázku mění ne-proporcionálně. Obrázek převzat z \cite{Wijk91}.}
 	\label{fig:SpotNoiseNonProportional}
 \end{figure}
 
 \section{Výškové mapy}
 \label{heightMaps}
-Výškové mapy představují dvoudimenzionální mřížky obsahující výškové hodnoty, jež jsou častým prvkem v modelování terénu. Tyto mapy se běžně využívají jako klíčový prvek pro reprezentaci základu terénu v herním průmyslu. Pro tvorbu výškových map existuje mnoho algoritmů. Na obrázku \ref{HeightMap} je jednoduchá ukázka, jak jednotlivé body na mapě mají hodnoty, podle kterých se dále určí jejich elevace. \cite{heightMap08}
+Výškové mapy představují dvoudimenzionální mřížky obsahující výškové hodnoty, jež jsou častým prvkem v modelování terénu. Tyto mapy se běžně využívají jako klíčový prvek pro reprezentaci základu terénu v herním průmyslu. Pro tvorbu výškových map existuje mnoho algoritmů. Na obrázku \ref{HeightMap} je zobrazena ilustrace, která ukazuje hodnoty jednotlivých bodů na mapě, jež následně slouží k určení jejich elevace. \cite{heightMap08}
 
-Jedny z nejstarších algoritmů jsou metody založené na pododdělení. Segmenty v rámci vygenerované hrubé výškové mapy jsou iterativně rozdělovány, kde každá iterace navíc používá kontrolovanou náhodnost k přidávání detailů. Miller \cite{MillerRendering} popisuje některé varianty všeobecně známé metody středového posunu, ve které se výška nového bodu nastavuje na průměr hodnot jeho rohů v trojúhelníkovém nebo diamantovém tvaru, k němuž je přidán náhodný offset. Každou iterací se rozsah náhodných hodnot offsetu snižuje podle parametru, který kontroluje hrubost výsledné výškové mapy. 
+Jedny z nejstarších algoritmů jsou metody založené na dělení. Segmenty v rámci vygenerované hrubé výškové mapy jsou iterativně rozdělovány, kde každá iterace navíc používá kontrolovanou náhodnost k přidávání detailů. Miller \cite{MillerRendering} popisuje některé varianty všeobecně známé metody středového posunu, ve které se výška nového bodu nastavuje na průměr hodnot jeho rohů v trojúhelníkovém nebo diamantovém tvaru, k němuž je přidán náhodný offset. Každou iterací se rozsah náhodných hodnot offsetu snižuje podle parametru, který kontroluje hrubost výsledné výškové mapy. 
 
-Generování výškových map se v dnešní době provádí převážně pomocí fraktálních generátorů šumu, jako je \hyperref[perlinNoise]{Perlinův šum}, který provádí generování šumu vzorkováním a interpolací bodů na mřížce náhodných vektorů. Výškové mapy se mohou dále transformovat na základě běžných filtrací obrazu, například vyhlazování (smoothing), nebo simulací fyzikálních jevů jako je eroze. \cite{inproceedings}
+Generování výškových map se v dnešní době provádí převážně pomocí fraktálních generátorů šumu, jako je Perlinův šum (detailně popsán v sekci \ref{perlinNoise}), který provádí generování šumu vzorkováním a interpolací bodů na mřížce náhodných vektorů. Výškové mapy se mohou dále transformovat na základě běžných filtrací obrazu, například vyhlazování (smoothing), nebo simulací fyzikálních jevů jako je eroze. \cite{inproceedings}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.9]{obrazky-figures/HeightMap.png}
-	\caption{Ukázka hodnot a jejich výšek výškových map.}
+	\caption{Ilustrace zobrazuje jednotlivé body výškové mapy a jejich elevaci.}
 	\label{HeightMap}
 \end{figure}
 
-Jednou z hlavních nevýhod výškových map je, že nepodporují tvorbu skalních převisů a jeskyní. Gamito a Musgrave \cite{Gamito2001ProceduralLW} navrhovali systém deformace terénu, který má za výsledek pravidelné, uměle vytvořené skalní převisy. O něco novější metoda \cite{Peytavie09} přináší propracovanější struktury s rozdílnými vrstvami materiálů, které podporují kameny, klenby, převisy a jeskyně. Příklady takto vygenerovaných struktur jsou vidět na obrázcích. \ref{PeytavieGen}
+Jednou z hlavních nevýhod výškových map je, že nepodporují tvorbu skalních převisů a jeskyní. Gamito a Musgrave \cite{Gamito2001ProceduralLW} navrhovali systém deformace terénu, který má za výsledek pravidelné, uměle vytvořené skalní převisy. Zjistili že algoritmus ray-tracing je nejvhodnější pro generování terénu s převisy, kvůli efektivnímu vykreslování scén. Tato nová metoda představuje inovativní metodu pro vytváření složitějších a realističtějších terénních struktur, které překonávají omezení tradičních algoritmů, jako je Perlinův šum. O něco novější metoda \cite{Peytavie09} přináší propracovanější struktury s rozdílnými vrstvami materiálů, které podporují kameny, klenby, převisy a jeskyně. Příklady takto vygenerovaných struktur jsou vidět na obrázcích. \ref{PeytavieGen}
 
 \begin{figure}[H]
 	\centering
@@ -439,18 +432,18 @@ Jednou z hlavních nevýhod výškových map je, že nepodporují tvorbu skalní
 		\includegraphics[scale=1]{obrazky-figures/Arches.png}
 		\caption{Vygenerované kamenné klenby.}
 	\end{subfigure}
-	\caption{Na obrázcích jsou vidět klenby a převisy vygenerované pomocí algoritmu vytvořeného Peytaviem, obrázky jsou převzaty z \cite{Peytavie09}}
+	\caption{Na obrázcích jsou vidět klenby a převisy vygenerované pomocí algoritmu vytvořeného Peytaviem, obrázky jsou převzaty z \cite{Peytavie09}.}
 	\label{PeytavieGen}
 \end{figure}
 
 \section{Wave Function Collapse}
-Algoritmus Wave Function Collapse (WFC) je moderní přístup k procedurální generaci obsahu, který nachází uplatnění v mnoha oblastech, od počítačových her po architektonický design. Tento algoritmus je inspirován principy kvantové mechaniky a umožňuje generovat složité vzory a struktury z relativně jednoduchých pravidel, příklad takto vygenerované tilemapy je uveden na obrázku \ref{WFCMap}.
+Algoritmus Wave Function Collapse (WFC) je moderní přístup k procedurální generaci obsahu, který nachází uplatnění v mnoha oblastech, od počítačových her po architektonický design. Tento algoritmus je inspirován principy kvantové mechaniky a umožňuje generovat složité vzory a struktury z relativně jednoduchých pravidel, příklad takto vygenerované tilemapy je uveden na obrázku \ref{WFCMap}. \cite{cheng2020automatic}
 
-Základem WFC je koncept superpozice, kde každý prvek (dlaždice) může nabývat různých stavů (superponováni). když provedeme pozorování (měření). V tom okamžiku se superpozice “zhroutí” do jednoho konkrétního stavu. Tento kolaps je podstatou kvantového měření. Proces je řízen sadou pravidel, která definují, jaké prvky mohou být umístěny vedle sebe, čímž je zajištěna koherence a konzistence výsledného vzoru. Podrobný popis WFC:
+Základem WFC je koncept superpozice, kde každý prvek (dlaždice) může nabývat různých stavů (superponování). Až v momentu kdy provedeme pozorování (měření) se superpozice \emph{zhroutí} do jednoho konkrétního stavu. Tento kolaps je podstatou kvantového měření.~\cite{Hwanhee2019} Proces je řízen sadou pravidel, která definují, jaké prvky mohou být umístěny vedle sebe, čímž je zajištěna koherence a konzistence výsledného vzoru. Algoritmus zahrnuje postupné provádění následujících kroků:
 
 \begin{description}
-	\item [Kolaps:] Kolaps nastává, když je pro buňku vybrán jeden konkrétní stav z její superpozice. Tento výběr se obvykle provádí na základě "entropie" - buňky s nejnižší entropií (nejmenším počtem možností) jsou kolabovány jako první. Jakmile je buňka zkolabována, ovlivní to možnosti sousedních buňek, což může vést k dalším kolapsům.
-	\item [Propagace:] Po kolapsu jedné buňky se aktualizují omezení pro sousední buňky, což se nazývá propagace. Propagace je proces, kdy se informace o kolapsu jedné buňky šíří do sousedních buněk, šímž se snižuje počet možností, kterých tyto buňky mohou nabývat.
+	\item [Kolaps:] Kolaps nastává, když je pro buňku vybrán jeden konkrétní stav z její superpozice. Tento výběr se obvykle provádí na základě \emph{entropie} - buňky s nejnižší entropií (nejmenším počtem možností) jsou kolabovány jako první. Jakmile je buňka kolabována, ovlivní to možnosti sousedních buněk, což může vést k dalšímu kolabování.
+	\item [Propagace:] Po kolapsu jedné buňky se aktualizují omezení pro sousední buňky, což se nazývá propagace. Propagace je proces, kdy se informace o kolapsu jedné buňky šíří do sousedních buněk, čímž se snižuje počet možností, kterých tyto buňky mohou nabývat.
 	\item [Iterace:] Proces kolapsu a propagace se opakuje iterativně, dokud nejsou všechny buňky kolabovány do definitivního stavu. Výsledkem je kompletně vygenerovaný vzor nebo struktura, která respektuje všechna pravidla a omezení definovaná na začátku.
 	\item [Pravidla a omezení:] WFC využívá sadu pravidel a omezení, která určují, jaké dlaždice mohou být vedle sebe. tato pravidla jsou klíčová pro zachování koherence a konzistence generovaného vzoru.
 	\item [Aplikace:] WFC lze použít pro generování 2D i 3D struktur, jako jsou mapy pro videohry, architektonické plány, textilní vzory a mnoho dalších.
@@ -459,71 +452,19 @@ Základem WFC je koncept superpozice, kde každý prvek (dlaždice) může nabý
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.45]{obrazky-figures/WFCGenerated.png}
-	\caption{Ukázka procedurálně vygenerované tilemapy pomocí WFC algoritmu.}
+	\includegraphics[scale=1]{obrazky-figures/WFCGenerated.png}
+	\caption{Ukázka procedurálně vygenerované tilemapy pomocí WFC algoritmu. Obrázek převzat z \cite{cheng2020automatic}.}
 	\label{WFCMap}
 \end{figure}
 
-\iffalse
-\chapter{Procedurální generování krajiny}
-\label{terrain}
-Procedurální generování krajiny se řadí ke složitějším tématům PG. Je tomu tak hlavně kvůli tomu, že se k tomuto typu generování většinou používají výškové mapy (height maps), podle kterých se ohodnocují jednotlivé pixely, jak je popsáno v sekci \ref{heightMaps}. Jakmile jsou všechny pixely ohodnoceny, jsou tři různé způsoby jak postupovat:
-\begin{itemize}
-	\item ruční vykreslování textur,
-	\item aplikování textur na ručně vytvořené regiony podle výšky,
-	\item vygenerování textur po analyzování výšek na vygenerované výškové mapě.
-\end{itemize}
-První metoda je výhodná v tom, že textury ručně vykreslené lze udělat na míru a žádný algoritmus je nemůže replikovat. Bohužel jsou časově náročné a jejich kvalita přímo závisí na schopnostech výtvarníka.
-
-Druhá metoda je podobná, nakreslí se barvy na určitá místa, kam si designer myslí, že by se mohly hodit hory, řeky, nebo země. Jedná se o docela obvyklou metodu, která přináší velice kvalitní výsledky, ale stále se jedná o manuální techniku.
-
-Třetí metoda používá data height mapy a vypočítává jakou texturu použít na které místo. Nízké hodnoty (tmavší místa) se používají například jako oceány, střední hodnoty se vyhodnocují jako země/tráva a na vysoké hodnoty (světlá místa) se nanášejí textury hor nebo kamení. Při generování ve 3D hrách lze ještě započítávat takzvané sklony (slopes), díky kterým je možné oddělovat vyšší plochy od nižších pomocí dalších textur např.: kamene. Tato metoda je více rozvedena v sekci \ref{heightMaps}.
-
-Vzhledem k tomu, že první dva postupy vyžadují mechanické vykreslování buď barvy, nebo textur on designéra, nedá se o nich mluvit jako o čistě procedurálních metodách. Naopak postup třetí tomuto popisu zcela odpovídá, neboť kompletně závisí na height mapě a není nutná žádná akce návrháře \cite{madoc59000}.
-
-\paragraph*{Generování oblastí lze rozdělit následovně:}
-\begin{description}
-	\item[Vytváření půdorysu:] Zahrnuje vytvoření země, moří, řek, hor, atd. Všechny tyto oblasti jsou otevřeného typu. Také můžeme rozumět pod generováním půdorysu i vytváření uzavřeného typu oblastí, například rozložení jednotlivých místností jeskynního komplexu, vytvoření bludiště a jeho cest. 
-	
-	\item[Přidání vegetace a objektů:] Tento bod v podstatě navazuje na předchozí, je potřeba, abychom měli vytvořený půdorys, aby bylo kam přidávat a rozmísťovat další objekty. Jedná se o bod, do kterého spadá vegetace, budovy, atd. Programu se zadávají různá omezení na množství vegetace, místa, kam který objekt lze přidávat a další omezení.
-\end{description} 
-
-\begin{figure}[h]
-	\centering
-	\begin{subfigure}{0.475\textwidth}
-		\centering
-		\includegraphics[scale=0.5]{obrazky-figures/layoutNoTrees.png}
-		\caption{Vygenerovaný půdorys oblasti.}
-	\end{subfigure}
-	\begin{subfigure}{0.475\textwidth}
-		\centering
-		\includegraphics[scale=0.5]{obrazky-figures/treesAdded.png}
-		\caption{Přidané stromy k půdorysu.}
-	\end{subfigure}
-	\caption{Na obrázcích jsou vidět různé postupy generování obsahu z této hry, na obrázku a je vygenerovaný půdorys oblasti i s mořem a pláží, na obrázku b se k tomu přidaly stromy.}
-\end{figure}
-
-\section{Metody pro procedurální generování krajiny}
-Tato sekce zkoumá procedurální metody používané při modelování terénu. Zaměřuje se na klíčové aspekty, jako je realismus výsledků, náročnost algoritmů a možnosti, jakými může uživatel ovlivnit a řídit proces generování.~\cite{inproceedings}
-
-\subsubsection{Porovnání metod}
-\todo{porovnání jednotlivých metod}
-\includegraphics[scale=0.3]{obrazky-figures/keep-calm.png}
-
-\fi
-
 \chapter{Návrh řešení}
 \label{solution}
-Tato část se věnuje představení klíčových technologií využitých při vývoji hry a zdůvodnění toho, proč byly zvoleny. Dále se zabývá metodami, jak budou procedurální mapy vytvářeny, a představuje návrhy algoritmů a postupů pro generování oblastí.
+Tato část se věnuje představení klíčových technologií využitých při vývoji hry a zdůvodnění toho, proč byly zvoleny. Dále se zabývá metodami pro procedurální vytváření map, a představuje návrhy algoritmů a postupů pro generování oblastí.
 
 \section{Vybrané technologie}
-V mé práci jsem se rozhodl pro použití herního enginu Unity, který je podrobněji popsán v sekci \ref{unity}. Před samotným začátkem práce jsem zhodnotil, že vývojové prostředí Unity nabízí mnoho výhod a pro vývoj procedurálního generování a následné hry bude ideální.
+V mé práci jsem se rozhodl pro použití herního enginu Unity. Před samotným začátkem práce jsem zhodnotil, že vývojové prostředí Unity nabízí mnoho výhod a pro vývoj procedurálního generování a následné hry bude ideální. Jedním z hlavních důvodů pro volbu Unity je, že nabízí širokou škálu knihoven, ale tou pro mě nejdůležitější byla knihovna Mathf, která kromě mnoha matematických funkcí obsahuje také funkci Perlinova šumu. Další výhodou je velké množství komponent, jako je například: NavMesh (více popsán v sekci \ref{NavMesh}), Tilemapy, collidery, animátory atd.
 
-Dalším z důvodů pro volbu Unity je jazyk C\#, který nabízí mnoho knihoven, které budou užitečné při tvorbě hry. Výhodou je, že C\# disponuje silnou typovou kontrolou, což znamená, že chyby v kódu jsou odhaleny během překladu, což usnadňuje odhalování a opravování chyb při vývoji.
-
-C\# nabízí širokou škálu knihoven, ale tou pro mě nejdůležitější byla knihovna Mathf, která kromě mnoha matematických funkcí obsahuje také funkci Perlinova šumu. Jazyk C\# je obecně velmi užívaný, a tím pádem má i velkou aktivní komunitu vývojářů přispívajících do knihoven, nástrojů, frameworků, poskytují podporu a návody, které pomáhají ostatním vývojářům efektivně pracovat s procedurálním generováním. 
-
-Některé další výhody použití programovacího jazyka C\# v kombinaci s Unity pro tvorbu her s procedurálním generováním zahrnují:
+Dalším z důvodů pro volbu Unity je jazyk C\#, jeho výhodou je, že C\# disponuje silnou typovou kontrolou, což znamená, že chyby v kódu jsou odhaleny během překladu, což usnadňuje odhalování a opravování chyb při vývoji. Jazyk C\# je obecně velmi užívaný, a tím pádem má i velkou a aktivní komunitu vývojářů přispívajících do knihoven, nástrojů, frameworků, poskytují podporu a návody, které pomáhají ostatním vývojářům efektivně pracovat s procedurálním generováním. Některé další výhody použití programovacího jazyka C\# v kombinaci s Unity pro tvorbu her s procedurálním generováním zahrnují:
 
 \begin{description}
 	\item [Snadná integrace s Unity:] C\# je primárním programovacím jazykem pro vývoj her v Unity, což znamená že má těsnou integraci s Unity API a prostředím.
@@ -548,8 +489,8 @@ Důležitou a často opomíjenou částí vývoje, je struktura samotného proje
 	\item[Prefabs] Prefabs jsou předvytvořené herní objekty s přiřazenými skripty a dalšími vlastnostmi, které lze opakovaně využívat ve hře.
 	Tato složka obsahuje klíčové herní objekty, které jsou vytvořeny, konfigurovány předem a mohou být snadno použity v různých scénách hry. Příklad využití je například u stromů, které mají při inicializaci stejné vlastnosti, a tak mají vlastní prefab, který tyto informace společně se spritem obsahuje.
 	\item[Scenes] V této složce jsou definované herní scény, jako jsou menu, nebo samotná hlavní herní scéna hry. Každá scéna obsahuje specifické herní objekty, nastavení a logiku potřebnou pro danou část hry.
-	\item[ScriptableObjects] ScriptableObjects jsou objekty vytvořené pomocí skriptů, které dědí z třídy ScriptableObject vestavěné v Unity. Tyto objekty mohou uchovávat data, nastavení a další informace, které lze použít v různých částech hry. Hodí se například pro stavitelné objekty, které budou mít vždy stejné základní vlastnosti, jako je sprite, název, nebo kategorii, do které spadá, ke kterým si potom vývojář přidá potřebné skripty.
-	\item[Scripts] Ve složce scripts se nacházejí všechny skripty potřebné k běhu hry. Skripty obsahují herní logiku, ovladače, umělou inteligenci, UI interakce a další funkce potřebné k implementaci funkcí a chování vaší hry. Tato složka je dále rozdělená do podsložek, z důvodu ještě lepší organizace, přístupu a správy skriptů
+	\item[ScriptableObjects] ScriptableObjects jsou objekty vytvořené pomocí skriptů, které dědí z třídy ScriptableObject vestavěné v Unity. Tyto objekty mohou uchovávat data, nastavení a další informace, které lze použít v různých částech hry. Jsou ideální například pro stavitelné objekty, což jsou budovy které bude moct hráč stavět (více popsáno v sekci \ref{buildingSystem}), a které budou mít vždy stejné základní vlastnosti, jako je sprite, název, nebo kategorii, do které spadá, ke kterým si potom vývojář přidá potřebné skripty.
+	\item[Scripts] Ve složce scripts se nacházejí všechny skripty potřebné k běhu hry. Skripty obsahují herní logiku, ovládání pohybu jednotek, umělou inteligenci, UI interakce a další funkce potřebné k implementaci funkcí a chování hry. Tato složka je dále rozdělená do podsložek, z důvodu ještě lepší organizace, přístupu a správy skriptů
 \end{description}
 
 Při organizaci složek jsem zohlednil několik kritérií, která jsou důležitá pro efektivní správu a vývoj projektu. Při navrhování struktury složek jsem se zaměřil na funkční oddělení a jednoduchost formátu. Hlavní složky projektu jsou rozděleny podle typu obsahu a funkčnosti, co usnadňuje navigaci a správu projektu.
@@ -560,18 +501,18 @@ Dalším hlediskem, na které jsem se zaměřil, bylo oddělení logiky a dat, p
 V této sekci je popsán způsob jakým se generují jednotlivé oblasti, použité algoritmy, metody a různé úpravy, pomocí kterých bude vytvořena 2D mapa, na které se následně bude odehrávat samotná hra, jejíž návrh je detailněji popsán v sekci \ref{GameDesign}.
 
 \subsection{Zvolený šum}
-Pro generování samotného šumu jsem vybral známý Perlinův šum (který je detailně popsán v sekci \ref{perlinNoise}), který je relativně jednoduchý na implementaci a jeho porozumění. Algoritmus, kterým je implementován, je intuitivní a snadno přenositelný do různých herních prostředí. Zde je několik dalších důvodů, proč byl vybrán právě Perlinův šum pro generování:
+Pro generování samotného šumu jsem vybral známý Perlinův šum (detailně popsán v sekci \ref{perlinNoise}), který je relativně jednoduchý na implementaci a jeho porozumění. Zde je několik dalších důvodů, proč byl vybrán právě Perlinův šum pro generování:
 
 \begin{description}
 	\item[Hladkost a přirozenost:] Perlinův šum poskytuje hladké a přirozené výsledky. Jeho charakteristika umožňuje vytvářet organické a realistické terény.
 	\item[Efektivita:] Perlinův šum je poměrně efektivní z hlediska výpočetní náročnosti. Jeho algoritmus umožňuje generování šumu s rozumným výkonem a nízkou paměťovou náročností.
 \end{description}
 
-Oproti například vlnkovému šumu, sekce \ref{WaveletNoise}, sice nemá takovou flexibilitu v nastavení detailů a škálování, ale kvůli přirozenosti jsem se rozhodl pro Perlinův. Perlinův šum bude mít mnoho vlastností (které jsou detailně popsány v sekci implementace \ref{PerlinNoiseImplement}), ale asi nejdůležitější bude vlastnost \texttt{seed}, pomocí které bude možné kteroukoliv mapu znovu vygenerovat.
+Oproti například vlnkovému šumu, sekce \ref{WaveletNoise}, sice nemá takovou flexibilitu v nastavení detailů a škálování, ale kvůli přirozenosti jsem se rozhodl pro Perlinův. Perlinův šum má mnoho vlastností (které jsou detailně popsány v sekci \ref{perlinNoise}), ale asi nejdůležitější bude vlastnost \texttt{seed}, pomocí které bude možné kteroukoliv mapu znovu vygenerovat.
 
 \newpage
 \subsection{Algoritmus generování mapy pomocí Perlinova šumu}
-Procedurální generování mapy je jedním z hlavních cílů této práce. Pro generování samotné mapy se bude využívat již zmíněný Perlinův šum s použitím výškových map, které jsou popsány v sekci \ref{heightMaps}. Každá oblast, země, voda, skály, nebo pláže, bude mít definovaný rozsah výšky na výškové mapě. Unity disponuje nástrojem zvaným \texttt{tilemap}, jedná se o čtvercovou mřížku, do jejíž buněk lze skládat takzvané \texttt{tiles} (dlaždice). Velkou výhodou těchto tilemap je, že každý bod reprezentuje jeden tile, tím pádem po ohodnocení bodu lze pouze položit odpovídající tile.
+Procedurální generování mapy je jedním z hlavních cílů této práce. Pro generování samotné mapy se bude využívat již zmíněný Perlinův šum s použitím výškových map, které jsou popsány v sekci \ref{heightMaps}. Každá oblast, země, voda, skály, nebo pláže, bude mít definovaný rozsah výšky na výškové mapě. Unity disponuje nástrojem zvaným \texttt{tilemap}, jedná se o čtvercovou mřížku, do jejíž buněk lze skládat takzvané \texttt{tiles} (dlaždice). Velkou výhodou těchto tilemap je, že každý bod reprezentuje jeden typ dlaždice, tím pádem po ohodnocení bodu lze položit pouze odpovídající dlaždici.
 
 \begin{figure}[H]
 	\centering
@@ -592,7 +533,7 @@ Kvůli jednodušší a srozumitelné interakci s uživatelem při generování m
 Tento algoritmus poskytuje uživatelům možnost tvořit rozmanitá a realistická herní prostředí v Unity pomocí Perlinova šumu a tilemap. Samotný algoritmus je navržen tak, aby poskytoval, co největší kontrolu na vzhledem vygenerovaných map. Díky flexibilitě a jednoduchosti tohoto přístupu může být proces tvorby herního světa intuitivní a rychlý. 
 
 \subsection{Algoritmus Wave Function Collapse}
-Při návrhu této práce jsem se rozhodl zkoumat různé metody procedurálního generování terénu. Mezi ně patří již zmíněný Perlinův šum, který již má dlouhou historii v počítačové grafice. Nicméně se tato práce zaměřuje i na novější přístupy generování terénu, jako je \texttt{Wave Function Collapse} (WFC), který nabízí zcela odlišný přístup k procedurálnímu generování. Navržený algoritmus je znázorněný na obrázku \ref{wfcAlgorithm}.
+Při návrhu této práce jsem se rozhodl zkoumat různé metody procedurálního generování terénu. Mezi ně patří již zmíněný Perlinův šum, který již má dlouhou historii v počítačové grafice. Nicméně se tato práce zaměřuje i na novější přístupy generování terénu, jako je \texttt{Wave Function Collapse} (WFC), který nabízí zcela odlišný přístup k procedurálnímu generování. Způsob použití algoritmu je znázorněný na obrázku \ref{wfcAlgorithm}.
 
 \subsubsection{Důvody pro volbu Wave Function Collapse}
 Wave Function Collapse byla vybrána pro svou významnou flexibilitu a rozmanitost při generování struktur s komplexními vzory a detaily, které jsou obtížně dosažitelné pomocí konvenčních metod. Její deterministická povaha zajišťuje konzistentní a reprodukovatelné výstupy, což je v oblasti procedurálního generování významným přínosem. Díky tomu lze dosáhnout zaručené kvality generovaného obsahu, což je klíčové pro mnohé aplikace. Tato metoda je navíc modulární a lze ji aplikovat na širokou škálu problémů, což ji činí atraktivním nástrojem pro různé oblasti aplikací.
@@ -600,7 +541,7 @@ Wave Function Collapse byla vybrána pro svou významnou flexibilitu a rozmanito
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{obrazky-figures/wfcAlgorithm.pdf}
-	\caption{Ilustrace navrhovaného algoritmu Wave Function Collapse, který bude generovat mapu.}
+	\caption{Ilustrace způsobu použití algoritmu Wave Function Collapse, který bude generovat mapu.}
 	\label{wfcAlgorithm}
 \end{figure}
 
@@ -614,7 +555,7 @@ Kromě obrany před nepřáteli se hráči budou muset vypořádat s dalšími p
 \newpage 
 
 \subsection{Grafika}
-Hra je navržena jako 2D hra s pohledem shora (top-down), jak je vidět na obrázku \ref{GraphicStyle}, což poskytne hráčům přehledný pohled na herní prostředí a umožní jim snadnou navigaci a řízení svých jednotek. Grafický styl hry bude pixelový s použitím převážně 16x16 pixelových spriteů. Tento styl grafiky je známý svou jednoduchostí. Modelů tohoto stylu je mnoho volně dostupných a v případě potřeby lze bez problémů dotvořit vlastní. Díky tomuto stylu grafiky bude zároveň možné udržet nízké nároky na hardwarové prostředky, což umožní hladký běh hry i na starším zařízení.
+Hra je navržena jako 2D hra s pohledem shora (top-down), jak je vidět na obrázku \ref{GraphicStyle}, což poskytne hráčům přehledný pohled na herní prostředí a umožní jim snadnou navigaci a řízení svých jednotek. Grafický styl hry bude pixelový s použitím převážně 16x16 pixelových spritů. Tento styl grafiky je známý svou jednoduchostí. Spritů tohoto stylu je mnoho volně dostupných a v případě potřeby lze bez problémů dotvořit vlastní. Díky tomuto stylu grafiky bude zároveň možné udržet nízké nároky na hardwarové prostředky, což umožní hladký běh hry i na starším zařízení.
 
 \begin{figure}[H]
 	\centering
@@ -624,9 +565,142 @@ Hra je navržena jako 2D hra s pohledem shora (top-down), jak je vidět na obrá
 \end{figure}
 
 \subsection{Jednoduchá umělá inteligence nepřátel}
-Umělá inteligence nepřátel bude implementována pomocí skriptů, které budou mít za úkol detekovat hráče v okolí a podle toho reagovat, včetně pronásledování a útoku na hráče. Pro pohyb po mapě bude využit vestavěný systém v Unity nazývaný NavMesh. Každá jednotka, která se má pohybovat po mapě, bude mít přiděleného NavMesh agenta, který bude schopen reagovat na podloží definované NavMesh surface. Tímto způsobem bude umožněno nepřátelským jednotkám plánovat svůj pohyb po herním světě s ohledem na dostupné průchody a neprůchodné oblasti definované v NavMesh surface, což vytvoří realističtější a dynamické chování nepřátel.
+Umělá inteligence nepřátel bude implementována pomocí skriptů, které budou mít za úkol detekovat hráče v okolí a podle toho reagovat, včetně pronásledování a útoku na hráče. Stavový diagram nepřátel je popsán na obrázku \ref{EnemyStateDiagram}.
 
-\subsection{NavMesh funkcionalita}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{obrazky-figures/EnemyStateDiagram.pdf}
+	\caption{Stavový diagram na kterém je vidět chování nepřátel při detekci hráče.}
+	\label{EnemyStateDiagram}
+\end{figure}
+
+\subsection{Ekonomika hry}
+Hra bude obsahovat základní suroviny (dřevo, kámen), které budou hrát klíčovou roli v průběhu hry.
+
+\begin{description}
+	\item[Dřevo:] Dřevo lze získat těžbou stromů, které budou rozmístěné po herní mapě. Dřevo bude nezbytné pro výstavbu obranných struktur a budování celé osady. Jeho nedostatek může ztížit možnosti obrany a rozvoje osady.
+	\item[Kámen:] Kámen lze získat kopáním skal a hornin v okolí herního prostředí. Bude sloužit, jako stavební a vylepšující materiál pro obranné struktury a osadu. Nedostatek kamene může omezit hráčovy možnosti vylepšení obrany.
+\end{description}
+
+Všechny tyto suroviny budou hrát klíčovou roli v ekonomice a strategii hry. Hráči budou muset efektivně spravovat jejich zdroje a využívat je pro zajištění bezpečnosti a přežití své osady.
+
+\chapter{Implementace}
+\label{implementace}
+Tato kapitola se zaměřuje na detailní popis implementace skriptů a algoritmů používaných ve hře. V této části práce je popsána struktura a funkce jednotlivých skriptů a jejich využití v rámci celkového herního prostředí. Je zde vysvětlena, jak implementace základních prvků, jako jsou ovládací prvky a herní mechaniky, tak i složitější algoritmy pro procedurální generování obsahu, automatické vytváření herního menu a umělou inteligenci herních jednotek.
+
+\section{Použití Perlinova šumu}
+
+Tato sekce se detailně zaměřuje na konkrétní způsob jakým byl Perlinovův šum v prostředí Unity použit. Postup je vysvětlen krok za krokem a představuje klíčové prvky implementace, jako je využití Perlinova šumu, který je detailně popsán v sekci \ref{perlinNoise}, a je implementován v knihovně \texttt{Mathf}. 
+
+Celý proces začíná skriptem \texttt{MapGenerator}, který nejprve vymaže původní hodnoty tilemap a následně se tilemapy zaplňují odpovídajícími tily. Perlinův šum je generován pomocí knihovny \texttt{Mathf} v Unity. Implementace využívá metod \texttt{Mathf.PerlinNoise} pro generování šumu s různými frekvencemi a amplitudami, čímž se vytváří plynulé, náhodné terény.
+
+Ve skriptu \texttt{MapGenerator} je uživateli umožněno vybrat mezi generováním pomocí Perlinova šumu nebo algoritmu WFC. Tato volba závisí na potřebách a preferencích uživatele. Parametry Perlinova šumu umožňují uživateli vytvářet různorodé mapy podle jeho potřeb, zde je jejich přehled:
+\begin{description}
+	\item[Noise scale] Definuje velikost přiblížení Perlinova šumu, čím bližší je, tím větší jsou jednotlivé regiony (viz obrázek \ref{NoiseScale}).
+	\item[Octaves] Přidává počet oktáv, ovlivňuje složitost výsledné šumové mapy, je nutno nalézt vyváženou hodnotu proměnné, která poskytne dostatečný detail, aniž by překročila úroveň přeplnění detaily (viz obrázek \ref{NoiseScale}).
+ 	\item[Seed] Jedná se o počáteční hodnotu, která určuje, jakým způsobem jsou generovány pseudonáhodné hodnoty v rámci algoritmu. Když je použit konkrétní seed, algoritmus vždy vygeneruje stejnou sérii pseudonáhodných čísel \ref{NoiseScale}.
+ 	\item[Offset] Proměnná určuje posun šumových hodnot po osách X, Y.
+\end{description}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=0.45]{obrazky-figures/NoiseScale70.png}
+		\caption{Nativní nastavení všech hodnot, seed 0.}
+	\end{subfigure}
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=0.45]{obrazky-figures/NoiseScale10.png}
+		\caption{Proměnná noise scale nastavená na 10.}
+	\end{subfigure}
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=0.52]{obrazky-figures/NoiseOctaves2.png}
+		\caption{Proměnná octaves nastavená na 2.}
+	\end{subfigure}
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=0.435]{obrazky-figures/NoiseSeed1.png}
+		\caption{Proměnná seed nastavená na 1.}
+	\end{subfigure}
+	\caption{Na obrázcích jsou vidět mapy vygenerované po upravení různých proměnných. Na obrázku (a) jsou proměnné nastaveny na hodnoty, které se používají ve hře. Na obrázku (b) je upravena proměnná noise scale (základní hodnota je 70). Na obrázku (c) byla upravena hodnota octaves (původní hodnota 1) a na obrázku (d) je změněn seed.}
+	\label{NoiseScale}
+\end{figure}
+
+\subsection{Skript pro inicializaci a nastavení šumu}
+Skriptem, který má za úkol inicializovat generátor Perlinova šumu a umožňuje nastavení klíčových parametrů, jako jsou šířka a výška mapy, seed, přiblížení šumu, oktávy, apod. pro dosažení různorodých terénů, je pojmenován \texttt{MapGenerator}. 
+
+Jedná se o skript, který je přímo přiřazený hernímu objektu jménem \texttt{Map Generator}, ve kterém může vývojář pohodlně zadávat potřebné hodnoty pro generování šumu a samotného terénu. Tento skript byl implementován tak, aby i po jeho implementaci byl jednoduše upravitelný, proto lze přímo v editoru nastavovat hodnoty, jako je maximální počet stromů, šířka a výška mapy, zvolený algoritmus procedurálního generování, seed mapy a další.
+
+Nejprve se volá externí metoda \texttt{GenerateNoiseMap()} z třídy Noise popsané níže \ref{noiseClass}, která generuje šumové dvoudimenzionální mapy pro terén, stromy a vegetaci. Tyto mapy slouží jako základní data pro následné umístění herních prvků na herní mapu. Po získání šumových map se vymaže obsah veškerých tilemap a tím se připraví na vkládání nového obsahu.
+
+Pokud je zvolena metoda Wave Function Collapse (WFC), je vytvořen WFC generátor pomocí komponenty \texttt{WFFCGenerator}. Tento generátor je zodpovědný za vytváření mapy s ohledem na vzájemné interakce mezi buňkami a dalšími definovanými pravidly. Tento algoritmus a jeho implementace jsou podrobněji popsány v sekci \ref{WFCImplement}.
+
+V opačném případě, tedy zvolení generování pomocí metody výškových map s použitím Perlinova šumu, se volá pomocná funkce \texttt{PlaceRegionTiles}, která pro každý bod mapy získá hodnotu šumu. Následuje porovnání podle definovaných regionů a umístění odpovídajícího tilu na příslušnou tilemapu.
+
+\subsubsection{Regiony určující typ dlaždic}
+Při generování mapy Perlinovým šumem je nutné přiřadit každé hodnotě z výškové mapy region, který definuje jaký typ dlaždice se použije. Rozsah určuje množství hodnot které spadají do daného regionu a tím pádem i jeho četnost. Regiony jsou tvořeny strukturou \texttt{TerrainType} definovanou následovně:
+\begin{lstlisting}[language=C]
+public struct TerrainType
+{
+	public string name;
+	public float height;
+	public Color colour;
+	public TileBase tile;
+	public Tilemap tileMap;
+	public int ID;
+}
+\end{lstlisting}
+Kde \texttt{name} je pojmenování daného regionu, \texttt{height} definuje horní limit pro šumovou hodnotu, to znamená že všechny hodnoty na mapě, které jsou nižší než tato hodnota a vyšší než hodnota předchozího regionu sem spadají. Proměnná \texttt{colour} je barva, která se používá pouze při nastavení generačního algoritmu a slouží pro testovací účely, jako vyobrazení obarvených bodů mapy. Hodnota \texttt{tile} je sprite, který se používá jako grafická podoba bodu mapy, může se jednat o sprite hory, vody, trávy a dalších. \texttt{tileMap} je tilemapa, na kterou se má nanášet \texttt{tile} a \texttt{ID} je identifikační číslo. Každý region má vlastní tilemapu, z důvodu následného generování navigačního meshe, více popsaného v sekci \ref{NavMesh}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{obrazky-figures/MapGeneratorRegions.png}
+	\caption{Ukázka jednoho z regionů s přiřazenými hodnotami.}
+	\label{fig:MapGeneratorRegions}
+\end{figure}
+ 
+\subsection{Třída Noise}
+\label{noiseClass}
+Třída Noise má na starosti vytváření samotného Perlinova šumu na základě zadaných vstupních hodnot. Tyto hodnoty následně upravuje v rámci potřebných mezí a volá funkci z knihovny \texttt{Mathf} jménem \texttt{PerlinNoise} pro každý bod z mapy. Tato hodnota je dále upravována amplitudou a dalšími hodnotami, po všech potřebných úpravách funkce vrací dvoudimenzionální pole hodnot pro každý bod mapy.
+
+\section{Wave function collapse}
+\label{WFCImplement}
+Další použitou metodou generování je algoritmus Wave Function Collapse (WFC). Tento algoritmus pracuje na ohodnocování buněk mapy a jejich následném \texttt{collapse}, což znamená vyhodnocení buňky a její nastavení na konkrétní hodnotu. Každá buňka má po inicializaci stejnou entropii, neboli počet možných tilů, kterých může nabývat. Samotný algoritmus funguje následovně:
+
+\begin{enumerate}
+	\item Skript \texttt{MapGenerator} nejprve vytvoří podle zadané výšky a šířky mřížku buněk, které jsou typu \texttt{WFCCell} a mají v sobě uložený počet možností a entropii.
+	\item Po vytvoření všech buněk se každé buňce přiřazují její sousední buňky, z Von Neumannova pohledu, který je znázorněn na obrázku \ref{moore}.
+	\item V cyklu se hledá vždy buňka s nejnižší entropií, to znamená, že má nejméně možných tilů, kterých může nabývat, pokud existuje více s nejnižší entropií, vybere se náhodná z těchto buněk. Zároveň se při výběru vynechávají ty buňky, které mají nulovou entropii.
+	\item Pro tuto buňku se zavolá hlavní funkce skriptu \texttt{WFCGenerator} jménem \texttt{WaveFunction}. 
+	\item Na buňku se zavolá \texttt{Collapse}, která vybere náhodný tile, tento výběr je vážený, aby některé tily měly větší šanci výběru.
+	\item Po nastavení nové hodnoty buňky je třeba zkontrolovat okolní buňky a aktualizovat jejich možnosti a entropii. Pokud je nějaká buňka tímto způsobem aktualizována, tak je nutné zkontrolovat i její sousední buňky.
+	\item tento proces se opakuje do té doby, dokud existuje alespoň jedna buňka, která ještě nebyla vyhodnocena.
+\end{enumerate}
+
+Každá buňka \texttt{WFCCell} má na začátku nastavené všechny možné tily, kterých může nabývat. Tyto tily jsou typu \texttt{WFCTile} a obsahují informace jako jsou, váha, typ a povolené sousední tily, které se nastavují v editoru.
+
+\subsection{Skript WFCTile}
+
+Slouží k definování chování a vlastností jednotlivých dlaždic (tile) v rámci algoritmu Wave Function Collapse (WFC). Jeho účel spočívá v udržování informací o sousedících dlaždicích a jejich vlastnostech, což je klíčové pro správné fungování algoritmu. Zde je podrobnější popis jeho účelu:
+
+\begin{description}
+	\item [Reprezentace dlaždic:] Každá instance skriptu \texttt{WFCTile} reprezentuje jednu dlaždici v mapě, která může nabývat různých vlastností a typů v závislosti na kontextu generovaného prostředí.
+	
+	\item [Definice sousedních dlaždic:] Skript uchovává informace o sousedních dlaždicích v různých směrech (nahoru, dolů, doleva, doprava). Tyto informace jsou zásadní pro správnou implementaci algoritmu WFC, protože určují možné hodnoty, které mohou sousední dlaždice nabývat.
+\end{description}
+
+Celkově lze říci, že skript \texttt{WFCTile} má za úkol definovat jednotlivé dlaždice v rámci algoritmu WFC a zajišťuje správné fungování tohoto algoritmu pomocí udržování informací o vlastnostech dlaždic a jejich interakcí s okolními dlaždicemi.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=1]{obrazky-figures/WFCTile.png}
+	\caption{Ukázka jednoho z mnoha tilů, každý tile má definované sousedy stejným způsobem.}
+	\label{fig:WFCTile}
+\end{figure}
+
+\section{NavMesh funkcionalita}
 \label{NavMesh}
 NavMesh je vestavěný systém v Unity, který umožňuje jednotkám v herním světě plánovat svůj pohyb a navigovat přes prostředí. Jedná se o komplexní nástroj pro tvorbu navigačních dat, která definují, kde se mohou jednotky pohybovat a kde nemohou. Na obrázku \ref{fig:NavMesh} je vidět připravená navigační síť NavMesh. NavMesh systém v Unity funguje následovně:
 
@@ -644,109 +718,6 @@ NavMesh je vestavěný systém v Unity, který umožňuje jednotkám v herním s
 	\label{fig:NavMesh}
 \end{figure}
 
-\subsection{Ekonomika hry}
-Hra bude obsahovat základní suroviny (dřevo, kámen), které budou hrát klíčovou roli v průběhu hry.
-
-\begin{description}
-	\item[Dřevo:] Dřevo lze získat těžbou stromů, které budou rozmístěné po herní mapě. Dřevo bude nezbytné pro výstavbu obranných struktur a budování celé osady. Jeho nedostatek může ztížit možnosti obrany a rozvoje osady.
-	\item[Kámen:] Kámen lze získat kopáním skal a hornin v okolí herního prostředí. Bude sloužit, jako stavební a vylepšující materiál pro obranné struktury a osadu. Nedostatek kamene může omezit hráčovy možnosti vylepšení obrany.
-\end{description}
-
-Všechny tyto suroviny budou hrát klíčovou roli v ekonomice a strategii hry. Hráči budou muset efektivně spravovat jejich zdroje a využívat je pro zajištění bezpečnosti a přežití své osady.
-
-\chapter{Implementace}
-\label{implementace}
-Tato kapitola se zaměřuje na detailní popis implementace skriptů a algoritmů používaných ve hře. V této části práce je popsána struktura a funkce jednotlivých skriptů a jejich využití v rámci celkového herního prostředí. Je zde vysvětlena, jak implementace základních prvků, jako jsou ovládací prvky a herní mechaniky, tak i složitější algoritmy pro procedurální generování obsahu, automatické vytváření herního menu a umělou inteligenci herních jednotek.
-
-\section{Implementace Perlinova šumu}
-
-Tato sekce se detailně zaměřuje na konkrétní implementaci Perlinova šumu v prostředí Unity pomocí skriptů v jazyce C\#. Postup je vysvětlen krok za krokem a představuje klíčové prvky implementace, jako je využití Perlinova šumu, který je detailně popsán v sekci \ref{perlinNoise}, a je implementován v knihovně \texttt{Mathf}. Skript \texttt{MapGenerator} nejprve vymaže původní hodnoty tilemap a následně se tilemapy zaplňují odpovídajícími tily.
-
-Perlinův šum je generován pomocí knihovny \texttt{Mathf} v Unity. Implementace využívá metod \texttt{Mathf.PerlinNoise} k generování šumu s různými frekvencemi a amplitudami, čímž se vytváří plynulé, náhodné terény.
-
-Ve skriptu \texttt{MapGenerator} je uživateli umožněno vybrat mezi generováním pomocí Perlinova šumu nebo algoritmu WFC. Tato volba závisí na potřebách a preferencích uživatele.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=1]{obrazky-figures/MapGeneratorVariables.png}
-	\caption{Herní objekt MapGenerator s přiřazenými skripty a nastavenými proměnnými.}
-	\label{fig:MapGeneratorVariables}
-\end{figure}
-
-\subsection{Skript pro inicializaci a nastavení šumu}
-Skriptem, který má za úkol inicializovat generátor Perlinova šumu a umožňuje nastavení klíčových parametrů, jako jsou šířka a výška mapy, seed, přiblížení šumu, oktávy, apod. pro dosažení různorodých terénů, je pojmenován \texttt{MapGenerator}. 
-
-Jedná se o skript, který je přímo přiřazený hernímu objektu jménem \texttt{Map Generator}, ve kterém může vývojář pohodlně zadávat potřebné hodnoty pro generování šumu a samotného terénu. Tento skript byl implementován tak, aby i po jeho implementaci byl jednoduše upravitelný, proto lze přímo v editoru nastavovat hodnoty, jako je maximální počet stromů, šířka a výška mapy, zvolený algoritmus procedurálního generování, seed mapy a další.
-
-Nejprve se volá externí metoda \texttt{GenerateNoiseMap()} z třídy Noise popsané níže \ref{noiseClass}, která generuje šumové dvoudimenzionální mapy pro terén, stromy a vegetaci. Tyto mapy slouží jako základní data pro následné umístění herních prvků na herní mapu. Po získání šumových map se vymaže obsah veškerých tilemap a tím se připraví na vkládání nového obsahu.
-
-Pokud je zvolena metoda Wave Function Collapse (WFC), je vytvořen WFC generátor pomocí komponenty \texttt{WFFCGenerator}. Tento generátor je zodpovědný za vytváření mapy s ohledem na vzájemné interakce mezi buňkami a dalšími definovanými pravidly. Tento algoritmus a jeho implementace jsou podrobněji popsány v sekci \ref{WFCImplement}.
-
-V opačném případě, tedy zvolení generování pomocí metody výškových map s použitím Perlinova šumu, se volá pomocná funkce \texttt{PlaceRegionTiles}, která pro každý bod mapy získá hodnotu šumu. Následuje porovnání podle definovaných regionů a umístění odpovídajícího tilu na příslušnou tilemapu
-
-\subsubsection{Regiony}
-Regiony jsou tvořeny strukturou \texttt{TerrainType} definovanou následovně:
-\begin{lstlisting}[language=C]
-public struct TerrainType
-{
-	public string name;
-	public float height;
-	public Color colour;
-	public TileBase tile;
-	public Tilemap tileMap;
-	public int ID;
-}
-\end{lstlisting}
-Kde \texttt{name} je pojmenování daného regionu, \texttt{height} definuje horní limit pro šumovou hodnotu, to znamená že všechny hodnoty na mapě, které jsou nižší než tato hodnota a vyšší než hodnota předchozího regionu sem spadají. Proměnná \texttt{colour} je barva, která se používá pouze při nastavení generačního algoritmu a slouží pro testovací účely, jako vyobrazení obarvených bodů mapy. Hodnota \texttt{tile} je sprite, který se používá jako grafická podoba bodu mapy, může se jednat o sprite hory, vody, trávy a dalších. \texttt{tileMap} je tilemapa, na kterou se má nanášet \texttt{tile} a \texttt{ID} je identifikační číslo. Každý region má vlastní tilemapu, z důvodu následného generování NavMesh plochy více popsané v sekci \ref{NavMesh}.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=1]{obrazky-figures/MapGeneratorRegions.png}
-	\caption{Ukázka jednoho z regionů s přiřazenými hodnotami.}
-	\label{fig:MapGeneratorRegions}
-\end{figure}
- 
-\subsection{Třída Noise}
-\label{noiseClass}
-Třída Noise má na starosti vytváření samotného Perlinova šumu na základě zadaných vstupních hodnot. Tyto hodnoty následně upravuje v rámci potřebných mezí a volá funkci z knihovny \texttt{Mathf} jménem \texttt{PerlinNoise} pro každý bod z mapy. Tato hodnota je dále upravována amplitudou a dalšími hodnotami, po všech potřebných úpravách funkce vrací dvoudimenzionální pole hodnot pro každý bod mapy.
-
-\section{Wave function collapse}
-\label{WFCImplement}
-Další použitou generační metodou je algoritmus Wave Function Collapse (WFC). Tento algoritmus pracuje na ohodnocování buněk mapy a jejich následném \texttt{collapse}, což znamená vyhodnocení buňky a její nastavení na konkrétní hodnotu. Každá buňka má po inicializaci stejnou entropii, neboli počet možných tilů, kterých může nabývat. Samotný algoritmus funguje následovně:
-
-\begin{enumerate}
-	\item Skript \texttt{MapGenerator} nejprve vytvoří podle zadané výšky a šířky mřížku buněk, které jsou typu \texttt{WFCCell} a mají v sobě uložený počet možností a entropii.
-	\item Po vytvoření všech buněk se každé buňce přiřazují její sousední buňky, z Von Neumannova pohledu, který je znázorněn na obrázku \ref{moore}.
-	\item V cyklu se hledá vždy buňka s nejnižší entropií, to znamená, že má nejméně možných tilů, kterých může nabývat, pokud existuje více s nejnižší entropií, vybere se náhodná z těchto buněk. Zároveň se při výběru vynechávají ty buňky, které mají nulovou entropii.
-	\item Pro tuto buňku se zavolá hlavní funkce skriptu \texttt{WFCGenerator} jménem \texttt{WaveFunction}. 
-	\item Na buňku se zavolá \texttt{Collapse}, která vybere náhodný tile, tento výběr je vážený, aby některé tily měly větší šanci výběru.
-	\item Po nastavení nové hodnoty buňky je třeba zkontrolovat okolní buňky a aktualizovat jejich možnosti a entropii. Pokud je nějaká buňka tímto způsobem aktualizována, tak je nutné zkontrolovat i její sousední buňky.
-	\item tento proces se opakuje do té doby, dokud existuje alespoň jedna buňka, která ještě nebyla vyhodnocena.
-\end{enumerate}
-
-Každá buňka \texttt{WFCCell} má na začátku nastavené všechny možné tily, kterých může nabývat. Tyto tily jsou typu \texttt{WFCTile} a obsahují informace jako jsou, váha, typ a povolené sousední tily, které se nastavují v editoru.
-
-\subsection{Skript WFCTile}
-
-Slouží k definování chování a vlastností jednotlivých dlaždic (tile) v rámci algoritmu Wave Function Collapse (WFC). Jeho účel spočívá v udržování informací o sousedících dlaždicích a jejich vlastnostech, což je klíčové pro správné fungování algoritmu.
-
-Zde je podrobnější popis jeho účelu:
-
-\begin{description}
-	\item [Reprezentace dlaždic:] Každá instance skriptu \texttt{WFCTile} reprezentuje jednu dlaždici v mapě, která může nabývat různých vlastností a typů v závislosti na kontextu generovaného prostředí.
-	
-	\item [Definice sousedních dlaždic:] Skript uchovává informace o sousedních dlaždicích v různých směrech (nahoru, dolů, doleva, doprava). Tyto informace jsou zásadní pro správnou implementaci algoritmu WFC, protože určují možné hodnoty, které mohou sousední dlaždice nabývat.
-\end{description}
-
-Celkově lze říci, že skript \texttt{WFCTile} má za úkol definovat jednotlivé dlaždice v rámci algoritmu WFC a zajišťuje správné fungování tohoto algoritmu pomocí udržování informací o vlastnostech dlaždic a jejich interakcí s okolními dlaždicemi.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=1]{obrazky-figures/WFCTile.png}
-	\caption{Ukázka jednoho z mnoha tilů, každý tile má definované sousedy stejným způsobem.}
-	\label{fig:WFCTile}
-\end{figure}
-
 \section{Hráčovy jednotky}
 Tato kapitola se podrobněji zabývá implementací hráčových jednotek ve hře. Detailně se zde popisují jednotlivé skripty, které řídí chování jednotek, jejich interakci s okolím a výkon v boji.
 
@@ -758,12 +729,12 @@ Tato kapitola se podrobněji zabývá implementací hráčových jednotek ve hř
 \end{figure}
 
 \subsection{Řízení a pohyb jednotek}
-Hlavním skriptem zajišťujícím řízení pohybu hráčových jednotek je \texttt{UnitControlScript}. Obsahuje metody pro interakci s uživatelským vstupem, pohyb k cílovým bodům, manipulaci s objekty a výběr cílů pro útok. Jeho hlavní funkce zahrnují:
+Hlavním skriptem zajišťujícím řízení pohybu hráčových jednotek je \texttt{UnitControlScript} (na obrázku \ref{UnitControlRelation} je vidět stavový diagram tohoto skriptu). Obsahuje metody pro interakci s uživatelským vstupem, pohyb k cílovým bodům, manipulaci s objekty a výběr cílů pro útok. Jeho hlavní funkce zahrnují:
 
 \begin{description}
 	\item [Zpracování uživatelského vstupu:] Skript sleduje uživatelský vstup a reaguje na něj, například detekuje kliknutí myší na herní plochu.
 	\item [Pohyb k bodu kliknutí] Po kliknutí myší na herní plochu skript řídí pohyb jednotky k danému cílovému bodu, či nepříteli.
-	\item [Interakce s objekty:] Jednotky mohou interagovat s různými objekty ve hře, například sbírat suroviny, nebo provádět útoky na nepřátelské jednotky.
+	\item [Interakce s objekty:] Jednotky mohou interagovat s různými objekty ve hře, například sbírat suroviny, nebo provádět útoky na nepřátelské jednotky. Objekty se kterými lze interagovat jsou všechny typu Interactable.
 \end{description}
 
 Další důležitou součástí pohybu jednotky je skript \texttt{PlayerMotor}, jehož funkcionalita zahrnuje navigaci po herním světe. Pomocí komponenty \texttt{NavMeshAgent}, která je detailně popsána v sekci \ref{NavMesh}.
@@ -771,15 +742,12 @@ Další důležitou součástí pohybu jednotky je skript \texttt{PlayerMotor}, 
 \subsection{Ostatní třídy}
 Dalšími skripty, které jednotky využívají, jsou \texttt{UnitStats} a \texttt{Gathering}. Skript UnitStats je zodpovědný za správu statistik a vlastností hráčových jednotek v herním světě. Poskytuje klíčové informace o zdraví, útočné síle, rychlosti útoku, dosahu a dalších parametrech, které ovlivňují chování a výkon jednotek v boji. 
 
-Skript Gathering řídí funkce jednotky související se sběrem surovin v herním světe. Jednotka s tímto skriptem je schopna interagovat s herními objekty reprezentujícími suroviny a může je těžit. Tento skript úzce spolupracuje se skriptem \texttt{ResourceGatherScript}, který je více popsán v sekci \ref{ResourceGatherScript}.
-
-\subsection{Interakce a funkcionalita}
-Interakce mezi jednotlivými skripty umožňuje jednotkám provádět různé akce v herním světě. Základní funkčnost je zaručena správnou provázaností a interakcí skriptů mezi sebou, ta je vyobrazena na diagramu \ref{UnitControlRelation}
+Skript Gathering řídí funkce jednotky související se sběrem surovin v herním světe. Jednotka s tímto skriptem je schopna interagovat s herními objekty reprezentujícími suroviny a může je těžit.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=1]{obrazky-figures/PlayerSequence.pdf}
-	\caption{Zjednodušený sekvenční diagram zobrazující ovládání jednotky hráčem.}
+	\includegraphics[scale=1]{obrazky-figures/PlayerStateDiagram.pdf}
+	\caption{Obrázek zobrazuje stavový diagram hráčových jednotek.}
 	\label{UnitControlRelation}
 \end{figure}
 
@@ -795,8 +763,7 @@ Umělá inteligence (AI) nepřátel je jedním z nejdůležitějších prvků v 
 
 Skript \texttt{EnemyMove} je jedním z kritických komponentů implementace tohoto chování. Tento skript řídí pohyb, detekci hráče a obstrukcí, pronásledování a útoky nepřátel. Díky tomuto skriptu jsou nepřátelé schopni inteligentně reagovat na hráčovy akce a poskytovat tak vyváženou a zábavnou herní zkušenost. Skript také obsahuje řešení animací a rotací nepřítele směrem k hráči, což dodává hře vizuální efekty.
 
-\subsection{Detekce hráče}
-Skript neustále skenuje okolí nepřítele a hledá hráče v dosahu. Provádí to pomocí metody \texttt{CheckForPlayer()}, která využívá vestavěnou funkci \texttt{Physics2D.OverlapCircleAll} k detekci všech hráčů v určené vzdálenosti nepřítele. Jakmile je v dosahu nalezen hráč, proměnná \texttt{chasedObject} je nastavena a nepřítel začne hráče pronásledovat.
+Detekce hráče probíhá tak, že skript neustále skenuje okolí nepřítele a hledá hráče v dosahu. Provádí to pomocí metody \texttt{CheckForPlayer()}, která využívá vestavěnou funkci \texttt{Physics2D.OverlapCircleAll} k detekci všech hráčů v určené vzdálenosti nepřítele. Jakmile je v dosahu nalezen hráč, proměnná \texttt{chasedObject} je nastavena a nepřítel začne hráče pronásledovat.
 
 \subsection{Pronásledování hráče}
 Pronásledování je prováděno metodou \texttt{HandleChase()}, která zjišťuje, zda je hráč v dosahu útoku, zda není překážka mezi nepřítelem a hráčem, a zda je hráč stále v dosahu sledování. Každá z těchto možností je dále popisována v následujících sekcích.
@@ -804,75 +771,16 @@ Pronásledování je prováděno metodou \texttt{HandleChase()}, která zjišťu
 \subsubsection{Útok}
 Jakmile je hráč v dosahu útoku, nepřítel spustí útok pomocí metody \texttt{Attack()}. Při útoku nepřítel sleduje svou rychlost útoku, aby neútočil příliš často, přičemž všechny statistiky jednotky jsou uváděny ve skriptu \texttt{UnitStats.cs}. Pokud je hráč v dosahu útoku a je možné zaútočit, nepřítel způsobí škodu hráči, k tomu se používá funkce vestavěná v rozhraní \texttt{IAttackable} jménem \texttt{TakeDamage(int damage)}, kterou implementuje skript \texttt{UnitStats}. V případě, že je nepřítel střelec, používá útoky na dálku, tak vystřelí projektil směrem k hráči.
 
-\begin{lstlisting}[language=C]
-void Attack()
-{
-	//setting target destination for NavMesh agent
-	agent.SetDestination(agent.transform.position);
-	if (Time.time >= nextAttackEvent)
-	{
-		nextAttackEvent = Time.time + stats.attackSpeed;
-		animator.SetTrigger("InRange");
-		
-		//IAttackable that walls and player derives from
-		var target = chasedObject.GetComponent<IAttackable>();
-		if (target != null)
-		{
-			if (stats.isRanged)
-			{
-				CreateBulletInDirection();
-			}
-			else
-			target.TakeDamage(stats.attackDamage);
-		}
-	}
-}
-\end{lstlisting}
-
 \subsubsection{Řešení překážek}
 Nepřítel se vyhýbá překážkám, pokud se nejedná o stavby hráče, v případě že se mezi hráčem a nepřítelem nachází zeď, tak je novým cílem a nepřítel na ni útočí dokud ji nezničí.
 
 \subsubsection{Rozhraní IAttackable}
-Toto rozhraní implementuje jak hráč, tak stavby. Jedná se o rozhraní, které obsahuje funkci \texttt{TakeDamage(int damage)}, Tímto způsobem je navržený proto, aby nepřítel nemusel zjišťovat a nahrávat pro hráče a zničitelnou stavbu jiné skripty. Díky IAttackable stačí pouze načíst tento interface a následně použít funkci TakeDamage(int damage).
+Toto rozhraní implementuje jak hráč, tak stavby. Jedná se o rozhraní, které obsahuje funkci \texttt{TakeDamage(int damage)}, Tímto způsobem je navržený proto, aby nepřítel nemusel zjišťovat a nahrávat pro hráče a zničitelnou stavbu jiné skripty. Díky IAttackable stačí pouze načíst toto rozhraní a následně použít funkci TakeDamage(int damage).
 
 \section{Třída Interactable}
 Tento skript definuje objekt, se kterým je možné interagovat ve světě hry. Obsahuje funkce pro zacházení s interakcí hráčů v určitém poloměru. Objekt může být zaměřen hráči, což spouští interakci, pokud se nacházejí v dosahu. Navíc může sledovat, zda je nepřátelským objektem a interagovat podle toho. Metoda Interact je navržena tak, aby byla přepsána odvozenými třídami k definování specifického chování interakce.
 
-Ve funkci Update() volané v každém snímku probíhá následující:
-
-\begin{lstlisting}[language=C]
-if (isFocus && !hasInteracted && !isEnemy)
-{
-	if (transform != null)
-	{
-		foreach (Transform player in playerList.ToList())
-		{
-			// Calculate distance between player and interactable object
-			float distance = Vector3.Distance(player.position, transform.position);
-			// If player is within interaction radius, trigger interaction
-			if (distance <= radius)
-			{
-				Interact(player);
-			}
-		}
-	}
-}
-\end{lstlisting}
-
-Tato část kódu v metodě Update() ukazuje, co se děje, pokud objekt, který má tento skript přiřazen, není nepřátelský. V opačném případě se používají jiné proměnné. Následně je zobrazena metoda Interact(), kterou implementuje třída EnemyAttacked, dědící z Interactable:
-
-\begin{lstlisting}[language=C]
-public override void Interact(Transform interactingPlayer)
-{
-	base.Interact(interactingPlayer);
-	CharacterCombat playerCombat = interactingPlayer.GetComponent<CharacterCombat>();
-	
-	if (playerCombat != null)
-	{
-		playerCombat.Attack(myStats);
-	}
-}
-\end{lstlisting}
+Tato část kódu v metodě Update() ukazuje, co se děje, pokud objekt, který má tento skript přiřazen, není nepřátelský. V opačném případě se používají jiné proměnné.
 
 \section{Dynamický systém stavění}
 \label{buildingSystem}
@@ -889,7 +797,7 @@ Skriptovatelný objekt \texttt{BuildableObjectBase} je abstraktní třída, kter
 
 \begin{description}
 	\item[Dynamické vytváření UI] Skript automaticky vytváří tlačítka pro různé kategorie budov a zobrazuje je ve stavitelském menu. To umožňuje hráčům snadno procházet různé typy budov, které mohou postavit.
-	\item[Dynamické načítání dat] Data o stavitelných budovách jsou načítána ze speciálních souborů ve složce "Resources/ScriptableObjects/Buildables". To umožňuje jednoduché přidávání nových budov do hry bez nutnosti úpravy kódu.
+	\item[Dynamické načítání dat] Data o stavitelných budovách jsou načítána ze speciálních souborů ve složce \texttt{Resources/ScriptableObjects/Buildables}. To umožňuje jednoduché přidávání nových budov do hry bez nutnosti úpravy kódu.
 \end{description}
 
 Tento skript je navržený tak, aby bylo možné dynamicky přidávat nové kategorie a položky, a to bez nutnosti jakékoli úpravy kódu. Na obrázku \ref{GraphicStyle} je v levém dolním rohu vidět stavební menu.
@@ -899,44 +807,28 @@ Klíčovou třídou odpovědnou za tvorbu a umisťování stavebních objektů v
 
 Jedním z klíčových prvků BuildingCreator je jeho schopnost dynamicky vytvářet a umisťovat stavební objekty na herní mapu. To umožňuje hráčům vybírat z různých typů budov a umisťovat je na vybraná místa pomocí myši. Třída také poskytuje náhledovou mapu, která hráčům ukazuje, kam bude budova umístěna, a zda je to možné z hlediska terénu, či surovin.
 
-Další klíčovou funkcí je správa kategorií stavebních objektů. Objekty jsou rozděleny do kategorií, po rozkliknutí se zobrazí podmenu, ze kterého lze vybrat konkrétní stavbu. Kategorie jsou definovány pomocí skriptovatelných objektů popsaných v sekci \ref{buildingSystem}. BuildingCreator také zajišťuje, aby hráči nemohli umístit stavební objekty na zakázaná místa nebo na místa, kde již existuje jiná stavba. 
+Další klíčovou funkcí je správa kategorií stavebních objektů. Objekty jsou rozděleny do kategorií, po rozkliknutí se zobrazí podmenu (viz obrázky \ref{BuildingMenu}), ze kterého lze vybrat konkrétní stavbu. Kategorie jsou definovány pomocí skriptovatelných objektů popsaných v sekci \ref{buildingSystem}. BuildingCreator také zajišťuje, aby hráči nemohli umístit stavební objekty na zakázaná místa nebo na místa, kde již existuje jiná stavba. 
 
 Každá budova je reprezentována prefabrikátem, který obsahuje potřebné komponenty jako \texttt{collider2D}, komponentu na detekci kolizí, skript odpovídající dané stavbě a popřípadě \texttt{NavMeshObstacle}, což je komponenta, která v NavMesh povrchu vytváří neprůchodnou oblast.
 
-\subsubsection{Metoda DrawBounds}
-Metoda \texttt{DrawBounds} se stará o vykreslení obdélníkových a lineárních struktur na mapě a zároveň provádí kontrolu dostupnosti zdrojů a umístění na mapě. Metoda kombinuje výpočet hranic oblasti, kontrolu a aktualizaci stavu surovin a umisťování prefabrikátů na mapu. Tato metoda je klíčovou součástí procesu tvorby a umísťování stavebních objektů a ukazuje, jakým způsobem se zde řeší komplexní problémy spojené s tímto procesem. Zde je ukázka kódu:
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=0.5]{obrazky-figures/buildingMenuInactive.png}
+		\caption{V levé dolní části je viditelné menu stavění, žádné podmenu budov není otevřené.}
+	\end{subfigure}
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=0.5]{obrazky-figures/buildingMenuOpened.png}
+		\caption{V levé dolní části je menu stavění s otevřeným podmenu \emph{Wall}.}
+	\end{subfigure}
+	\caption{Na obrázcích je vidět stavební menu bez otevřeného podmenu (a), zatímco na druhém obrázku (b) je otevřené \emph{Wall} podmenu.}
+	\label{BuildingMenu}
+\end{figure}
 
-\begin{lstlisting}[language=C]
-//checking if placing tiles is only in inspector
-if (previewMode)
-{
-	map.SetTile(position, tileBase);
-	
-	//checking for all banned tilemaps
-	if (IsForbidden(position) || NotEnoughResources())
-	{
-		if (!IsSameTilemap(position, selectedObject.Category.tilemap))
-			map.SetColor(position, Color.red);
-	}
-}
-else
-{
-	//placing tile and instantiating object
-	Vector3Int position = new Vector3Int(posX, posY, 0);
-	previewMap.SetTile(position, null);	
-	if (IsBuildablePosition)
-	{
-		resourceMenu.UpdateAmmount(-requiredResources);
-		int ammount = requiredResources.ammount;
-		if (resourcesPreview.ContainsKey(requiredResources.itemType))
-			resourcesPreview[requiredResources.itemType] -= ammount;
-		
-		map.SetTile(position, tileBase);
-		item = Instantiate(selectedObject, position, Quaternion.identity);
-		item.transform.parent = categoryParent.transform;
-	}
-}
-\end{lstlisting}
+\subsubsection{Metoda DrawBounds}
+Metoda \texttt{DrawBounds} se stará o vykreslení obdélníkových a lineárních struktur na mapě a zároveň provádí kontrolu dostupnosti zdrojů a umístění na mapě. Metoda kombinuje výpočet hranic oblasti, kontrolu a aktualizaci stavu surovin a umisťování prefabrikátů na mapu. Tato metoda je klíčovou součástí procesu tvorby a umísťování stavebních objektů a ukazuje, jakým způsobem se zde řeší komplexní problémy spojené s tímto procesem.
 
 Tento úryvek ukazuje, jak se dynamicky pracuje s rozložením zdrojů a umístěním stavby. Prochází se celý obdélníkový rozměr stavby a provádí se analýza dostupných zdrojů pro stavbu. Pokud jsou zdroje dostupné a na cestě není překážka, stavba se umístí a zdroje jsou odebrány. V opačném případě se dokončí pouze ty části, kde to je možné a v náhledu se ty části které nebudou postaveny zabarví červeně.
 
@@ -960,27 +852,6 @@ Slouží jako centrální prvek pro správu náhodných událostí v herním pro
 
 Každý GameEvent má atribut GameEventAttribute, díky kterému lze dynamicky a automaticky pomocí reflexe načítat a inicializovat všechny možné události ze skriptu EventManager, pro což byla vytvořena následující funkce:
 
-\newpage
-
-\begin{lstlisting}[language=C]
-void LoadEvents()
-{
-	//Getting all events from running assembly
-	var eventTypes = Assembly.GetExecutingAssembly().GetTypes()
-	.Where(type => type.GetCustomAttributes(typeof(GameEventAttribute), true).Length > 0);
-
-	foreach (var eventType in eventTypes)
-	{
-		//Activating instance of every event
-		var eventInstance = Activator.CreateInstance(eventType) as IGameEvent;
-		if (eventInstance != null)
-		{
-			events.Add(eventInstance);
-		}
-	}
-}
-\end{lstlisting}
-
 Tato funkce slouží k načtení dostupných událostí do paměti z aktuálně běžícího assembly (souboru s kódem aplikace) a jejich uložení do kolekce událostí. Kód na prvním řádku \texttt{Assembly.GetExecutingAssembly()} vrací aktuálně běžící assembly, ve kterém je tato funkce vykonávána a všechny typy v jeho rámci. Následně se pomocí Linq filtrují všechny typy událostí, na základě toho, zda mají atribut \texttt{GameEventAttribute}. Následuje iterace přes všechny nalezené typy událostí a instanciace daného typu události za pomoci reflexe. Reflexe umožňuje manipulaci s typy a objekty za běhu programu. Zde je použita k vytvoření instance třídy a přetypování na \texttt{IGameEvent}. Nakonec se každá událost přidává do seznamu, ze kterého se následovně náhodně vybírají.
 
 Tato třída navíc obsahuje seznam prefabů nepřátelských jednotek, zařizuje manipulaci s informativním oknem a má pomocné funkce díky kterým mohou GameEventy načítat potřebné hodnoty.
@@ -993,6 +864,24 @@ Definuje základní strukturu a metody, které musí být implementovány v jedn
 	\item[Metoda pro ukončení události:] Rozhraní obsahuje metodu \texttt{EndEvent()}, která slouží k ukončení dané události po jejím dokončení, nebo po dosažení určitých podmínek. Tato metoda umožňuje vyčištění prostředků a provedení konečných akcí spojených s danou událostí. Metoda \texttt{EndEvent()} navíc vrací hodnotu typu WindowInfo, což jsou hodnoty, které jsou potřebné pro zobrazení informativního okna hráči po dokončení náhodné události.
 \end{description}
 
+\chapter{Testování a optimalizace}
+\label{experiments}
+Tato část práce se zaměřuje na testování a porovnání efektivity metod procedurálního generování, konkrétně Perlinova šumu a algoritmu Wave Function Collapse (WFC). Testování probíhalo na základě několika kritérií, včetně kvality výsledného obsahu, rychlosti generování, variabilitě a úspěšnosti opakovatelnosti generovaných herních světů.
+
+Pro testování byly vytvořeny různé scénáře a parametry generování pro oba algoritmy. Každý scénář obsahoval specifické požadavky na mapu a herní prostředí, jako byla velikost mapy, typ terénu, počet a rozložení herních objektů apod. Generované mapy byly hodnoceny podle vizuální kvality, rozmanitosti, hratelnosti a chování generovaných objektů v herním světě. Byla také sledována rychlost generování a výpočetní náročnost jednotlivých metod.
+
+\section{Optimalizace}
+Hlavní úpravou algoritmu WFC bylo zavedení seznamu buněk, které se mají zpracovat před začátkem generování. Při každém kolapsu buňky byla daná buňka přidána do tohoto seznamu. Následně se před zpracováním celého seznamu buněk nejprve procházel tento seznam, aby se zabezpečilo, že buňky s nižší entropií budou kolapsovány dříve. Tímto způsobem bylo dosaženo optimalizace času potřebného k generování mapy.
+
+Průměrný čas generování herních světů byl snížen z přibližně 73 sekund na průměrných 10 sekund. Tato úprava umožnila rychlejší a efektivnější generování map, což výrazně přispělo k celkové kvalitě a použitelnosti procedurálně generovaných herních prostředí. Avšak i po takovéto optimalizaci je WFC algoritmus stále pomalejší než Perlinův šum.
+
+\section{Výsledky testování}
+Výsledky testování ukázaly, že oba algoritmy, Perlinův šum i WFC, mají své silné a slabé stránky v závislosti na konkrétních požadavcích a scénářích generování. Oba algoritmy jsou vhodné pro vytváření organických terénů, jako jsou krajiny, hory a lesy. Perlinův šum vytváří více zakulacené struktury, zatímco WFC tvoří vyloženě náhodné tvary.
+
+Pokud jde o rychlost generování, Perlinův šum je obecně rychlejší a méně náročný na výpočetní výkon než WFC, zejména při tvorbě rozsáhlých herních světů. Nicméně, WFC poskytuje větší kontrolu nad výsledným obsahem a umožňuje dosáhnout vyšší úrovně detailu a struktury v generovaných mapách. Perlinův šum tvoří mapy v řádu jednotek sekund, naopak WFC bez optimalizací vytváří mapy stejných velikostí v řádu minut. S optimalizacemi je WFC o dost rychlejší, avšak to stále nestačí na Perlinův šum.
+
+Kromě rychlosti generování má Perlinův šum i další výhodu a tou je seed. Tato proměnná představuje set podle kterého se generují pseudonáhodná čísla, což znamená že výstup bude vždy stejný pro stejný seed. Něco takového WFC neumí a tím pádem není možnost vytvořit znovu stejnou mapu.
+
 \chapter{Závěr}
 Cílem této bakalářské práce bylo implementovat generativní algoritmy pro tvorbu herních prostředí v Unity. Práce se zaměřila především na dva hlavní přístupy k generaci prostředí: Perlinův šum a algoritmus Wave Function Collapse (WFC).
 
@@ -1002,19 +891,4 @@ Ve druhé části práce byly oba algoritmy implementovány do herního prostře
 
 Výsledkem práce je funkční prototyp hry, která obsahuje většinu základních systémů. Hra samotná byla navržena s úmyslem, aby byla snadno rozšiřitelná, což se z velké části povedlo.
 
-Během práce na této bakalářské práci jsem získal cenné zkušenosti v oblasti práce s Unity, C\# a obecně s programováním větších projektů. Při zpětném pohledu bych pravděpodobně zvolil jiný přístup a více plánoval celou hru i jednotlivé komponenty do budoucna. Většinou jsem se vyhnul potřebě rozsáhlých úprav kódu, ale občas jsem narazil na situace, kde bylo zapotřebí provedení úprav či optimalizací.
-
-\iffalse
-\section{Perlinův šum}
-\label{PerlinNoiseImplement}
-\textcolor{gray}{\blindtext[60]}
-\chapter{Experimenty a vyhodnocení}
-\label{experiments}
-\section{testování}
-\label{tests}
-\textcolor{gray}{\blindtext[30]}
-
-\chapter{Závěr}
-\label{end}
-\textcolor{gray}{\blindtext[4]}
-\fi
+Během vypracovávání této bakalářské práce jsem získal cenné zkušenosti v oblasti práce s Unity, C\# a obecně s programováním větších projektů. Při zpětném pohledu bych pravděpodobně zvolil jiný přístup a více plánoval celou hru i jednotlivé komponenty do budoucna. Většinou jsem se vyhnul potřebě rozsáhlých úprav kódu, ale občas jsem narazil na situace, kde bylo zapotřebí provedení úprav či optimalizací.

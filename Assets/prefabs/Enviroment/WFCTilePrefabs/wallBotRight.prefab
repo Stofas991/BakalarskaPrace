@@ -100,7 +100,6 @@ MonoBehaviour:
   weight: 1
   tileType: 1
   upNeighbours:
-  - {fileID: 8070532179161317336, guid: 1943cc00b5300bb49bb7816568952203, type: 3}
   - {fileID: 8070532179161317336, guid: d761cddf6858be5479dadd6297d04d24, type: 3}
   - {fileID: 8070532179161317336, guid: a1e24006bfbab6a49a2fddf2e139a5f2, type: 3}
   - {fileID: 8070532179161317336, guid: fa9b0f6bff974d147830377a1d6de6ab, type: 3}
