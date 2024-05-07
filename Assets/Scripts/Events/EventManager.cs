@@ -1,3 +1,10 @@
+/**
+ * File: EventManager.cs
+ * Author: Kryštof Glos
+ * Last Modified: 2.5.2024
+ * Description: Singleton class responsible for managing game events, including event selection, initialization, and handling player input.
+ */
+
 using System;
 using System.Collections;
 using System.Collections.Generic;

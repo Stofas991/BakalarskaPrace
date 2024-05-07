@@ -1,4 +1,10 @@
-using Unity.VisualScripting;
+/**
+* File: UnitControlScript.cs
+* Author: Kryštof Glos
+* Date Last Modified: 3.5.2024
+* Description: This script controls the behavior of a unit in the game, including movement, interaction, and resource handling.
+*/
+
 using UnityEngine;
 using UnityEngine.AI;
 

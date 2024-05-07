@@ -1,3 +1,9 @@
+/**
+* File: UnitSelection.cs
+* Author: Kryštof Glos
+* Date Last Modified: 18.2.2024
+* Description: This script handles the visual indication of unit selection and updates the selected status in the associated UnitControlScript.
+*/
 using UnityEngine;
 
 public class UnitSelection : MonoBehaviour

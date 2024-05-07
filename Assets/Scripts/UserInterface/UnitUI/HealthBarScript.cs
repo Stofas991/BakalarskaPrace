@@ -1,3 +1,9 @@
+/*
+ * File: HealthBarScript.cs
+ * Description: Manages the health bar UI element.
+ * Author: Kryštof Glos
+ * Date: 25.3.2024
+ */
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +14,10 @@ public class HealthBarScript : MonoBehaviour
     public Gradient gradient;
     public Image fill;
 
+    ///<summary>
+    /// Sets the maximum health value and initializes the health bar.
+    ///</summary>
+    ///<param name="health">The maximum health value.</param>
     public void SetMaxHealth(int health)
     {
         slider.maxValue = health;
@@ -16,10 +26,14 @@ public class HealthBarScript : MonoBehaviour
         fill.color = gradient.Evaluate(1f);
     }
 
+    ///<summary>
+    /// Updates the current health value and adjusts the health bar accordingly.
+    ///</summary>
+    ///<param name="health">The current health value.</param>
     public void SetHealth(int health)
     {
         slider.value = health;
 
-        fill.color = gradient.Evaluate(slider.normalizedValue);
+        fill.color = gradient.Evaluate(slider.normalizedValue); // Adjust the color of the health bar based on the current health percentage
     }
 }

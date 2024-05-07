@@ -1,7 +1,14 @@
-﻿using UnityEngine;
+﻿/*
+ * File: Singleton.cs
+ * Description: Imports singleton class into project.
+ * Author: EngiGames
+ * Date: 20.3.2024
+ * Code from: https://www.youtube.com/watch?v=ErJgQY5smnw&t=3s
+ */
 
-//  Code from:
-// https://www.youtube.com/watch?v=ErJgQY5smnw&t=3s
+using UnityEngine;
+
+
 
 public abstract class Singleton<T> : MonoBehaviour where T : Component
 {

@@ -1,3 +1,10 @@
+/**
+ * File: ClickableObject.cs
+ * Author: Kryštof Glos
+ * Last Modified: 18.2.2024
+ * Description: Script for changing cursor when hovering over clickable objects them.
+ */
+
 using UnityEngine;
 
 public class ClickableObject : MonoBehaviour

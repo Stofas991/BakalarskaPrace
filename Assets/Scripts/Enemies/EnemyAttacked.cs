@@ -1,3 +1,9 @@
+/**
+ * File: ClickableObject.cs
+ * Author: Kryštof Glos
+ * Last Modified: 19.2.2024
+ * Description: Script making enemy units attackable, derives from Interactable.
+ */
 
 using UnityEngine;
 [RequireComponent(typeof(UnitStats))]

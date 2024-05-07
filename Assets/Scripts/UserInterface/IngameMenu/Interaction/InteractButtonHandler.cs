@@ -1,3 +1,9 @@
+/*
+ * File: InteractButtonHandler.cs
+ * Author: Kryštof Glos
+ * Date: 25.4.2024
+ * Description: Manages interaction with items.
+ */
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -1,3 +1,9 @@
+/**
+ * File: WFCTileEditor.cs
+ * Author: Kryštof Glos
+ * Last Modified: 7.5.2024
+ * Description: Custom inspector for the WFCTile script.
+ */
 using UnityEditor;
 
 [CustomEditor(typeof(WFCTile))]

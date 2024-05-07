@@ -1,3 +1,10 @@
+/**
+ * File: CameraController.cs
+ * Author: Kryštof Glos
+ * Date: 3.5.2024
+ * Description: This script controls the movement and behavior of the in-game camera.
+ */
+
 using Sentry;
 using UnityEngine;
 

@@ -1,3 +1,10 @@
+/**
+ * File: CameraController.cs
+ * Author: Kryštof Glos
+ * Date: 3.5.2024
+ * Description: This script handles the behaviour of stockpiles.
+ */
+
 using UnityEngine;
 
 public class StockpileScript : Interactable

@@ -399,7 +399,6 @@ GameObject:
   - component: {fileID: 7576999208517008877}
   - component: {fileID: 7968693199467964788}
   - component: {fileID: 2629049188160768821}
-  - component: {fileID: -8632762726293959139}
   m_Layer: 11
   m_Name: WoodenDoor
   m_TagString: Untagged
@@ -478,19 +477,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 0}
   doorTile: {fileID: 11400000, guid: 17a30f9c5827ba140a861796a8ba7dc5, type: 2}
---- !u!114 &-8632762726293959139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5152080460175122735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Size: {x: 1, y: 1, z: 0}
-  m_Center: {x: 0, y: 0, z: 0}
-  m_Area: 1
-  m_AffectedAgents: a98c17ec

@@ -1,3 +1,9 @@
+/*
+ * File: BuildingHUD.cs
+ * Author: Kryštof Glos
+ * Date: 27.3.2024
+ * Description: Manages the building HUD, including categories and items.
+ */
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;

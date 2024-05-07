@@ -1,3 +1,9 @@
+/**
+* File: WFCTile.cs
+* Author: Kryštof Glos
+* Date Last Modified: 23.4.2024
+* Description: This script defines properties and behaviors of individual tiles used in the Wave Function Collapse algorithm.
+*/
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +19,9 @@ public class WFCTile : MonoBehaviour
 
     public Dictionary<Direction, WFCTile[]> directionNeighbours = new Dictionary<Direction, WFCTile[]>();
 
+    /// <summary>
+    /// Sets the values of direction neighbours.
+    /// </summary>
     public void SetValues()
     {
         if (directionNeighbours.Count == 0)

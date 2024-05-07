@@ -1,3 +1,10 @@
+/**
+ * File: CameraController.cs
+ * Author: Kryštof Glos
+ * Date: 7.5.2024
+ * Description: This script handles the behavior of the doors in the game.
+ */
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
 

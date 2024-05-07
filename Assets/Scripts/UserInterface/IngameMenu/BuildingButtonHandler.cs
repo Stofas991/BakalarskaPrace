@@ -1,3 +1,9 @@
+/**
+* File: BuildingButtonHandler.cs
+* Author: Kryštof Glos
+* Date Last Modified: 20.3.2024
+* Description: This script handles the behavior of building buttons in the UI.
+*/
 using UnityEngine;
 using UnityEngine.UI;
 

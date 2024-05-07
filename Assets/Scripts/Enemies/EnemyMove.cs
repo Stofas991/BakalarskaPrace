@@ -1,3 +1,10 @@
+/**
+ * File: EnemyMove.cs
+ * Author: Kryštof Glos
+ * Last Modified: 1.5.2024
+ * Description: Script for controlling enemy movement, detection, and attacks.
+ */
+
 using UnityEngine;
 using UnityEngine.AI;
 

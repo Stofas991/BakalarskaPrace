@@ -1,3 +1,9 @@
+/**
+ * File: ResourceGatherScript.cs
+ * Author: Kryštof Glos
+ * Last Modified: 3.5.2024
+ * Description: Script for controlling resource gathering interaction and progress.
+ */
 using UnityEngine;
 using UnityEngine.Tilemaps;
 

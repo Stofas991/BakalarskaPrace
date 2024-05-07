@@ -1,45 +1,50 @@
+/**
+ * File: MapGenerator.cs
+ * Author: Kryštof Glos
+ * Last Modified: 7.5.2024
+ * Description: Generates the game map using Perlin noise or Wave Function Collapse algorithm.
+ */
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Tilemaps;
 
-
-
+/**
+ * Class: MapGenerator
+ * Description: Generates the game map using Perlin noise or Wave Function Collapse algorithm.
+ */
 public class MapGenerator : Singleton<MapGenerator>
 {
+    // Enumeration for different draw modes
     public enum DrawMode { NoiseMap, ColourMap, TileMap };
-    public DrawMode drawMode;
 
+    // Properties for map generation
+    public DrawMode drawMode;
     public int mapWidth = 100;
     public int treeLimit = 50;
     public int mapHeight = 100;
     public float noiseScale;
     public float treeNoisScale;
-
-
     public int octaves;
     [Range(0f, 1f)]
     public float persistance;
     public float lacunarity;
-
     public int seed = 100000000;
     public Vector2 offset;
-
     public bool autoUpdate;
     public GenerationType generationType;
-
     public TerrainType[] regions;
-
     public GameObject treePrefab;
+
+    // Private fields for map generation
     private int treeCount;
     private GameObject wfcParent;
     [SerializeField] WFCTile wfcFiller;
     [SerializeField] NavMeshSurface2d nmSurface;
     private WFCGenerator wfcGenerator;
-
     private bool end;
-
     [SerializeField] Tilemap[] tilemaps;
 
     public void Start()
@@ -79,6 +84,10 @@ public class MapGenerator : Singleton<MapGenerator>
         nmSurface.BuildNavMeshAsync();
     }
 
+    /**
+     * Method: GenerateMap
+     * Description: Generates the game map based on selected generation method.
+     */
     public void GenerateMap()
     {
         float[,] noiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
@@ -330,17 +339,25 @@ public class MapGenerator : Singleton<MapGenerator>
     }
 }
 
+/**
+ * Struct: TerrainType
+ * Description: Defines the properties of different terrain types.
+ */
 [System.Serializable]
 public struct TerrainType
 {
-    public string name;
-    public float height;
-    public Color colour;
-    public TileBase tile;
-    public Tilemap tileMap;
-    public int ID;
+    public string name;         // Name of the terrain type
+    public float height;        // Height threshold for this terrain type
+    public Color colour;        // Colour associated with this terrain type
+    public TileBase tile;       // Tile associated with this terrain type
+    public Tilemap tileMap;     // Tilemap associated with this terrain type
+    public int ID;              // ID of this terrain type
 }
 
+/**
+ * Enumeration: GenerationType
+ * Description: Enumerates the different map generation types.
+ */
 public enum GenerationType
 {
     Perlin,

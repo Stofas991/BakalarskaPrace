@@ -1,3 +1,9 @@
+/**
+* File: UnitStats.cs
+* Author: Kryštof Glos
+* Date Last Modified: 1.5.2024
+* Description: This script defines the stats and behavior of units in the game.
+*/
 using UnityEngine;
 
 public class UnitStats : MonoBehaviour, IAttackable
@@ -14,13 +20,15 @@ public class UnitStats : MonoBehaviour, IAttackable
     public float gatherCooldown = 0f;
     public float attackRange = 2f;
     public float movementSpeed = 1.5f;
-    int currentHealth;
-    public HealthBarScript healthBar;
-    public ProjectileBehaviour projectilePrefab;
-    public bool isRanged;
+
+    private int currentHealth;
     private float timer = 0;
     private float regenTimer = 0;
     private float regenerationTimer = 5;
+
+    public HealthBarScript healthBar;
+    public ProjectileBehaviour projectilePrefab;
+    public bool isRanged;
     // Start is called before the first frame update
     void Start()
     {
@@ -62,6 +70,7 @@ public class UnitStats : MonoBehaviour, IAttackable
         }
     }
 
+    // Regenerate health over time
     public void RegenerateHealth()
     {
         if (currentHealth != maxHealth && currentHealth + healthRegeneration <= maxHealth)
@@ -71,6 +80,7 @@ public class UnitStats : MonoBehaviour, IAttackable
         }
     }
 
+    // Handle death of the unit
     void Die()
     {
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);

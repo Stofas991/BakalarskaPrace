@@ -1,7 +1,15 @@
+/**
+ * File: WFCCell.cs
+ * Author: Kryštof Glos
+ * Last Modified: 1.5.2024
+ * Description: Defines a class representing a cell in a Wave Function Collapse grid.
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 
 public class WFCCell : MonoBehaviour
 {
@@ -11,22 +19,39 @@ public class WFCCell : MonoBehaviour
     public int totalTiles;
     Dictionary<Direction, WFCCell> neighbours = new Dictionary<Direction, WFCCell>();
 
+    ///<summary>
+    /// Adds a neighbouring cell in the specified direction.
+    ///</summary>
+    ///<param name="direction">Direction of the neighbouring cell.</param>
+    ///<param name="cell">Neighbouring cell.</param>
     public void AddNeighbour(Direction direction, WFCCell cell)
     {
         neighbours[direction] = cell;
         totalTiles = possibilities.Count();
     }
 
+    ///<summary>
+    /// Retrieves the neighbouring cell in the specified direction.
+    ///</summary>
+    ///<param name="direction">Direction of the neighbouring cell.</param>
+    ///<returns>Neighbouring cell.</returns>
     public WFCCell GetNeighbour(Direction direction)
     {
         return neighbours[direction];
     }
 
+    ///<summary>
+    /// Retrieves the list of possible tiles for this cell.
+    ///</summary>
+    ///<returns>List of possible tiles.</returns>
     public List<WFCTile> GetPossibilities()
     {
         return possibilities;
     }
 
+    ///<summary>
+    /// Removes mountain tiles from the list of possibilities.
+    ///</summary>
     public void RemoveMountainPossibilities()
     {
         for (int i = possibilities.Count-1; i >= 0; i--)
@@ -39,6 +64,9 @@ public class WFCCell : MonoBehaviour
         }
     }
 
+    ///<summary>
+    /// Removes water tiles from the list of possibilities.
+    ///</summary>
     public void RemoveWaterPossibilities()
     {
         for (int i = possibilities.Count - 1; i >= 0; i--)
@@ -51,17 +79,29 @@ public class WFCCell : MonoBehaviour
         }
     }
 
+    ///<summary>
+    /// Sets the list of possibilities to contain only the given tile.
+    ///</summary>
+    ///<param name="possibilitiesGiven">The tile to set as the only possibility.</param>
     public void SetPossibilities(WFCTile possibilitiesGiven)
     {
         possibilities.Clear();
         possibilities.Add(possibilitiesGiven);
     }
 
+    ///<summary>
+    /// Retrieves the directions of neighbouring cells.
+    ///</summary>
+    ///<returns>Array of directions.</returns>
     public Direction[] GetDirections()
     {
         return neighbours.Keys.ToArray();
     }
 
+    ///<summary>
+    /// Collapses the cell to a single tile, removing all other possibilities.
+    ///</summary>
+    ///<returns>The tile that the cell collapsed to.</returns>
     public WFCTile Collapse()
     {
         // Choose random tile based on weight
@@ -108,6 +148,12 @@ public class WFCCell : MonoBehaviour
         return GetRandomItem(selectedTiles, x => x.weight);
     }
 
+    ///<summary>
+    /// Constrains the possibilities of the cell based on the possibilities of its neighboring cells in the given direction.
+    ///</summary>
+    ///<param name="neighbourPossibilities">List of possibilities of the neighboring cells.</param>
+    ///<param name="direction">Direction of the neighboring cells.</param>
+    ///<returns>True if the possibilities are reduced, false otherwise.</returns>
     public bool Constrain(List<WFCTile> neighbourPossibilities, Direction direction)
     {
         bool reduced = false;
@@ -147,6 +193,10 @@ public class WFCCell : MonoBehaviour
         return reduced;
     }
 
+    ///<summary>
+    /// Retrieves a random tile from the possibilities list, weighted by their respective weights.
+    ///</summary>
+    ///<returns>The randomly selected tile.</returns>
     public WFCTile GetRandomValue()
     {
         System.Random random = new System.Random();
@@ -218,6 +268,12 @@ public class WFCCell : MonoBehaviour
             return 0;
     }
 
+    ///<summary>
+    /// Retrieves a random tile from the possibilities list, weighted by their respective weights.
+    ///</summary>
+    ///<param name="itemsEnumerable">The collection of items to choose from.</param>
+    ///<param name="weightKey">The function to retrieve the weight of each item.</param>
+    ///<returns>The randomly selected item.</returns>
     public T GetRandomItem<T>(IEnumerable<T> itemsEnumerable, Func<T, int> weightKey)
     {
         System.Random random = new System.Random();

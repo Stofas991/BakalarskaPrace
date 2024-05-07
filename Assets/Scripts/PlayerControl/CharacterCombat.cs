@@ -1,3 +1,9 @@
+/**
+* File: CharacterCombat.cs
+* Author: Kryštof Glos
+* Date Last Modified: 1.5.2024
+* Description: This script handles combat behavior for a character, including attacking and cooldown management.
+*/
 using UnityEngine;
 
 public class CharacterCombat : MonoBehaviour
@@ -19,6 +25,10 @@ public class CharacterCombat : MonoBehaviour
         myStats.attackCooldown -= Time.deltaTime;
     }
 
+    /// <summary>
+    /// Initiates an attack on the target unit.
+    /// </summary>
+    /// <param name="targetStats">Stats of the target unit.</param>
     public void Attack(UnitStats targetStats)
     {
         if (myStats.attackCooldown <= 0)

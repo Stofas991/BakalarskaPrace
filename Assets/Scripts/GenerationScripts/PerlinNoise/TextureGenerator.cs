@@ -1,3 +1,9 @@
+/**
+ * File: TextureGenerator.cs
+ * Author: Kryštof Glos
+ * Last Modified: 9.4.2024
+ * Description: Contains methods for generating textures from color maps and height maps.
+ */
 using UnityEngine;
 
 public static class TextureGenerator

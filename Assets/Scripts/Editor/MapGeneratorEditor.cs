@@ -1,3 +1,9 @@
+/**
+ * File: MapGeneratorEditor.cs
+ * Author: Kryštof Glos
+ * Last Modified: 3.5.2024
+ * Description: Custom inspector for the MapGenerator script.
+ */
 using UnityEditor;
 using UnityEngine;
 

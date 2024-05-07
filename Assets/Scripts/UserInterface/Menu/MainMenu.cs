@@ -1,3 +1,9 @@
+/*
+ * File: MainMenu.cs
+ * Description: Handles functionality for the main menu UI, including setting game parameters and quitting the game.
+ * Author: Kryštof Glos
+ * Date: 6.5.2024
+ */
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -18,15 +24,21 @@ public class MainMenu : MonoBehaviour
 
     public void QuitGaime()
     {
-        Debug.Log("quit");
+        Application.Quit();
     }
 
+    ///<summary>
+    /// Generates a random seed value and displays it.
+    ///</summary>
     public void randomSeed()
     {
         var randomValue = UnityEngine.Random.Range(100000000, 999999999);
         seedText.text = randomValue.ToString();
     }
 
+    ///<summary>
+    /// Sets the selected game parameters based on UI inputs.
+    ///</summary>
     public void setValues()
     {
         SelectedValues.seed = Convert.ToInt32(seedText.text);
@@ -75,6 +87,11 @@ public class MainMenu : MonoBehaviour
         SelectedValues.isSet = true;
     }
 
+    ///<summary>
+    /// Retrieves the active toggle from a given toggle parent.
+    ///</summary>
+    ///<param name="toggleParent">The parent GameObject containing the toggles.</param>
+    ///<returns>The active toggle.</returns>
     public Toggle getActiveToggle(GameObject toggleParent)
     {
         Toggle[] toggles = toggleParent.GetComponentsInChildren<Toggle>();

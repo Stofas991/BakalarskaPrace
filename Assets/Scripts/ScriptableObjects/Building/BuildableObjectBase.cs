@@ -1,3 +1,9 @@
+/**
+* File: BuildableObjectBase.cs
+* Author: Kryštof Glos
+* Date Last Modified: 1.5.2024
+* Description: This script defines the properties of a buildable object that can be placed in the game world.
+*/
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -22,11 +28,13 @@ public class BuildableObjectBase : ScriptableObject
         get { return category; }
     }
 
+    /// <summary>
+    /// The type of placing how the buildable object can be placed.
+    /// </summary>
     public PlaceType PlaceType
     {
         get { return placeType == PlaceType.None ? category.PlaceType : placeType; }
     }
-    //Write about this, every buildable object has placeType, can be None, if it is none it gets value from BuildingCategory which also has placeType
 
     public UICategory UICategory
     {

@@ -1,3 +1,10 @@
+/*
+ * File: IngameMenu.cs
+ * Author: Kryštof Glos
+ * Date: 7.5.2024
+ * Description: Manages the in-game menu functionality.
+
+ */
 using UnityEngine;
 
 public class IngameMenu : Singleton<IngameMenu>
@@ -20,6 +27,10 @@ public class IngameMenu : Singleton<IngameMenu>
         }    
     }
 
+    ///<summary>
+    /// Activates the specified submenu and closes any previously active submenu.
+    ///</summary>
+    ///<param name="subMenu">The submenu to activate.</param>
     public void ActivateSubMenu(GameObject subMenu)
     {
         CloseActiveMenu(subMenu);
@@ -28,6 +39,10 @@ public class IngameMenu : Singleton<IngameMenu>
         activeSubMenu = subMenu;
     }
 
+    ///<summary>
+    /// Closes the active submenu if it is not the same as the provided menu.
+    ///</summary>
+    ///<param name="menu">The menu to check against the active submenu.</param>
     void CloseActiveMenu(GameObject menu)
     {
         if (activeSubMenu != null && activeSubMenu != menu)
@@ -37,6 +52,9 @@ public class IngameMenu : Singleton<IngameMenu>
         }
     }
 
+    ///<summary>
+    /// Restores the time scale to normal (1).
+    ///</summary
     public void ActivateTime()
     {
         Time.timeScale = 1;

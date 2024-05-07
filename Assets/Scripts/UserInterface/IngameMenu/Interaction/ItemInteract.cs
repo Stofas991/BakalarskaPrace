@@ -1,3 +1,9 @@
+/*
+ * File: ItemInteract.cs
+ * Description: Manages the interaction with items in the game world.
+ * Author: Kryštof Glos
+ * Date: 6.5.2024
+ */
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +13,10 @@ public class ItemInteract : Interactable
     [SerializeField] GameObject itemCanvas;
     GameObject instance;
 
+    ///<summary>
+    /// Overrides the Interact method from the base class Interactable. Handles the interaction with the item.
+    ///</summary>
+    ///<param name="interactingPlayer">The transform of the player interacting with the item.</param>
     public override void Interact(Transform interactingPlayer)
     {
         base.Interact(interactingPlayer);
@@ -31,6 +41,10 @@ public class ItemInteract : Interactable
         hasInteracted = true;
     }
 
+    ///<summary>
+    /// Overrides the OnDeFocused method from the base class Interactable. Handles the behavior when the player is no longer interacting with the item.
+    ///</summary>
+    ///<param name="playerTransform">The transform of the player.</param>
     public override void OnDeFocused(Transform playerTransform)
     {
         base.OnDeFocused(playerTransform);
@@ -40,6 +54,9 @@ public class ItemInteract : Interactable
         }
     }
 
+    ///<summary>
+    /// Destroys the interaction menu and allows the player to carry the item.
+    ///</summary>
     public void DestroyInstanceAndCarry()
     {
         ItemSpecifics itemSpecifics = GetComponent<ItemSpecifics>();
@@ -67,6 +84,11 @@ public class ItemInteract : Interactable
             Destroy(gameObject);
     }
 
+    ///<summary>
+    /// Gets the first possible unit that can carry the specified item type.
+    ///</summary>
+    ///<param name="itemType">The type of item to be carried.</param>
+    ///<returns>The GameObject of the unit, if found; otherwise, returns null.</returns>
     public GameObject GetFirstPossibleUnit(ContainedItemType itemType)
     {
         GameObject returnedUnit = null;

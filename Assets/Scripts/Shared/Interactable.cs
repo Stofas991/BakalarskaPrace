@@ -1,3 +1,9 @@
+/**
+* File: Interactable.cs
+* Author: Kryštof Glos
+* Date Last Modified: 3.5.2024
+* Description: This script defines the behavior of interactable objects in the game.
+*/
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;

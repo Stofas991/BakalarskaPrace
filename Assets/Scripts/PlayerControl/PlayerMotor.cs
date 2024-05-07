@@ -1,3 +1,9 @@
+/**
+* File: PlayerMotor.cs
+* Author: Kryštof Glos
+* Date Last Modified: 18.2.2024
+* Description: This script controls the movement of the player character using NavMeshAgent.
+*/
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -22,12 +28,21 @@ public class PlayerMotor : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Moves the player character to the specified point on the NavMesh.
+    /// </summary>
+    /// <param name="point">The point to move to.</param>
     public void MoveToPoint(Vector3 point)
     {
         point = FlipAgent(point);
         agent.SetDestination(point);
     }
 
+    /// <summary>
+    /// Sets the player character to follow a target.
+    /// </summary>
+    /// <param name="newTarget">The new target to follow.</param>
+    /// <param name="attackRange">The attack range when following an enemy.</param>
     public void FollowTarget(Interactable newTarget, float attackRange)
     {
         target = newTarget.transform;
@@ -44,6 +59,9 @@ public class PlayerMotor : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Stops the player character from following the target.
+    /// </summary>
     public void StopFollowingTarget()
     {
         agent.stoppingDistance = 0f;

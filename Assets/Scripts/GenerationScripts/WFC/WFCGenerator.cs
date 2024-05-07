@@ -1,3 +1,10 @@
+/**
+* File: WFCGenerator.cs
+* Author: Kryštof Glos
+* Date Last Modified: 1.5.2024
+* Description: This script generates tiles using the Wave Function Collapse algorithm.
+*/
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -18,6 +25,9 @@ public class WFCGenerator : Singleton<WFCGenerator>
     public TileBase waterBase;
     public TileBase mountainBase;
 
+    /// <summary>
+    /// Places tiles at the specified position and returns the WFCCell component.
+    /// </summary>
     public WFCCell PlaceTiles(int posX, int posY, Transform parent)
     {
         var instance = Instantiate(WFCTileObject, new Vector3(posX, posY, 0), Quaternion.identity);
@@ -25,6 +35,9 @@ public class WFCGenerator : Singleton<WFCGenerator>
         return instance.GetComponent<WFCCell>();
     }
 
+    /// <summary>
+    /// Executes the Wave Function Collapse algorithm on the specified cell.
+    /// </summary>
     public void WaveFunction(WFCCell cellToCollapse)
     {
         cellToCollapse.Collapse();
@@ -65,6 +78,9 @@ public class WFCGenerator : Singleton<WFCGenerator>
         }
     }
 
+    /// <summary>
+    /// Gets the cells with the lowest entropy from the specified parent.
+    /// </summary>
     public List<WFCCell> GetLowestEntropy(Transform parent)
     {
         constrainedList.RemoveWhere(x => x == null);

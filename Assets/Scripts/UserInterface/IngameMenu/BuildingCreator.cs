@@ -1,6 +1,13 @@
+/**
+* File: BuildingCreator.cs
+* Author: Kryštof Glos
+* Date Last Modified: 1.5.2024
+* Description: This script handles the creation of buildings and zones in the game world.
+*/
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
@@ -13,6 +20,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
     PlayerBuildInput playerInput;
     [SerializeField] GameObject itemParent;
     [SerializeField] GameObject zoneParent;
+    [SerializeField] NavMeshSurface2d nmSurface;
 
     //if any one of those maps contain tile, cant place there
     [SerializeField] List<Tilemap> forbidPlacingMaps;
@@ -106,8 +114,10 @@ public class BuildingCreator : Singleton<BuildingCreator>
 
     private void Update()
     {
+        // Check if a building object is selected
         if (selectedObject != null)
         {
+            // Check if the mouse is over a UI element
             isOverObject = EventSystem.current.IsPointerOverGameObject();
             Vector3 pos = _camera.ScreenToWorldPoint(mousePos);
             Vector3Int gridPos = previewMap.WorldToCell(pos);
@@ -131,11 +141,17 @@ public class BuildingCreator : Singleton<BuildingCreator>
         }
     }
 
+    ///<summary>
+    /// Update the position of the mouse pointer.
+    ///</summary>
     private void OnMouseMove(InputAction.CallbackContext ctx)
     {
         mousePos = ctx.ReadValue<Vector2>();
     }
 
+    ///<summary>
+    /// Handle left mouse button clicks for building placement.
+    ///</summary>
     private void OnLeftClick(InputAction.CallbackContext ctx)
     {
         if (selectedObject != null && !isOverObject)
@@ -168,8 +184,12 @@ public class BuildingCreator : Singleton<BuildingCreator>
         }
     }
 
+    ///<summary>
+    /// Handle right mouse button clicks to cancel building placement.
+    ///</summary>
     private void OnRightClick(InputAction.CallbackContext ctx)
     {
+        // Deselect the currently selected object, clear the preview, and reset drawing state
         SelectedObject = null;
         previewMap.ClearAllTiles();
         holdActive = false;
@@ -181,13 +201,18 @@ public class BuildingCreator : Singleton<BuildingCreator>
         SelectedObject = obj;
     }
 
+    ///<summary>
+    /// Updates the preview of the building based on the current mouse position.
+    ///</summary>
     private void UpdatePreview()
     {
         //removing old tile if existing
         previewMap.SetTile(lastGridPosition, null);
 
+        // Set the tile at the current mouse position
         previewMap.SetTile(currentGridPosition, tileBase);
 
+        // Highlight the tile in red if it is forbidden
         if (IsForbidden(currentGridPosition))
         {
             previewMap.SetTileFlags(currentGridPosition, TileFlags.None);
@@ -195,6 +220,9 @@ public class BuildingCreator : Singleton<BuildingCreator>
         }
     }
 
+    ///<summary>
+    /// Handles drawing the building preview based on the selected building type.
+    ///</summary>
     private void HandleDrawing()
     {
         if (selectedObject != null)
@@ -217,6 +245,9 @@ public class BuildingCreator : Singleton<BuildingCreator>
         }
     }
 
+    ///<summary>
+    /// Handles the release of the drawing action for the selected building type.
+    ///</summary>
     private void HandleDrawRelease()
     {
         if (selectedObject != null)
@@ -235,6 +266,9 @@ public class BuildingCreator : Singleton<BuildingCreator>
         }
     }
 
+    ///<summary>
+    /// Renders the rectangle shape of the building preview.
+    ///</summary>
     private void RectangleRenderer()
     {
         previewMap.ClearAllTiles();
@@ -247,10 +281,14 @@ public class BuildingCreator : Singleton<BuildingCreator>
         DrawBounds(previewMap, true);
     }
 
+    ///<summary>
+    /// Renders the line shape of the building preview.
+    ///</summary>
     private void LineRenderer()
     {
         previewMap.ClearAllTiles();
 
+        // Determine if the line is horizontal or vertical
         float diffX = Mathf.Abs(currentGridPosition.x - holdStartPosition.x);
         float diffY = Mathf.Abs(currentGridPosition.y - holdStartPosition.y);
 
@@ -258,6 +296,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
 
         if (lineIsHorizontal)
         {
+            // Calculate bounds for horizontal line
             if (currentGridPosition.x < holdStartPosition.x)
             {
                 bounds.xMin = currentGridPosition.x;
@@ -276,6 +315,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
         }
         else
         {
+            // Calculate bounds for vertical line
             bounds.xMin = holdStartPosition.x;
             bounds.xMax = holdStartPosition.x;
             if (currentGridPosition.y < holdStartPosition.y)
@@ -296,11 +336,18 @@ public class BuildingCreator : Singleton<BuildingCreator>
         DrawBounds(previewMap, true);
     }
 
+    ///<summary>
+    /// Draws the building bounds on the tilemap.
+    ///</summary>
+    ///<param name="map">The target tilemap.</param>
+    ///<param name="previewMode">Indicates whether the drawing is in preview mode.</param>
     private void DrawBounds(Tilemap map, bool previewMode)
     {
+        // Initialize dictionaries to track required resources
         Dictionary<ContainedItemType, int> requiredResourcesPreview = new Dictionary<ContainedItemType, int>();
         Dictionary<ContainedItemType, int> requiredResourcesUsed = new Dictionary<ContainedItemType, int>();
-        //creating parent for each zone, if it is already created just use the one already existing
+
+        // Create parent object for each zone, if it doesn't already exist
         if (!previewMode)
         {
             categoryParent = InitializeParent();
@@ -344,6 +391,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
                 {
                     map.SetTile(new Vector3Int(posX, posY, 0), tileBase);
 
+                    // Highlight forbidden tiles or tiles with insufficient resources in red
                     if (IsForbidden(new Vector3Int(posX, posY, 0)) || NotEnoughResources(requiredResourcesPreview))
                     {
                         if (!IsSameTilemap(new Vector3Int(posX, posY, 0), selectedObject.Category.tilemap))
@@ -353,7 +401,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
                 else
                 {
 
-                    //cant place on forbidden tilemaps or on another zone
+                    // Place the building and update resource status
                     Vector3Int targetPosition = new Vector3Int(posX, posY, 0);
                     previewMap.SetTile(targetPosition, null);
                     if (!IsForbidden(targetPosition) && !selectedObject.Category.tilemap.HasTile(targetPosition) && !NotEnoughResources(requiredResourcesPreview))
@@ -374,6 +422,10 @@ public class BuildingCreator : Singleton<BuildingCreator>
         }
     }
 
+    ///<summary>
+    /// Initializes the parent object for the selected building category.
+    ///</summary>
+    ///<returns>The initialized parent object.</returns>
     private GameObject InitializeParent()
     {
         GameObject parent;
@@ -402,6 +454,9 @@ public class BuildingCreator : Singleton<BuildingCreator>
         return parent;
     }
 
+    ///<summary>
+    /// Draws a single building item.
+    ///</summary>
     private void DrawItem()
     {
         List<RequiredResources> resourcesToUpdate = new List<RequiredResources>();
@@ -431,7 +486,7 @@ public class BuildingCreator : Singleton<BuildingCreator>
                 resourceMenu.UpdateAmmount(resource.ammount, resource.itemType);
             }
 
-            //placing tile and prefab
+            // Place the tile and prefab
             tilemap.SetTile(currentGridPosition, tileBase);
             GameObject item = Instantiate(selectedObject.Prefab, new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0), Quaternion.identity);
             item.transform.parent = itemParent.transform;
@@ -441,6 +496,11 @@ public class BuildingCreator : Singleton<BuildingCreator>
 
     }
 
+    ///<summary>
+    /// Checks if the current position is on a forbidden tile.
+    ///</summary>
+    ///<param name="pos">The position to check.</param>
+    ///<returns>True if the position is on a forbidden tile, otherwise false.</returns>
     private bool IsForbidden(Vector3Int pos)
     {
         return forbidPlacingMaps.Any(map =>
@@ -449,7 +509,12 @@ public class BuildingCreator : Singleton<BuildingCreator>
         });
     }
 
-    //maybe create override method to IsForbidden
+    ///<summary>
+    /// Checks if the current position is on the same tilemap as the specified tilemap.
+    ///</summary>
+    ///<param name="pos">The position to check.</param>
+    ///<param name="tilemapToCheck">The tilemap to compare against.</param>
+    ///<returns>True if the position is on the same tilemap, otherwise false.</returns>
     private bool IsSameTilemap(Vector3Int pos, Tilemap tilemapToCheck)
     {
         foreach (Tilemap map in forbidPlacingMaps)
@@ -463,7 +528,9 @@ public class BuildingCreator : Singleton<BuildingCreator>
         return false;
     }
 
-    //removing selected item and position
+    ///<summary>
+    /// Removes the selected item and resets the drawing state.
+    ///</summary>
     private void RemoveSelectedItem()
     {
         previewMap.SetTile(currentGridPosition, null);
@@ -472,6 +539,11 @@ public class BuildingCreator : Singleton<BuildingCreator>
         SelectionScript.startPosition = Input.mousePosition;
     }
 
+    ///<summary>
+    /// Checks if there are insufficient resources based on the specified resource dictionary.
+    ///</summary>
+    ///<param name="resources">The dictionary containing required resources.</param>
+    ///<returns>True if there are insufficient resources, otherwise false.</returns>
     private bool NotEnoughResources(Dictionary<ContainedItemType, int> resources)
     {
         foreach (var resource in resourceMenu.resourceList)

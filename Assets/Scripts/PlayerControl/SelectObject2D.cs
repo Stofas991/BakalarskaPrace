@@ -1,3 +1,9 @@
+/**
+* File: SelectObject2D.cs
+* Author: Kryštof Glos
+* Date Last Modified: 23.4.2024
+* Description: This script allows selecting 2D objects in the scene using mouse input.
+*/
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -88,9 +94,10 @@ public class SelectObject2D : MonoBehaviour
     }
 
     /// <summary>
-    /// finds all units in selection box and selects them
+    /// Finds all units in selection box and selects them.
     /// </summary>
-    /// <returns>list of selected units</returns>
+    /// <param name="multipleUnits">Determines if multiple units can be selected.</param>
+    /// <returns>List of selected units.</returns>
     HashSet<UnitSelection> SelectObjects(bool multipleUnits)
     {
         HashSet<UnitSelection> selectedUnits = new HashSet<UnitSelection>();
