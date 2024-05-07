@@ -36,8 +36,7 @@ public class MapGenerator : Singleton<MapGenerator>
     private GameObject wfcParent;
     [SerializeField] WFCTile wfcFiller;
     [SerializeField] NavMeshSurface2d nmSurface;
-    private int currentIteration;
-    private int maxIteration;
+    private WFCGenerator wfcGenerator;
 
     private bool end;
 
@@ -47,13 +46,33 @@ public class MapGenerator : Singleton<MapGenerator>
     {
         if (SelectedValues.isSet)
         {
+            wfcGenerator = GetComponent<WFCGenerator>();
+
             seed = SelectedValues.seed;
             mapWidth = SelectedValues.mapSize;
             mapHeight = SelectedValues.mapSize;
-            if (mapWidth == 200)
-                treeLimit = 1000;
+            wfcGenerator.mountainLimit = 1200;
+            wfcGenerator.mountainLimited = false;
+            wfcGenerator.waterLimit = 1000;
+            wfcGenerator.waterLimited = false;
 
-            maxIteration = mapWidth * mapHeight;
+            if (mapWidth == 200)
+            {
+                treeLimit = 1000;
+                wfcGenerator.mountainLimit = wfcGenerator.mountainLimit * 2;
+                wfcGenerator.waterLimit = wfcGenerator.waterLimit * 2;
+            }
+            else if (mapHeight == 50) 
+            {
+                wfcGenerator.mountainLimit = wfcGenerator.mountainLimit / 6;
+                wfcGenerator.waterLimit = wfcGenerator.waterLimit / 6;
+            }
+
+            if (SelectedValues.isPerlin)
+                generationType = GenerationType.Perlin;
+            else
+                generationType = GenerationType.WFC;
+
             GenerateMap();
         }
         CameraController.GetInstance().setCameraBorders();
@@ -66,7 +85,6 @@ public class MapGenerator : Singleton<MapGenerator>
         float[,] treeNoiseMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, treeNoisScale, octaves, persistance, lacunarity, new Vector2(2.87f, 1.8f));
         float[,] vegetationMap = noise.GenerateNoiseMap(mapWidth, mapHeight, seed, 2, octaves, persistance, lacunarity, new Vector2(2.87f, 1.8f));
 
-        WFCGenerator wfcGenerator = GetComponent<WFCGenerator>();
         Color[] colourMap = new Color[mapWidth * mapHeight];
 
         //removing old structures on map
@@ -113,6 +131,30 @@ public class MapGenerator : Singleton<MapGenerator>
 
             while (!wfcGenerator.finished)
             {
+                if (wfcGenerator.mountainLimit == 0 && !wfcGenerator.mountainLimited)
+                {
+                    wfcGenerator.mountainLimited = true;
+                    foreach (Transform child in wfcParent.transform)
+                    {
+                        WFCCell currentCell = child.GetComponent<WFCCell>();
+                        if (!currentCell.collapsed)
+                        {
+                            currentCell.RemoveMountainPossibilities();
+                        }
+                    }
+                }
+                if (wfcGenerator.waterLimit == 0 && !wfcGenerator.waterLimited)
+                {
+                    wfcGenerator.waterLimited = true;
+                    foreach (Transform child in wfcParent.transform)
+                    {
+                        WFCCell currentCell = child.GetComponent<WFCCell>();
+                        if (!currentCell.collapsed)
+                        {
+                            currentCell.RemoveWaterPossibilities();
+                        }
+                    }
+                }
                 //getting list of lowest entropies in grid
                 var wFCCells = wfcGenerator.GetLowestEntropy(wfcParent.transform);
 
@@ -134,10 +176,24 @@ public class MapGenerator : Singleton<MapGenerator>
                 if (currentCell.entropy == 0 && !currentCell.collapsed)
                 {
                     Instantiate(wfcFiller, child.transform);
+                    wfcGenerator.grassTilemap.SetTile(new Vector3Int((int)child.transform.position.x, (int)child.transform.position.y, 0), wfcGenerator.grassBase);
                     currentCell.entropy = 0;
                     currentCell.collapsed = true;
                 }
             }
+
+            for (int y = 0; y < mapHeight; y++)
+            {
+                for (int x = 0; x < mapWidth; x++)
+                {
+                    float currentHeight = noiseMap[x, y];
+                    float treeCurrentHeight = treeNoiseMap[x, y];
+                    float vegetationCurrentHeight = vegetationMap[x, y];
+
+                    PlaceVegetation(currentHeight, x, y, treeCurrentHeight, vegetationCurrentHeight);
+                }
+            }
+            DestroyImmediate(wfcParent);
         }
     }
 
@@ -208,26 +264,47 @@ public class MapGenerator : Singleton<MapGenerator>
         }
 
         //adding trees on next layer and objects representing them
-        if (!end && currentHeight > regions[1].height && currentHeight <= regions[2].height && treeCurrentHeight > regions[4].height && vegetationCurrentHeight <= regions[5].height)
-        {
+        PlaceVegetation(currentHeight, x, y, vegetationCurrentHeight, treeCurrentHeight);
+    }
 
-            regions[4].tileMap.SetTile(new Vector3Int(x, y, 0), regions[4].tile);
-            treeCount++;
-            if (treeCount > treeLimit)
+    public void PlaceVegetation(float currentHeight, int x, int y, float vegetationCurrentHeight, float treeCurrentHeight)
+    {
+        //adding trees on next layer and objects representing them
+        if (!end && currentHeight > regions[0].height && currentHeight <= regions[1].height && treeCurrentHeight > regions[3].height && vegetationCurrentHeight <= regions[4].height)
+        {
+            if (generationType == GenerationType.WFC)
             {
-                end = true;
+                var wfcGenerator = WFCGenerator.GetInstance();
+                if (!wfcGenerator.mountainTilemap.HasTile(new Vector3Int(x, y, 0)) && !wfcGenerator.waterTilemap.HasTile(new Vector3Int(x, y, 0)))
+                {
+                    regions[3].tileMap.SetTile(new Vector3Int(x, y, 0), regions[3].tile);
+                    treeCount++;
+                    if (treeCount > treeLimit)
+                    {
+                        end = true;
+                    }
+                }
+            }
+            else
+            {
+                regions[3].tileMap.SetTile(new Vector3Int(x, y, 0), regions[3].tile);
+                treeCount++;
+                if (treeCount > treeLimit)
+                {
+                    end = true;
+                }
             }
         }
-        else if (currentHeight > regions[1].height && currentHeight <= regions[2].height && vegetationCurrentHeight >= regions[5].height)
+        else if (currentHeight > regions[0].height && currentHeight <= regions[1].height && vegetationCurrentHeight >= regions[4].height)
         {
-            regions[6].tileMap.SetTile(new Vector3Int(x, y, 0), regions[6].tile);
+            regions[5].tileMap.SetTile(new Vector3Int(x, y, 0), regions[5].tile);
         }
 
         //placing nothing everywhere where the trees are not present
         //used for erasing last existent tree tiles
         else
         {
-            regions[5].tileMap.SetTile(new Vector3Int(x, y, 0), regions[5].tile);
+            regions[4].tileMap.SetTile(new Vector3Int(x, y, 0), regions[4].tile);
         }
     }
 

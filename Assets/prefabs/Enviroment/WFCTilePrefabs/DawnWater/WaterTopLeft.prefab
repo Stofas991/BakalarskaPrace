@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2827751447383184331}
   - component: {fileID: 3183472033059186753}
   - component: {fileID: 8070532179161317336}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: WaterTopLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -37,7 +37,7 @@ public class ResourceGatherScript : Interactable
 
         playerGather = interactingPlayer.GetComponent<Gathering>();
 
-        if (playerGather != null)
+        if (playerGather != null && transform != null)
         {
             playerGather.GatherResource(this);
         }

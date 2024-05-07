@@ -42,7 +42,13 @@ public class ItemInteract : Interactable
 
     public void DestroyInstanceAndCarry()
     {
-        GameObject player = playerList[0].gameObject;
+        ItemSpecifics itemSpecifics = GetComponent<ItemSpecifics>();
+        GameObject player = GetFirstPossibleUnit(itemSpecifics.itemType);
+        if (player == null)
+        {
+            Debug.Log("No player has open slot.");
+            return;
+        }
         UnitControlScript unitControlScript = player.GetComponent<UnitControlScript>();
 
         //destroy menu
@@ -54,10 +60,25 @@ public class ItemInteract : Interactable
         }
 
         //copy values for effectivity and spawn canvas
-        ItemSpecifics itemSpecifics = GetComponent<ItemSpecifics>();
-        unitControlScript.PickUp(itemCanvas, itemSpecifics.count, itemSpecifics.itemType);
+        var pickedUp = unitControlScript.PickUp(itemCanvas, itemSpecifics.count, itemSpecifics.itemType);
 
-        //Destroy this object
-        Destroy(gameObject);
+        //Destroy this object only if item was picked up
+        if (pickedUp)
+            Destroy(gameObject);
+    }
+
+    public GameObject GetFirstPossibleUnit(ContainedItemType itemType)
+    {
+        GameObject returnedUnit = null;
+        foreach (var unit in playerList)
+        {
+            var unitController = unit.GetComponent<UnitControlScript>();
+            if (unitController.UCItemType == ContainedItemType.None || unitController.UCItemType == itemType)
+            {
+                returnedUnit = unit.gameObject;
+                return returnedUnit;
+            }
+        }
+        return returnedUnit;
     }
 }

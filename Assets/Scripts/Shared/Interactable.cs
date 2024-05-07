@@ -23,16 +23,23 @@ public class Interactable : MonoBehaviour
         // Check if the object is focused and hasn't been interacted with yet (for non-enemy objects)
         if (isFocus && !hasInteracted && !isEnemy)
         {
-            if (transform != null)
+            if (gameObject != null)
             {
                 foreach (Transform player in playerList.ToList())
                 {
-                    // Calculate distance between player and interactable object
-                    float distance = Vector3.Distance(player.position, transform.position);
-                    // If player is within interaction radius, trigger interaction
-                    if (distance <= radius)
+                    if (player != null)
                     {
-                        Interact(player);
+                        // Calculate distance between player and interactable object
+                        float distance;
+                        if (this != null)
+                        {
+                            distance = Vector3.Distance(player.position, transform.position);
+                            // If player is within interaction radius, trigger interaction
+                            if (distance <= radius)
+                            {
+                                Interact(player);
+                            }
+                        }
                     }
                 }
             }

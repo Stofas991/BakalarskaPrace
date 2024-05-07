@@ -1,11 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
-public class WFCGenerator : MonoBehaviour
+public class WFCGenerator : Singleton<WFCGenerator>
 {
     [SerializeField] GameObject WFCTileObject;
     public bool finished = false;
     private HashSet<WFCCell> constrainedList = new HashSet<WFCCell>();
+    public int mountainLimit = 800;
+    public int waterLimit = 1000;
+    public bool waterLimited = false;
+    public bool mountainLimited = false;
+    public Tilemap grassTilemap;
+    public Tilemap waterTilemap;
+    public Tilemap mountainTilemap;
+    public TileBase grassBase;
+    public TileBase waterBase;
+    public TileBase mountainBase;
 
     public WFCCell PlaceTiles(int posX, int posY, Transform parent)
     {

@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] TextMeshProUGUI seedText;
     [SerializeField] GameObject sizeToggleParent;
     [SerializeField] GameObject difficultyToggleParent;
+    [SerializeField] GameObject generationTypeParent;
 
     [SerializeField] List<GameObject> easyPlayerUnits = new List<GameObject>();
     [SerializeField] List<GameObject> normalPlayerUnits = new List<GameObject>();
@@ -59,6 +60,18 @@ public class MainMenu : MonoBehaviour
                 SelectedValues.playerPrefabList = hardPlayerUnits;
                 break;
         }
+
+        activeToggle = getActiveToggle(generationTypeParent);
+        switch(activeToggle.tag)
+        {
+            case "WFC":
+                SelectedValues.isPerlin = false;
+                break;
+            case "Perlin":
+                SelectedValues.isPerlin = true;
+                break;
+
+        }
         SelectedValues.isSet = true;
     }
 
@@ -78,4 +91,5 @@ public class SelectedValues
     static public int mapSize;
     static public float difficulty;
     static public List<GameObject> playerPrefabList = new List<GameObject>();
+    static public bool isPerlin = true;
 }

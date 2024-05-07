@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ProjectileBehaviour : MonoBehaviour
@@ -6,14 +7,21 @@ public class ProjectileBehaviour : MonoBehaviour
     private Vector3 shootDirection;
     private int damage;
     private string casterTag;
+    private Vector3 startPosition;
+    private int distance = 20;
     // Update is called once per frame
     void Update()
     {
         transform.position += shootDirection * Time.deltaTime * speed;
+        if (Vector3.Distance(transform.position, startPosition) >= distance)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void Setup(Vector3 shootDirection, int damage, string targetTag)
     {
+        startPosition = transform.position;
         this.shootDirection = shootDirection;
         this.damage = damage;
         this.casterTag = targetTag;
@@ -30,6 +38,10 @@ public class ProjectileBehaviour : MonoBehaviour
             if (attackable != null)
             {
                 attackable.TakeDamage(damage);
+                Destroy(gameObject);
+            }
+            else if (collider.GetComponent<StockpileScript>() == null && collider.gameObject.layer != LayerMask.NameToLayer("Items"))
+            {
                 Destroy(gameObject);
             }
         }

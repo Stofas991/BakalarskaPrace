@@ -27,6 +27,30 @@ public class WFCCell : MonoBehaviour
         return possibilities;
     }
 
+    public void RemoveMountainPossibilities()
+    {
+        for (int i = possibilities.Count-1; i >= 0; i--)
+        {
+            if (possibilities[i].tileType == TileType.Mountain)
+            {
+                possibilities.RemoveAt(i);
+                entropy = possibilities.Count;
+            }
+        }
+    }
+
+    public void RemoveWaterPossibilities()
+    {
+        for (int i = possibilities.Count - 1; i >= 0; i--)
+        {
+            if (possibilities[i].tileType == TileType.Water)
+            {
+                possibilities.RemoveAt(i);
+                entropy = possibilities.Count;
+            }
+        }
+    }
+
     public void SetPossibilities(WFCTile possibilitiesGiven)
     {
         possibilities.Clear();
@@ -40,17 +64,30 @@ public class WFCCell : MonoBehaviour
 
     public WFCTile Collapse()
     {
-        // Vyber náhodný prvek z možností podle váhy
+        // Choose random tile based on weight
         WFCTile collapsedTile = GetRandomWeightedTile();
+        var wfcGenerator = WFCGenerator.GetInstance();
+        if (collapsedTile.tileType == TileType.Mountain)
+        {
+            wfcGenerator.mountainLimit--;
+            wfcGenerator.mountainTilemap.SetTile(new Vector3Int((int)transform.position.x, (int)transform.position.y, 0), wfcGenerator.mountainBase);
+        }
+        else if (collapsedTile.tileType == TileType.Water)
+        {
+            wfcGenerator.waterLimit--;
+            wfcGenerator.waterTilemap.SetTile(new Vector3Int((int)transform.position.x, (int)transform.position.y, 0), wfcGenerator.waterBase);
+        }
+        else
+        {
+            wfcGenerator.grassTilemap.SetTile(new Vector3Int((int)transform.position.x, (int)transform.position.y, 0), wfcGenerator.grassBase);
+        }
 
-        // Vyèisti seznam možností a pøidej pouze vybraný prvek
+        // clear possibility list and set to selected value
         possibilities.Clear();
         possibilities.Add(collapsedTile);
 
-        // Instantializuj vybraný prvek
         Instantiate(collapsedTile, transform);
 
-        // Nastav entropii na nulu a oznaè buòku jako collapsed
         entropy = 0;
         collapsed = true;
 
@@ -61,17 +98,13 @@ public class WFCCell : MonoBehaviour
     {
         System.Random random = new System.Random();
 
-        // Seøaï možnosti podle váhy (vzestupnì)
         possibilities = possibilities.OrderBy(x => x.weight).ToList();
 
-        // Seøaï možnosti podle typu dlaždice pro další vyvážený výbìr
         Dictionary<TileType, List<WFCTile>> possibilityDictionary = GetPossibilityDictionary();
         possibilityDictionary = possibilityDictionary.OrderBy(x => WeightForType(x.Key)).ToDictionary(x => x.Key, x => x.Value);
 
-        // Vytvoø seznam dlaždic podle váhy pro další výbìr
         List<WFCTile> selectedTiles = GetRandomTileList(possibilityDictionary);
 
-        // Vyber náhodný prvek z vyváženého seznamu
         return GetRandomItem(selectedTiles, x => x.weight);
     }
 
@@ -126,31 +159,6 @@ public class WFCCell : MonoBehaviour
         var randomValue = random.Next(0, selectedTileList.Count - 1);
 
         return GetRandomItem(selectedTileList, x => x.weight);
-
-        //solution 2
-        /*
-        var maxWeight = possibilities.Max(x => x.weight);
-        int randomValue = random.Next(0, maxWeight);
-        possibilities = possibilities.OrderBy(x => x.weight).ToList();
-
-        List<WFCTile> sameWeightTiles = new List<WFCTile>();
-        foreach (var possibility in possibilities)
-        {
-            if (possibility.weight >= randomValue)
-            {
-                if (!sameWeightTiles.Any(x => x.weight < possibility.weight))
-                {
-                    sameWeightTiles.Add(possibility);
-                }
-            }
-        }
-        randomValue = random.Next(0, sameWeightTiles.Count - 1);
-
-        return sameWeightTiles[randomValue];
-        */
-
-        //solution 3
-        //return GetRandomItem(possibilities, x => x.weight);
     }
 
     private Dictionary<TileType, List<WFCTile>> GetPossibilityDictionary()
@@ -201,13 +209,11 @@ public class WFCCell : MonoBehaviour
     private int WeightForType(TileType tileType)
     {
         if (tileType == TileType.Grass)
-            return GameConstants.grassWeight;
+            return 32;
         else if (tileType == TileType.Water)
-            return GameConstants.waterWeight;
-        else if (tileType == TileType.Beach)
-            return GameConstants.beachWeight;
+            return 5;
         else if (tileType == TileType.Mountain)
-            return GameConstants.treesWeight;
+            return 1;
         else
             return 0;
     }

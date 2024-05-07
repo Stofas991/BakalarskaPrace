@@ -3,7 +3,7 @@
 \chapter*{Úvod}
 Procedurálně vytvářený obsah v herním průmyslu je velmi důležitou součástí her už po několik let. Mnoho her postavených na tomto principu se již prosadilo na trhu, a stále více se uplatňuje. Vytváření obsahu na základě generátorů pseudonáhodných čísel se používá například na tvoření herních map, věcí v místnosti, skládání různých dopředu vytvořených místností tak, aby vznikla jedinečná mapa. Takto implementované hry mají výhodu v opakované hratelnosti a nepředvídatelnosti.
 
-Cílem této bakalářské práce je návrh a vytvoření prototypu 2D hry v herním enginu Unity, založené na procedurálním generování herního obsahu. Samotný algoritmus pro generování pracuje s Perlinovým šumem a výškovými mapami, ty slouží k vytvoření elevace různých bodů na mapě.
+Cílem této bakalářské práce je návrh a vytvoření prototypu 2D hry v herním enginu Unity, založené na procedurálním generování herního obsahu. Samotný algoritmus pro generování pracuje s Perlinovým šumem a výškovými mapami, ty slouží k vytvoření elevace různých bodů na mapě. Jako alternativu k Perlinově šumu byla přidána i metoda Wave Function Collapse, která pracuje s entropií a kolapsem buněk.
 
 Inspirací na téma hry je počítačová hra RimWorld, která se řadí do her typu Colony-sim. Jedná se o žánr, ve kterém hráč ovládá skupinu lidí (kolonii), kterou se snaží pomocí dobrého vedení dovést k nějakému danému cíli. V navržené hře je úkolem hráče vydržet co nejdéle nájezdy nepřátel a přečkat další náhodné události.
 
@@ -11,7 +11,7 @@ Vytváření mapy je stěžejní částí celé hry. Určuje zdroje pro hráče,
 
 Hra je implementována v herním enginu Unity, který je v dnešní době jedním z nejvíce používaných vývojových nástrojů pro vývoj her. Mezi další oblíbená vývojová prostředí se řadí například, GameMaker, Unreal Engine, Godot. O vývoji v jednotlivých enginech pojednává kapitola \ref{engines}.
 
-Po dokončení implementační části bylo zahájeno experimentování s herními systémy a následovné uživatelské testování. Průběh a výsledky této části práce jsou dále popsány v kapitole \ref{experiments}.
+Po dokončení implementační části bylo zahájeno experimentování s herními systémy a metody generování. Průběh a výsledky této části práce jsou dále popsány v kapitole \ref{experiments}.
 
 \newpage
 
@@ -212,10 +212,11 @@ L-systémy (Lindenmayerovy systémy) jsou formálním nástrojem \cite{prusinkie
 \end{equation}
 kde $M$ je abeceda L-systému, $\omega$ je axiom a $R$ je množina pravidel přepisování. Abeceda obsahuje parametrizované moduly $M = {A(P),B(P),\ldots}$, kde $P=p_1,p_2,\ldots,p_n$ jsou modulové parametry, jako jsou rotace, zvětšení, zmenšení.
 Axiom $\omega \in M^+$ je neprázdná sekvence modulů a $M^+$ jsou všechny možné prázdné řetězce z $M$. Pravidla pro přepisování mají následující formu:
-
-\[id_1:A(P):cond\rightarrow x,x \in M^*,\]
 \begin{equation}
 id_1:A(P):cond\rightarrow x,x \in M^*,
+\end{equation}
+\begin{equation}
+id_2:B(P):cond\rightarrow x,x \in M^*,
 \end{equation}
 \[\ldots\]
 kde $M^*$ jsou všechny možné řetězce z $M$ včetně prázdného $\epsilon$. Pravidlo $id_i$ přepisuje znak na levé straně z abecedy $A(P)$ posloupností písmen z pravé strany, pokud je podmínka $cond$ pravdivá. Modul, který se nenachází na levé straně pravidla, se nazývá \textit{terminální symbol}, neboť se nemůže dál měnit, všechny ostatní moduly se nazývají \textit{neterminální symboly}.~\cite{prusinkiewicz2012algorithmic}
@@ -260,7 +261,7 @@ Ohodnocením hodnot takového šumu jsme schopni vytvářet jednoduché náhodn�
 
 \[color = white * Noise(point)\]
 
-S hodnotou vrácenou funkcí Noise() \cite{Perlin2002ImprovingN} lze dělat mnoho různých věcí, například pomocí funkční kompozice je možné mapovat různé rozsahy hodnot do různých barev. V příkladu níže je textura škálovaná pomocí násobení domény funkce Noise() konstantou k. Jednou z výhod tohoto přístupu je jednoduchost, se kterou lze takovéto úpravy provádět. Výsledná textura je zobrazena na obrázku \ref{ColoredDoughnut}.
+S hodnotou vrácenou funkcí Noise() \cite{Perlin2002} lze dělat mnoho různých věcí, například pomocí funkční kompozice je možné mapovat různé rozsahy hodnot do různých barev. V příkladu níže je textura škálovaná pomocí násobení domény funkce Noise() konstantou k. Jednou z výhod tohoto přístupu je jednoduchost, se kterou lze takovéto úpravy provádět. Výsledná textura je zobrazena na obrázku \ref{ColoredDoughnut}.
 
 \[color = Colorful(Noise(k * point))\]
 
@@ -288,7 +289,7 @@ S hodnotou vrácenou funkcí Noise() \cite{Perlin2002ImprovingN} lze dělat mnoh
 
 \subsubsection{Perlinův šum}
 \label{perlinNoise}
-Roku 1985 Perlin představil \textit{Perlinův šum}, jeho slavnou procedurální funkci pro generování šumu.~\cite{PerlinKen, Perlin2002ImprovingN} Perlinův šum určuje šum v bodě prostoru výpočtem pseudonáhodného gradientu u každého z osmi nejbližších vrcholů na celočíselné krychlové mřížce a následným provedením spline interpolace. Gradienty jsou získány hashováním mřížkových bodů a následným výběrem gradientu na základě tohoto hashování. Mřížkové body jsou hashovány pomocí postupné aplikace pseudonáhodné permutace na souřadnice, což dekoreluje indexy do pole pseudonáhodných jednotkových gradientových vektorů. Sada gradientů obsahuje 12 vektorů, které jsou definovány směrem od středu krychle k jejím hranám. Interpolantem je kvintický polynom, který zajišťuje spojitou derivaci šumu, neboli hladké přechody mezi jednotlivými body.
+Roku 1985 Perlin představil \textit{Perlinův šum}, jeho slavnou procedurální funkci pro generování šumu.~\cite{PerlinKen, Perlin2002} Perlinův šum určuje šum v bodě prostoru výpočtem pseudonáhodného gradientu u každého z osmi nejbližších vrcholů na celočíselné krychlové mřížce a následným provedením spline interpolace. Gradienty jsou získány hashováním mřížkových bodů a následným výběrem gradientu na základě tohoto hashování. Mřížkové body jsou hashovány pomocí postupné aplikace pseudonáhodné permutace na souřadnice, což dekoreluje indexy do pole pseudonáhodných jednotkových gradientových vektorů. Sada gradientů obsahuje 12 vektorů, které jsou definovány směrem od středu krychle k jejím hranám. Interpolantem je kvintický polynom, který zajišťuje spojitou derivaci šumu, neboli hladké přechody mezi jednotlivými body.
 
 Již od svého uvedení před skoro čtyřmi desetiletími se Perlinův šum široce využívá v grafice, například při generování textur, které je vidět na obrázku \ref{PerlinVase}. Perlinův šum je rychlý, jednoduchý a nadále zůstává pilířem průmyslu.
 
@@ -344,7 +345,7 @@ Hlavní myšlenkou bylo vygenerovat šumové textury tak, že frekvenční obor 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.8]{obrazky-figures/AnisotropicNoise.png}
+	\includegraphics[scale=1]{obrazky-figures/AnisotropicNoise.pdf}
 	\caption{Ilustrace spektrálního generování šumu. Dekompozice frekvenční domény má tři orientace. Jsou vidět tři orientované pod-pásma se stejnou velikostí a odpovídajícími obrazy prostorových domén, které se následně ukládají jako textury. Obrázek převzat z \cite{Goldberg08}.}
 	\label{fig:AnisotropicNoise}
 \end{figure}
@@ -380,7 +381,7 @@ Abychom vyhodnotili šum v konkrétním bodě, je nutné použít pouze jádra, 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1]{obrazky-figures/SparseConvolutionNoise.png}
-	\caption{\texttt{Řídký konvoluční šum}. Vlevo dole: Vzorek obrázku vlasů. Vpravo: přibližná textura vlasů vytvořená pomoc9 2D řídké konvoluce. Obrázek převzat z \cite{Lagae10}.}
+	\caption{Řídký konvoluční šum. Vlevo dole: Vzorek obrázku vlasů. Vpravo: přibližná textura vlasů vytvořená pomoc9 2D řídké konvoluce. Obrázek převzat z \cite{Lagae10}.}
 	\label{fig:SparseConvolutionNoise}
 \end{figure}
 
@@ -407,7 +408,7 @@ Van Wijk \cite{Wijk91} diskutuje vztah mezi bodem a texturou v detailech (viz ob
 \label{heightMaps}
 Výškové mapy představují dvoudimenzionální mřížky obsahující výškové hodnoty, jež jsou častým prvkem v modelování terénu. Tyto mapy se běžně využívají jako klíčový prvek pro reprezentaci základu terénu v herním průmyslu. Pro tvorbu výškových map existuje mnoho algoritmů. Na obrázku \ref{HeightMap} je zobrazena ilustrace, která ukazuje hodnoty jednotlivých bodů na mapě, jež následně slouží k určení jejich elevace. \cite{heightMap08}
 
-Jedny z nejstarších algoritmů jsou metody založené na dělení. Segmenty v rámci vygenerované hrubé výškové mapy jsou iterativně rozdělovány, kde každá iterace navíc používá kontrolovanou náhodnost k přidávání detailů. Miller \cite{MillerRendering} popisuje některé varianty všeobecně známé metody středového posunu, ve které se výška nového bodu nastavuje na průměr hodnot jeho rohů v trojúhelníkovém nebo diamantovém tvaru, k němuž je přidán náhodný offset. Každou iterací se rozsah náhodných hodnot offsetu snižuje podle parametru, který kontroluje hrubost výsledné výškové mapy. 
+Jedny z nejstarších algoritmů jsou metody založené na dělení. Segmenty v rámci vygenerované hrubé výškové mapy jsou iterativně rozdělovány, kde každá iterace navíc používá kontrolovanou náhodnost k přidávání detailů. Miller \cite{Miller19860831} popisuje některé varianty všeobecně známé metody středového posunu, ve které se výška nového bodu nastavuje na průměr hodnot jeho rohů v trojúhelníkovém nebo diamantovém tvaru, k němuž je přidán náhodný offset. Každou iterací se rozsah náhodných hodnot offsetu snižuje podle parametru, který kontroluje hrubost výsledné výškové mapy. 
 
 Generování výškových map se v dnešní době provádí převážně pomocí fraktálních generátorů šumu, jako je Perlinův šum (detailně popsán v sekci \ref{perlinNoise}), který provádí generování šumu vzorkováním a interpolací bodů na mřížce náhodných vektorů. Výškové mapy se mohou dále transformovat na základě běžných filtrací obrazu, například vyhlazování (smoothing), nebo simulací fyzikálních jevů jako je eroze. \cite{inproceedings}
 
@@ -592,13 +593,13 @@ Tato kapitola se zaměřuje na detailní popis implementace skriptů a algoritm�
 
 Tato sekce se detailně zaměřuje na konkrétní způsob jakým byl Perlinovův šum v prostředí Unity použit. Postup je vysvětlen krok za krokem a představuje klíčové prvky implementace, jako je využití Perlinova šumu, který je detailně popsán v sekci \ref{perlinNoise}, a je implementován v knihovně \texttt{Mathf}. 
 
-Celý proces začíná skriptem \texttt{MapGenerator}, který nejprve vymaže původní hodnoty tilemap a následně se tilemapy zaplňují odpovídajícími tily. Perlinův šum je generován pomocí knihovny \texttt{Mathf} v Unity. Implementace využívá metod \texttt{Mathf.PerlinNoise} pro generování šumu s různými frekvencemi a amplitudami, čímž se vytváří plynulé, náhodné terény.
+Celý proces začíná skriptem \texttt{MapGenerator}, který nejprve vymaže původní hodnoty tilemap a následně se tilemapy zaplňují odpovídajícími tily. Perlinův šum je generován pomocí knihovny \texttt{Mathf} v Unity. Implementace využívá metod \texttt{Mathf.PerlinNoise} pro generování šumu s různými frekvencemi a amplitudami, čímž se vytváří plynulé, náhodné terény (na obrázku \ref{NoiseNative} je vidět krajina vygenerovaná Perlinovým šumem).
 
 Ve skriptu \texttt{MapGenerator} je uživateli umožněno vybrat mezi generováním pomocí Perlinova šumu nebo algoritmu WFC. Tato volba závisí na potřebách a preferencích uživatele. Parametry Perlinova šumu umožňují uživateli vytvářet různorodé mapy podle jeho potřeb, zde je jejich přehled:
 \begin{description}
-	\item[Noise scale] Definuje velikost přiblížení Perlinova šumu, čím bližší je, tím větší jsou jednotlivé regiony (viz obrázek \ref{NoiseScale}).
-	\item[Octaves] Přidává počet oktáv, ovlivňuje složitost výsledné šumové mapy, je nutno nalézt vyváženou hodnotu proměnné, která poskytne dostatečný detail, aniž by překročila úroveň přeplnění detaily (viz obrázek \ref{NoiseScale}).
- 	\item[Seed] Jedná se o počáteční hodnotu, která určuje, jakým způsobem jsou generovány pseudonáhodné hodnoty v rámci algoritmu. Když je použit konkrétní seed, algoritmus vždy vygeneruje stejnou sérii pseudonáhodných čísel \ref{NoiseScale}.
+	\item[Noise scale] Definuje velikost přiblížení Perlinova šumu, čím bližší je, tím větší jsou jednotlivé regiony (viz obrázek se sníženým přiblížením \ref{NoiseScale10}).
+	\item[Octaves] Přidává počet oktáv, ovlivňuje složitost výsledné šumové mapy, je nutno nalézt vyváženou hodnotu proměnné, která poskytne dostatečný detail, aniž by překročila úroveň přeplnění detaily (viz obrázek \ref{NoiseOctaves}).
+ 	\item[Seed] Jedná se o počáteční hodnotu, která určuje, jakým způsobem jsou generovány pseudonáhodné hodnoty v rámci algoritmu. Když je použit konkrétní seed, algoritmus vždy vygeneruje stejnou sérii pseudonáhodných čísel \ref{NoiseSeed}.
  	\item[Offset] Proměnná určuje posun šumových hodnot po osách X, Y.
 \end{description}
 
@@ -608,23 +609,27 @@ Ve skriptu \texttt{MapGenerator} je uživateli umožněno vybrat mezi generován
 		\centering
 		\includegraphics[scale=0.45]{obrazky-figures/NoiseScale70.png}
 		\caption{Nativní nastavení všech hodnot, seed 0.}
+		\label{NoiseNative}
 	\end{subfigure}
 	\begin{subfigure}{0.475\textwidth}
 		\centering
 		\includegraphics[scale=0.45]{obrazky-figures/NoiseScale10.png}
 		\caption{Proměnná noise scale nastavená na 10.}
+		\label{NoiseScale10}
 	\end{subfigure}
 	\begin{subfigure}{0.475\textwidth}
 		\centering
 		\includegraphics[scale=0.52]{obrazky-figures/NoiseOctaves2.png}
 		\caption{Proměnná octaves nastavená na 2.}
+		\label{NoiseOctaves}
 	\end{subfigure}
 	\begin{subfigure}{0.475\textwidth}
 		\centering
 		\includegraphics[scale=0.435]{obrazky-figures/NoiseSeed1.png}
 		\caption{Proměnná seed nastavená na 1.}
+		\label{NoiseSeed}
 	\end{subfigure}
-	\caption{Na obrázcích jsou vidět mapy vygenerované po upravení různých proměnných. Na obrázku (a) jsou proměnné nastaveny na hodnoty, které se používají ve hře. Na obrázku (b) je upravena proměnná noise scale (základní hodnota je 70). Na obrázku (c) byla upravena hodnota octaves (původní hodnota 1) a na obrázku (d) je změněn seed.}
+	\caption{Na obrázcích jsou vidět mapy vygenerované Perlinovým šumem po upravení různých proměnných. Na obrázku (a) jsou proměnné nastaveny na hodnoty, které se používají ve hře. Na obrázku (b) je upravena proměnná noise scale (základní hodnota je 70). Na obrázku (c) byla upravena hodnota octaves (původní hodnota 1) a na obrázku (d) je změněn seed.}
 	\label{NoiseScale}
 \end{figure}
 
@@ -866,29 +871,49 @@ Definuje základní strukturu a metody, které musí být implementovány v jedn
 
 \chapter{Testování a optimalizace}
 \label{experiments}
-Tato část práce se zaměřuje na testování a porovnání efektivity metod procedurálního generování, konkrétně Perlinova šumu a algoritmu Wave Function Collapse (WFC). Testování probíhalo na základě několika kritérií, včetně kvality výsledného obsahu, rychlosti generování, variabilitě a úspěšnosti opakovatelnosti generovaných herních světů.
+Tato část práce se zaměřuje na testování a porovnání efektivity metod procedurálního generování, konkrétně Perlinova šumu a algoritmu Wave Function Collapse (WFC). Testování probíhalo na základě několika kritérií, včetně kvality výsledného obsahu, rychlosti generování a opakovatelnosti generovaných herních světů.
 
 Pro testování byly vytvořeny různé scénáře a parametry generování pro oba algoritmy. Každý scénář obsahoval specifické požadavky na mapu a herní prostředí, jako byla velikost mapy, typ terénu, počet a rozložení herních objektů apod. Generované mapy byly hodnoceny podle vizuální kvality, rozmanitosti, hratelnosti a chování generovaných objektů v herním světě. Byla také sledována rychlost generování a výpočetní náročnost jednotlivých metod.
 
 \section{Optimalizace}
-Hlavní úpravou algoritmu WFC bylo zavedení seznamu buněk, které se mají zpracovat před začátkem generování. Při každém kolapsu buňky byla daná buňka přidána do tohoto seznamu. Následně se před zpracováním celého seznamu buněk nejprve procházel tento seznam, aby se zabezpečilo, že buňky s nižší entropií budou kolapsovány dříve. Tímto způsobem bylo dosaženo optimalizace času potřebného k generování mapy.
+Hlavní úpravou algoritmu WFC bylo zavedení seznamu buněk, které jsou zpracovávány před hlavním seznamem buněk, což znamená, že není nutné vždy procházet všechny buňky. Po každém kolapsu se omezuje počet možných dlaždic sousedních buněk, právě tyto buňky se přidávají do zmíněného seznamu. Následně se před zpracováním všech buněk na mapě nejprve prochází tento seznam, aby se zabezpečilo, že buňky s nižší entropií budou kolabovány dříve. Tímto způsobem bylo dosaženo optimalizace času potřebného k generování mapy.
 
-Průměrný čas generování herních světů byl snížen z přibližně 73 sekund na průměrných 10 sekund. Tato úprava umožnila rychlejší a efektivnější generování map, což výrazně přispělo k celkové kvalitě a použitelnosti procedurálně generovaných herních prostředí. Avšak i po takovéto optimalizaci je WFC algoritmus stále pomalejší než Perlinův šum.
+Průměrný čas generování herních světů byl snížen z přibližně 73 sekund na průměrných 10 sekund. Tato úprava umožnila rychlejší a efektivnější generování map, což výrazně přispělo k celkové kvalitě a použitelnosti procedurálně generovaných herních prostředí pomocí WFC algoritmu. Avšak i po takovéto optimalizaci je WFC algoritmus stále pomalejší než Perlinův šum při větších rozměrech mapy.
+
+Další optimalizací WFC byla především z pohledu estetického. Jedná se o omezení maximálního počtu dlaždic typu skal a vody (obrázky \ref{WFCNonRestricted} a \ref{WFCRestricted}). Tato optimalizace generování byla zavedena za účelem vytvářet kvalitnější mapy, které nebudou chaoticky zaskládány vodou a skalami. 
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=0.4]{obrazky-figures/WFCNonrestricted.png}
+		\caption{Mapa vygenerovaná bez nastavených omezení na typy dlaždic.}
+		\label{WFCNonRestricted}
+	\end{subfigure}
+	\begin{subfigure}{0.475\textwidth}
+		\centering
+		\includegraphics[scale=0.4]{obrazky-figures/WFCRestricted.png}
+		\caption{Mapa vygenerovaná s nastavenými limity skal na 1500 dlaždic a vody na 1200 dlaždic.}
+		\label{WFCRestricted}
+	\end{subfigure}
+	\caption{Na obrázcích jsou vidět mapy vygenerované pomocí algoritmu WFC. Na obrázku vlevo nejsou nastavená omezení pro generování. Na obrázku 2 jsou nastaveny maximální limity pro počty skalních a vodních dlaždic.}
+	\label{WFCRestrictions}
+\end{figure}
 
 \section{Výsledky testování}
 Výsledky testování ukázaly, že oba algoritmy, Perlinův šum i WFC, mají své silné a slabé stránky v závislosti na konkrétních požadavcích a scénářích generování. Oba algoritmy jsou vhodné pro vytváření organických terénů, jako jsou krajiny, hory a lesy. Perlinův šum vytváří více zakulacené struktury, zatímco WFC tvoří vyloženě náhodné tvary.
 
-Pokud jde o rychlost generování, Perlinův šum je obecně rychlejší a méně náročný na výpočetní výkon než WFC, zejména při tvorbě rozsáhlých herních světů. Nicméně, WFC poskytuje větší kontrolu nad výsledným obsahem a umožňuje dosáhnout vyšší úrovně detailu a struktury v generovaných mapách. Perlinův šum tvoří mapy v řádu jednotek sekund, naopak WFC bez optimalizací vytváří mapy stejných velikostí v řádu minut. S optimalizacemi je WFC o dost rychlejší, avšak to stále nestačí na Perlinův šum.
+Pokud jde o rychlost generování, Perlinův šum je obecně rychlejší a méně náročný na výpočetní výkon než WFC, zejména při tvorbě rozsáhlých herních světů. Nicméně, WFC poskytuje větší kontrolu nad výsledným obsahem a umožňuje dosáhnout vyšší úrovně detailu a struktury v generovaných mapách. Perlinův šum tvoří mapy v řádu jednotek sekund, naopak WFC bez optimalizací vytváří mapy stejných velikostí v řádu minut a náročnost inkrementálně roste. S optimalizacemi je WFC o dost rychlejší, avšak to stále nestačí na Perlinův šum.
 
-Kromě rychlosti generování má Perlinův šum i další výhodu a tou je seed. Tato proměnná představuje set podle kterého se generují pseudonáhodná čísla, což znamená že výstup bude vždy stejný pro stejný seed. Něco takového WFC neumí a tím pádem není možnost vytvořit znovu stejnou mapu.
+Kromě rychlosti generování má Perlinův šum i další výhodu, a tou je seed. Tato proměnná představuje set, podle kterého se generují pseudonáhodná čísla, což znamená, že výstup bude vždy stejný pro stejný seed. Něco takového WFC neumí, a tím pádem není možnost vytvořit znovu stejnou mapu.
 
 \chapter{Závěr}
-Cílem této bakalářské práce bylo implementovat generativní algoritmy pro tvorbu herních prostředí v Unity. Práce se zaměřila především na dva hlavní přístupy k generaci prostředí: Perlinův šum a algoritmus Wave Function Collapse (WFC).
+Cílem této bakalářské práce bylo implementovat generativní algoritmy pro tvorbu herních prostředí v Unity. Práce se zaměřila především na dva hlavní přístupy k generaci prostředí: Perlinův šum a algoritmus Wave Function Collapse (WFC). Následně po vytvoření herní mapy bylo cílem navrhnout a implementovat samotnou hru odehrávající se v těchto světech.
 
 První část práce se věnovala teoretickému zázemí obou metod a jejich principům fungování. Byly popsány základní koncepty Perlinova šumu a jeho využití pro generaci terénů. Následně byl detailněji rozebrán algoritmus WFC včetně jeho aplikací v generativním designu a tvorbě map.
 
-Ve druhé části práce byly oba algoritmy implementovány do herního prostředí v Unity. Byly vytvořeny skripty pro generaci terénů pomocí Perlinova šumu, jakož i pro generaci komplexních herních map pomocí algoritmu WFC. Implementace obou metod byla testována a optimalizována s cílem dosáhnout co nejlepšího výkonu a efektivity.
+Ve druhé části práce byly oba algoritmy implementovány do herního prostředí v Unity. Byly vytvořeny skripty pro generaci terénů pomocí Perlinova šumu, tak i pro generaci komplexních herních map pomocí algoritmu WFC. Implementace obou metod byla testována a optimalizována s cílem dosáhnout, co nejlepšího výkonu a efektivity.
 
 Výsledkem práce je funkční prototyp hry, která obsahuje většinu základních systémů. Hra samotná byla navržena s úmyslem, aby byla snadno rozšiřitelná, což se z velké části povedlo.
 
-Během vypracovávání této bakalářské práce jsem získal cenné zkušenosti v oblasti práce s Unity, C\# a obecně s programováním větších projektů. Při zpětném pohledu bych pravděpodobně zvolil jiný přístup a více plánoval celou hru i jednotlivé komponenty do budoucna. Většinou jsem se vyhnul potřebě rozsáhlých úprav kódu, ale občas jsem narazil na situace, kde bylo zapotřebí provedení úprav či optimalizací.
+Během vypracovávání této bakalářské práce jsem získal cenné zkušenosti v oblasti práce s Unity, C\# a obecně s programováním větších projektů. Při zpětném pohledu bych pravděpodobně zvolil jiný přístup a více plánoval celou hru i jednotlivé komponenty do budoucna. Většinou jsem se vyhnul potřebě rozsáhlých úprav kódu, ale občas jsem narazil na situace, kde bylo zapotřebí provedení menších úprav či optimalizací.

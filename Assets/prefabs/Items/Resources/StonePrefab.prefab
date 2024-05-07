@@ -205,7 +205,7 @@ MonoBehaviour:
   playerList: []
   progressFinish: 100
   currentProgress: 0
-  tile: {fileID: 0}
+  tile: {fileID: 11400000, guid: 9d786ba1b1e1b4849be765184e3286b3, type: 2}
   droppedItem: {fileID: 9120545310718558474, guid: 60cdc0663bb61c7438828a17f7f58d05, type: 3}
   healthBar: {fileID: 7790986191394417824}
   healthCanvas: {fileID: 8299318691964381453}

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -67,7 +68,7 @@ public class UnitControlScript : MonoBehaviour
 
             if (stockpile != null && UCItemType != ContainedItemType.None)
             {
-                HaulItem(UCCount, UCItemType);
+                HaulItem();
             }
             else if (interactable != null && stockpile == null)
             {
@@ -127,17 +128,32 @@ public class UnitControlScript : MonoBehaviour
     }
 
     // Pick up an item and move it to the stockpile
-    public void PickUp(GameObject itemToPick, int count, ContainedItemType itemType)
+    public bool PickUp(GameObject itemToPick, int count, ContainedItemType itemType)
     {
-        carriedItem = Instantiate(itemToPick, transform);
-        stockpileZone = StockpileGetter();
-        UCItemType = itemType;
-        UCCount = count;
-        HaulItem(count, itemType);
+        if (carriedItem == null)
+        {
+            carriedItem = Instantiate(itemToPick, transform);
+            stockpileZone = StockpileGetter();
+            UCItemType = itemType;
+            UCCount = count;
+            HaulItem();
+            return true;
+        }
+        else if (UCItemType == itemType)
+        {
+            UCCount += count;
+            HaulItem();
+            return true;
+        }
+        else
+        {
+            Debug.Log("Cant carry multiple types of resources");
+            return false;
+        }
     }
 
     // Haul item to the stockpile
-    public void HaulItem(int count, ContainedItemType itemType)
+    public void HaulItem()
     {
         StockpileScript stockpileScript = FindEmptyStockpile();
 

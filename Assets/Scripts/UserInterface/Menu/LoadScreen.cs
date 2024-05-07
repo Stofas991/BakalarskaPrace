@@ -10,6 +10,7 @@ public class LoadScreen : MonoBehaviour
 
     public void LoadScene(int sceneId)
     {
+        Time.timeScale = 1;
         StartCoroutine(LoadSceneAsync(sceneId));
     }
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2827751447383184331}
   - component: {fileID: 3183472033059186753}
   - component: {fileID: 8070532179161317336}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: WaterCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e6436e884632545bd3476d1ca5569d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 10
+  weight: 150
   tileType: 2
   upNeighbours:
   - {fileID: 8070532179161317336}

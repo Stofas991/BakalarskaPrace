@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e6436e884632545bd3476d1ca5569d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 2
+  weight: 10
   tileType: 0
   upNeighbours:
   - {fileID: -1999561939963316766, guid: 13032d5821cf96342805a564b9d78992, type: 3}
@@ -106,8 +106,7 @@ MonoBehaviour:
   downNeighbours:
   - {fileID: 8070532179161317336, guid: 33e808347e401804dbb85a566e68df91, type: 3}
   - {fileID: 8070532179161317336, guid: c13bc4db522c1d947a2c47e64b322a40, type: 3}
-  - {fileID: 8070532179161317336, guid: 783090ed23e6daf439904964f226aa73, type: 3}
-  - {fileID: 8070532179161317336, guid: a1e24006bfbab6a49a2fddf2e139a5f2, type: 3}
+  - {fileID: 8070532179161317336, guid: 8118c0047165ca14c8f36d15033d0bcf, type: 3}
   - {fileID: 8070532179161317336, guid: 1943cc00b5300bb49bb7816568952203, type: 3}
   - {fileID: 8070532179161317336, guid: d761cddf6858be5479dadd6297d04d24, type: 3}
   - {fileID: 8070532179161317336, guid: f87a51d1352691a42b36c51ca798eb6c, type: 3}
