@@ -745,9 +745,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Trap1_27: -1923553833
+      Trap1_3: -1051754105
       Trap1_17: -1361599458
-      Trap1_28: -1957336644
+      Trap1_27: -1923553833
       Trap1_11: 2087657364
       Trap1_2: 2133043672
       Trap1_4: -759019734
@@ -774,7 +774,7 @@ TextureImporter:
       Trap1_26: 851086208
       Trap1_22: 1273561623
       Trap1_18: -1901826937
-      Trap1_3: -1051754105
+      Trap1_28: -1957336644
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

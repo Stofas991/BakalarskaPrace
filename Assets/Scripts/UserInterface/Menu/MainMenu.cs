@@ -22,6 +22,11 @@ public class MainMenu : MonoBehaviour
     [SerializeField] List<GameObject> hardPlayerUnits = new List<GameObject>();
     static SelectedValues SelectedValues = new SelectedValues();
 
+    private void Start()
+    {
+        MusicScript.GetInstance().PlayMenuMusic();    
+    }
+
     public void QuitGaime()
     {
         Application.Quit();
@@ -98,6 +103,11 @@ public class MainMenu : MonoBehaviour
         foreach (var t in toggles)
             if (t.isOn) return t;  //returns selected toggle
         return null;           // if nothing is selected return null
+    }
+
+    public void ChangeVolume(float volume)
+    {
+        MusicScript.GetInstance().ChangeVolume(volume);
     }
 }
 

@@ -11,15 +11,6 @@ public class ResourcesScript : Singleton<ResourcesScript>
 {
     [SerializeField] public Resource[] resourceList;
 
-    public void Start()
-    {
-        foreach (var resource in resourceList)
-        {
-            resource.requiredResources.ammount = 500;
-            resource.text.text = resource.requiredResources.ammount.ToString();
-        }
-    }
-
     ///<summary>
     /// Updates the amount of a specific resource and updates its display in the UI.
     ///</summary>

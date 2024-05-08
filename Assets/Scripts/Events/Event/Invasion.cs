@@ -1,3 +1,9 @@
+/**
+ * File: Invasion.cs
+ * Author: Kryštof Glos
+ * Last Modified: 7.5.2024
+ * Description: Event that creates enemy units attacking player.
+ */
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,7 +43,7 @@ public class Invasion : IGameEvent
     {
         callAmmount++;
         unitList.AddRange(SpawnUnit(height, width, callAmmount));
-        Debug.Log("Spawned: " + unitList.Count + " units");
+        MusicScript.GetInstance().StartBattleMusic();
     }
 
     public bool UpdateEvent()
@@ -63,6 +69,7 @@ public class Invasion : IGameEvent
         windowInfo.textBoxContent = "All enemies were eliminated! Congratulations.";
         windowInfo.deniedContent = string.Empty;
         windowInfo.acceptContent = "Continue";
+        MusicScript.GetInstance().PlayDefaultMusic();
         return windowInfo;
     }
 

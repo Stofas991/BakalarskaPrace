@@ -4,6 +4,7 @@
 * Date Last Modified: 18.2.2024
 * Description: This script controls the movement of the player character using NavMeshAgent.
 */
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,7 +25,8 @@ public class PlayerMotor : MonoBehaviour
         if (target != null)
         {
             target.position = FlipAgent(target.position);
-            agent.SetDestination(target.position);
+            if (Vector3.Distance(transform.position, target.position) > agent.stoppingDistance)
+                agent.SetDestination(target.position);
         }
     }
 

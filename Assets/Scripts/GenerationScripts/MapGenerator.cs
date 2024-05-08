@@ -82,6 +82,7 @@ public class MapGenerator : Singleton<MapGenerator>
         }
         CameraController.GetInstance().setCameraBorders();
         nmSurface.BuildNavMeshAsync();
+        MusicScript.GetInstance().PlayDefaultMusic();
     }
 
     /**
@@ -98,7 +99,7 @@ public class MapGenerator : Singleton<MapGenerator>
 
         //removing old structures on map
         ClearMap();
-
+        
         List<List<WFCCell>> tileRows = new List<List<WFCCell>>();
         for (int y = 0; y < mapHeight; y++)
         {

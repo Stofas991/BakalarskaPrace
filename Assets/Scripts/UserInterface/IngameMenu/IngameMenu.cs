@@ -6,6 +6,7 @@
 
  */
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class IngameMenu : Singleton<IngameMenu>
 {
@@ -58,5 +59,15 @@ public class IngameMenu : Singleton<IngameMenu>
     public void ActivateTime()
     {
         Time.timeScale = 1;
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void ChangeVolume(float volume)
+    {
+        MusicScript.GetInstance().ChangeVolume(volume);
     }
 }

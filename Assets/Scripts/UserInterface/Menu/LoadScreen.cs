@@ -36,7 +36,7 @@ public class LoadScreen : MonoBehaviour
 
         while (!operation.isDone)
         {
-            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
+            float progressValue = Mathf.Clamp01(operation.progress);
 
             loadingBarFill.fillAmount = progressValue;
 

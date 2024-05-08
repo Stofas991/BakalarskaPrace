@@ -83,8 +83,11 @@ public class EnemyMove : ClickableObject
         }
         else if (IsObstacleInWay())
         {
-
             HandleObstacle();
+        }
+        else if (!IsInChasingRange())
+        {
+            StopChasing();
         }
         else
             MoveTowardsPlayer();
