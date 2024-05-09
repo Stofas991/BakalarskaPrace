@@ -200,7 +200,7 @@ MonoBehaviour:
   attackSpeed: 0.5
   attackCooldown: 4
   gatheringDamage: 10
-  gatheringSpeed: 4
+  gatheringSpeed: 1
   gatherCooldown: 0
   attackRange: 10
   movementSpeed: 2

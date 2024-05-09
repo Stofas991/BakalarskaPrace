@@ -200,9 +200,9 @@ MonoBehaviour:
   attackSpeed: 1
   attackCooldown: 0
   gatheringDamage: 10
-  gatheringSpeed: 4
+  gatheringSpeed: 1
   gatherCooldown: 0
-  attackRange: 2
+  attackRange: 2.5
   movementSpeed: 1
   healthBar: {fileID: 1439205066363382705}
   projectilePrefab: {fileID: 0}

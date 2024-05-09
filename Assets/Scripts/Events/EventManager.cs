@@ -224,7 +224,7 @@ public class EventManager : Singleton<EventManager>
 
         popupDenie.SetActive(false);
 
-        popupAccept.GetComponentInChildren<TextMeshProUGUI>().text = "Continue to main menu";
+        popupAccept.GetComponentInChildren<TextMeshProUGUI>().text = "Main Menu";
         popupAccept.GetComponent<Button>().onClick.RemoveAllListeners();
         popupAccept.GetComponent<Button>().onClick.AddListener(ReturnToMainMenu);
 
