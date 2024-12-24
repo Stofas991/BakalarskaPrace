@@ -4,6 +4,7 @@
 * Date Last Modified: 3.5.2024
 * Description: This script defines the behavior of interactable objects in the game.
 */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class Interactable : MonoBehaviour
 {
     // Reference to the health of the interactable object
     public UnitStats myHealth { get; private set; }
+
+    public InteractableType type;
 
     // Interaction radius
     public float radius = 2f;
@@ -88,9 +91,34 @@ public class Interactable : MonoBehaviour
         // Reset interaction status and set focus to true
         hasInteracted = false;
         isFocus = true;
+
+        UnitControlScript playerControlScript = playerTransform.GetComponent<UnitControlScript>();
         // Add the player to the list of interacting players if not already present
         if (!playerList.Contains(playerTransform))
             playerList.Add(playerTransform);
+
+        switch(type)
+        {
+            case InteractableType.None:
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Object has no interaction type set");
+                Console.ResetColor();
+                break;
+            case InteractableType.Tree:
+                playerControlScript.SetActivity(UnitControlScript.ActivityType.CuttingTrees);
+                break;
+            case InteractableType.Hill:
+                playerControlScript.SetActivity(UnitControlScript.ActivityType.Digging);
+                break;
+            case InteractableType.Enemy:
+                playerControlScript.SetActivity(UnitControlScript.ActivityType.Fighting);
+                break;
+            case InteractableType.Hauling:
+                playerControlScript.SetActivity(UnitControlScript.ActivityType.Hauling);
+                break;
+        }
+
+
     }
 
     // Method to handle loss of focus on the object
@@ -104,5 +132,15 @@ public class Interactable : MonoBehaviour
             hasInteracted = false;
             isFocus = false;
         }
+    }
+
+    public enum InteractableType
+    {
+        None,
+        Hauling,
+        Enemy,
+        Tree,
+        Hill,
+        Farm
     }
 }

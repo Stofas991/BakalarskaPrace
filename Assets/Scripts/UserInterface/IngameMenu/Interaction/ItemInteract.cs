@@ -20,24 +20,7 @@ public class ItemInteract : Interactable
     public override void Interact(Transform interactingPlayer)
     {
         base.Interact(interactingPlayer);
-        if (instance == null)
-        {
-            instance = Instantiate(interactionMenu, transform);
-            GameObject child = instance.transform.GetChild(0).gameObject;
-            TMP_Text[] text = child.GetComponentsInChildren<TMP_Text>();
-            foreach (var t in text)
-            {
-                if (t.name == "ItemNameText")
-                    t.text = name;
-
-                else
-                    t.text = "Haul";
-            }
-        }
-        else
-        {
-            instance.SetActive(true);
-        }
+        DestroyInstanceAndCarry();
         hasInteracted = true;
     }
 

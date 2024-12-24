@@ -5,8 +5,10 @@
 * Description: This script controls the behavior of a unit in the game, including movement, interaction, and resource handling.
 */
 
+using System;
 using UnityEngine;
 using UnityEngine.AI;
+using static Interactable;
 
 
 public class UnitControlScript : MonoBehaviour
@@ -27,6 +29,7 @@ public class UnitControlScript : MonoBehaviour
     public int UCCount;
     public ContainedItemType UCItemType = ContainedItemType.None;
     public bool selected = false;
+    private ActivityType activityType = ActivityType.None;
 
     // Start is called before the first frame update
     private void Start()
@@ -48,6 +51,29 @@ public class UnitControlScript : MonoBehaviour
         {
             HandleInput();
         }
+        if (focus == null)
+        {
+            switch (activityType)
+            {
+                case ActivityType.None:
+                    break;
+                case ActivityType.CuttingTrees:
+                    FindNextTarget();
+                    break;
+                case ActivityType.Digging:
+                    FindNextTarget();
+                    break;
+                case ActivityType.Hauling:
+                    FindNextTarget();
+                    break;
+                case ActivityType.Farming:
+                    FindNextTarget();
+                    break;
+                case ActivityType.Fighting:
+                    FindNextTarget();
+                    break;
+            }
+        }
     }
 
     // Handle user input
@@ -57,6 +83,7 @@ public class UnitControlScript : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
+            StopActivity();
             ProcessMouseInput();
         }
     }
@@ -200,5 +227,78 @@ public class UnitControlScript : MonoBehaviour
     {
         Transform stockpile = zoneParent.transform.Find("Stockpile_zone");
         return stockpile?.gameObject;
+    }
+
+    public void SetActivity(ActivityType activityType)
+    {
+        this.activityType = activityType;
+    }
+
+    public void StopActivity()
+    {
+        activityType = ActivityType.None;
+    }
+
+    private void FindNextTarget()
+    {
+        Interactable nextTarget = null;
+        switch (activityType)
+        {
+            case ActivityType.None:
+                break;
+            case ActivityType.Farming:
+                nextTarget = FindNearestObjectOfType(InteractableType.Farm);
+                break;
+            case ActivityType.Digging:
+                nextTarget = FindNearestObjectOfType(InteractableType.Hill);
+                break;
+            case ActivityType.Hauling:
+                nextTarget = FindNearestObjectOfType(InteractableType.Hauling);
+                break;
+            case ActivityType.CuttingTrees:
+                nextTarget = FindNearestObjectOfType(InteractableType.Tree);
+                break;
+            case ActivityType.Fighting:
+                nextTarget = FindNearestObjectOfType(InteractableType.Enemy);
+                break;
+        }
+        if (nextTarget != null)
+        {
+            SetFocus(nextTarget);
+        }
+    }
+
+    public Interactable FindNearestObjectOfType(InteractableType targetType)
+    {
+        float scanRadius = 10f;
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, scanRadius);
+        GameObject nearestObject = null;
+        float nearestDistance = float.MaxValue;
+
+        foreach (var collider in colliders)
+        {
+            Interactable interactable = collider.GetComponent<Interactable>();
+            if (interactable != null && interactable.type == targetType)
+            {
+                float distance = Vector3.Distance(transform.position, collider.transform.position);
+                if (distance < nearestDistance)
+                {
+                    nearestDistance = distance;
+                    nearestObject = collider.gameObject;
+                }
+            }
+        }
+
+        return nearestObject.GetComponent<Interactable>();
+    }
+
+    public enum ActivityType
+    {
+        Farming,
+        CuttingTrees,
+        Digging,
+        Fighting,
+        Hauling,
+        None
     }
 }

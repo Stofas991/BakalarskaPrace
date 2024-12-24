@@ -58,6 +58,7 @@ public class StockpileScript : Interactable
         control.UCItemType = ContainedItemType.None;
         resourceMenu.UpdateAmmount(itemCount, itemType);
         interactingPlayer.GetComponent<UnitControlScript>().DestroyCarriedItem();
+        interactingPlayer.GetComponent<UnitControlScript>().RemoveFocus();
 
         hasInteracted = true;
         OnDeFocused(interactingPlayer);

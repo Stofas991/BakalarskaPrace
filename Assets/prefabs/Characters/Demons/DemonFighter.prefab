@@ -563,6 +563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  healthRegeneration: 5
   attackDamage: 20
   attackSpeed: 2
   attackCooldown: 0
@@ -612,6 +613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 569412edf13930d4e8d03a67bc7a6e14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 2
   radius: 3
   hasInteracted: 0
   isEnemy: 1
