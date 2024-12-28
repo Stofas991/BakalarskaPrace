@@ -11,7 +11,6 @@ public class HealthBarScript : MonoBehaviour
 {
 
     public Slider slider;
-    public Gradient gradient;
     public Image fill;
 
     ///<summary>
@@ -22,8 +21,6 @@ public class HealthBarScript : MonoBehaviour
     {
         slider.maxValue = health;
         slider.value = health;
-
-        fill.color = gradient.Evaluate(1f);
     }
 
     ///<summary>
@@ -33,7 +30,5 @@ public class HealthBarScript : MonoBehaviour
     public void SetHealth(int health)
     {
         slider.value = health;
-
-        fill.color = gradient.Evaluate(slider.normalizedValue); // Adjust the color of the health bar based on the current health percentage
     }
 }

@@ -289,7 +289,10 @@ public class UnitControlScript : MonoBehaviour
             }
         }
 
-        return nearestObject.GetComponent<Interactable>();
+        if (nearestObject != null)
+            return nearestObject.GetComponent<Interactable>();
+        else 
+            return null;
     }
 
     public enum ActivityType
