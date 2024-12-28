@@ -63,6 +63,7 @@ MonoBehaviour:
   popupDenie: {fileID: 2881539401677531740}
   playerUnitCount: 0
   blackoutPanel: {fileID: 0}
+  playerUnitsToSpawn: []
 --- !u!1001 &3084969687915506982
 PrefabInstance:
   m_ObjectHideFlags: 0
