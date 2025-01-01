@@ -33,6 +33,17 @@ public class CharacterUI : Singleton<CharacterUI>
         currentIndex = 0;
         characterImagesLocal.Clear();
         characterImagesLocal.AddRange(characterImages);
+        
+        if (units.Count == 1)
+        {
+            nextButton.interactable = false;
+            previousButton.interactable = false;
+        }
+        else
+        {
+            nextButton.interactable = true;
+            previousButton.interactable = false;
+        }
         ShowCharacter(currentIndex, characterImages);
     }
 
@@ -56,6 +67,15 @@ public class CharacterUI : Singleton<CharacterUI>
         {
             currentIndex++;
             ShowCharacter(currentIndex, GetCharacterImages());
+            if (currentIndex < selectedUnits.Count - 1)
+            {
+                nextButton.interactable = true;
+            }
+            else
+            {
+                nextButton.interactable = false;
+            }
+            previousButton.interactable = true;
         }
     }
 
@@ -65,6 +85,18 @@ public class CharacterUI : Singleton<CharacterUI>
         {
             currentIndex--;
             ShowCharacter(currentIndex, GetCharacterImages());
+            if (currentIndex > 0)
+            {
+                previousButton.interactable = true;
+            }
+            else
+            {
+                previousButton.interactable = false;
+            }
+            if (currentIndex < selectedUnits.Count - 1)
+            {
+                nextButton.interactable = true;
+            }
         }
     }
 
