@@ -11,6 +11,7 @@ public class CharacterUI : Singleton<CharacterUI>
     [SerializeField] TMP_Text treeCuttingLevel;
     [SerializeField] TMP_Text miningLevel;
     [SerializeField] TMP_Text fightingLevel;
+    [SerializeField] TMP_Text currentActivityText; // Add this line
     public Image characterIcon;
     public GameObject characterIconBox;
     public Button nextButton;
@@ -33,7 +34,7 @@ public class CharacterUI : Singleton<CharacterUI>
         currentIndex = 0;
         characterImagesLocal.Clear();
         characterImagesLocal.AddRange(characterImages);
-        
+
         if (units.Count == 1)
         {
             nextButton.interactable = false;
@@ -108,5 +109,10 @@ public class CharacterUI : Singleton<CharacterUI>
     public void HideBox()
     {
         gameObject.SetActive(false);
+    }
+
+    public void SetActivityText(string action)
+    {
+        currentActivityText.text = action;
     }
 }
