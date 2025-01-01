@@ -163,7 +163,18 @@ public class SelectObject2D : MonoBehaviour
         {
             characterUI.HideBox();
         }
+        else
+        {
+            List<UnitStats> unitStatList = new List<UnitStats>();
+            List<Sprite> characterImages = new List<Sprite>();
+            foreach (var unit in selectedUnits)
+            {
+                unitStatList.Add(unit.GetComponent<UnitStats>());
+                characterImages.Add(unit.GetComponent<SpriteRenderer>().sprite);
+            }
+            characterUI.ShowBoxForCharacters(unitStatList, characterImages);
+        }
 
-        return selectedUnits;
+            return selectedUnits;
     }
 }
