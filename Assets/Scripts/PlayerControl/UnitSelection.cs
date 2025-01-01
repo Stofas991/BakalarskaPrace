@@ -9,10 +9,14 @@ using UnityEngine;
 public class UnitSelection : MonoBehaviour
 {
     private GameObject selectedGameObject;
+    private CharacterUI characterUI;
+    private UnitStats stats;
 
     private void Awake()
     {
         selectedGameObject = transform.Find("Circle").gameObject;
+        characterUI = CharacterUI.GetInstance();
+        stats = GetComponent<UnitStats>();
         SetSelectedVar(false);
     }
 
@@ -21,5 +25,9 @@ public class UnitSelection : MonoBehaviour
         selectedGameObject.SetActive(selection);
         UnitControlScript unit = gameObject.GetComponent<UnitControlScript>();
         unit.selected = selection;
+        if (selection)
+        {
+            characterUI.ShowBoxForCharacter(stats);
+        }
     }
 }

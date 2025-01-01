@@ -3,7 +3,9 @@ guid: d0a85e2352f70a74abc3f5b21ebf20fe
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - characterUIPrefab: {fileID: 1238343377609476273, guid: 4598536fceb330b45be8cc71808e19b1, type: 3}
+  - selectionBox: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

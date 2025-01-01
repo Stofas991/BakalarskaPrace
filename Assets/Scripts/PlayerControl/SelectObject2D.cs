@@ -14,6 +14,7 @@ public class SelectObject2D : MonoBehaviour
     private bool isDragSelect = false;
     public Vector3 startPosition;
     private Vector3 endPosition;
+    private CharacterUI characterUI;
 
     public RectTransform selectionBox;
     public bool buildingMode = false;
@@ -21,6 +22,7 @@ public class SelectObject2D : MonoBehaviour
 
     private void Awake()
     {
+        characterUI = CharacterUI.GetInstance();
         selectedUnitList = new HashSet<UnitSelection>();
     }
 
@@ -157,6 +159,11 @@ public class SelectObject2D : MonoBehaviour
                 }
             }
         }
+        if (selectedUnits.Count == 0)
+        {
+            characterUI.HideBox();
+        }
+
         return selectedUnits;
     }
 }

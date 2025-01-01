@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class UnitStats : MonoBehaviour, IAttackable
 {
+    public string characterName;
     public int maxHealth = 100;
     public int healthRegeneration = 5;
     public int attackDamage = 0;

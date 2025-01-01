@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3377633813944631930}
   - component: {fileID: 5904259467658559720}
-  - component: {fileID: 35802674226386479}
+  - component: {fileID: 6108655680074665124}
   - component: {fileID: 7650908556596081821}
   - component: {fileID: 356696167367167031}
   - component: {fileID: 4533981252407204535}
@@ -67,7 +67,7 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
---- !u!114 &35802674226386479
+--- !u!114 &6108655680074665124
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab6827ac4a76cd42a7a5c089b6f265b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterUIPrefab: {fileID: 1238343377609476273, guid: 4598536fceb330b45be8cc71808e19b1, type: 3}
 --- !u!114 &7650908556596081821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,6 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a9b924c59c91843b518d623be82109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterName: MageMajster
   maxHealth: 100
   healthRegeneration: 2
   attackDamage: 50
