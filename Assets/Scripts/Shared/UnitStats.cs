@@ -30,6 +30,12 @@ public class UnitStats : MonoBehaviour, IAttackable
     public HealthBarScript healthBar;
     public ProjectileBehaviour projectilePrefab;
     public bool isRanged;
+
+    public int totalLevel = 1;
+    public int treeCuttingLevel = 1;
+    public int miningLevel = 1;
+    public int gatheringLevel = 1;
+    public int fightingLevel = 1;
     // Start is called before the first frame update
     void Start()
     {

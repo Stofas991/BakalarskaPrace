@@ -5,6 +5,7 @@
 * Description: This script handles the visual indication of unit selection and updates the selected status in the associated UnitControlScript.
 */
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnitSelection : MonoBehaviour
 {
@@ -24,10 +25,11 @@ public class UnitSelection : MonoBehaviour
     {
         selectedGameObject.SetActive(selection);
         UnitControlScript unit = gameObject.GetComponent<UnitControlScript>();
+        Sprite characterImage = gameObject.GetComponent<SpriteRenderer>().sprite;
         unit.selected = selection;
         if (selection)
         {
-            characterUI.ShowBoxForCharacter(stats);
+            characterUI.ShowBoxForCharacter(stats, characterImage);
         }
     }
 }
