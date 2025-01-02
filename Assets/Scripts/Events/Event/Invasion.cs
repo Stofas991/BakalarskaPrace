@@ -103,10 +103,10 @@ public class Invasion : IGameEvent
 
                 var spawnPosition = GetValidSpawnPosition(squareEdges);
                 var unit = GameObject.Instantiate(unitPrefab, spawnPosition, Quaternion.identity);
-                var agent = unit.GetComponent<NavMeshAgent>();
-                if (agent != null)
+                var enemyMove = unit.GetComponent<EnemyMove>();
+                if (enemyMove != null)
                 {
-                    agent.SetDestination(closestUnit.transform.position);
+                    enemyMove.chaseUnit(closestUnit);
                 }
                 unitList.Add(unit);
             }

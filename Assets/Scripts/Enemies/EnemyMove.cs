@@ -26,7 +26,7 @@ public class EnemyMove : ClickableObject
     private UnitStats stats;
 
     //promìnná pro detekci hráèe
-    private int distance = 10;
+    private int distance = 100;
     void Start()
     {
         // Inicializace promìnných
@@ -68,8 +68,7 @@ public class EnemyMove : ClickableObject
         Collider2D[] HitEnemies = Physics2D.OverlapCircleAll(agent.transform.position, distance, enemyLayers);
         if (HitEnemies.Length > 0)
         {
-            chasedObject = HitEnemies[0].gameObject;
-            chasing = true;
+            chaseUnit(HitEnemies[0].gameObject);
         }
     }
 
@@ -180,5 +179,11 @@ public class EnemyMove : ClickableObject
     {
         bool flipped = agent.transform.position.x < chasedObject.transform.position.x;
         transform.rotation = Quaternion.Euler(new Vector3(0f, flipped ? 180f : 0f, 0f));
+    }
+
+    public void chaseUnit(GameObject unit)
+    {
+        chasedObject = unit;
+        chasing = true;
     }
 }
