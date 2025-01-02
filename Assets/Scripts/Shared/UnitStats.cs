@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class UnitStats : MonoBehaviour, IAttackable
 {
+    public string characterName;
     public int maxHealth = 100;
     public int healthRegeneration = 5;
     public int attackDamage = 0;
@@ -29,9 +30,28 @@ public class UnitStats : MonoBehaviour, IAttackable
     public HealthBarScript healthBar;
     public ProjectileBehaviour projectilePrefab;
     public bool isRanged;
-    // Start is called before the first frame update
+
+    public int totalLevel = 1;
+    public int treeCuttingLevel = 1;
+    public int miningLevel = 1;
+    public int gatheringLevel = 1;
+    public int fightingLevel = 1;
+    private ActivityType _activityType = ActivityType.None;
+    private CharacterUI characterUI;
+
+    public ActivityType activityType
+    {
+        get => _activityType;
+        set
+        {
+            _activityType = value;
+            characterUI.UpdateActivityText(_activityType);
+        }
+    }
+
     void Start()
     {
+        characterUI = CharacterUI.GetInstance();
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
 
@@ -85,5 +105,10 @@ public class UnitStats : MonoBehaviour, IAttackable
     {
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         Destroy(gameObject);
+    }
+
+    public void SetActivity(ActivityType activity)
+    {
+        activityType = activity;
     }
 }

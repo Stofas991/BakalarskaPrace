@@ -5,6 +5,7 @@
 * Description: This script handles the visual indication of unit selection and updates the selected status in the associated UnitControlScript.
 */
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnitSelection : MonoBehaviour
 {

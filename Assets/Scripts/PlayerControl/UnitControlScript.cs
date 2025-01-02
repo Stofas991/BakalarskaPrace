@@ -24,6 +24,7 @@ public class UnitControlScript : MonoBehaviour
     private GameObject stockpileZone;
     private GameObject carriedItem;
     private UnitStats stats;
+    private CharacterUI characterUI;
 
     // Unit properties
     public int UCCount;
@@ -42,6 +43,7 @@ public class UnitControlScript : MonoBehaviour
         animator = GetComponent<Animator>();
         stats = GetComponent<UnitStats>();
         zoneParent = GameObject.FindGameObjectWithTag("ZoneParent");
+        characterUI = CharacterUI.GetInstance();
     }
 
     // Update is called once per frame
@@ -232,11 +234,15 @@ public class UnitControlScript : MonoBehaviour
     public void SetActivity(ActivityType activityType)
     {
         this.activityType = activityType;
+        UnitStats stats = GetComponent<UnitStats>();
+        stats.SetActivity(activityType);
     }
 
     public void StopActivity()
     {
         activityType = ActivityType.None;
+        UnitStats stats = GetComponent<UnitStats>();
+        stats.SetActivity(activityType);
     }
 
     private void FindNextTarget()
@@ -289,16 +295,9 @@ public class UnitControlScript : MonoBehaviour
             }
         }
 
-        return nearestObject.GetComponent<Interactable>();
-    }
-
-    public enum ActivityType
-    {
-        Farming,
-        CuttingTrees,
-        Digging,
-        Fighting,
-        Hauling,
-        None
+        if (nearestObject != null)
+            return nearestObject.GetComponent<Interactable>();
+        else 
+            return null;
     }
 }
