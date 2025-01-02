@@ -234,32 +234,15 @@ public class UnitControlScript : MonoBehaviour
     public void SetActivity(ActivityType activityType)
     {
         this.activityType = activityType;
-        switch (activityType)
-        {
-            case ActivityType.None:
-                break;
-            case ActivityType.Farming:
-                characterUI.SetActivityText("Farming...");
-                break;
-            case ActivityType.Digging:
-                characterUI.SetActivityText("Mining...");
-                break;
-            case ActivityType.Hauling:
-                characterUI.SetActivityText("Hauling...");
-                break;
-            case ActivityType.CuttingTrees:
-                characterUI.SetActivityText("Cutting Trees...");
-                break;
-            case ActivityType.Fighting:
-                characterUI.SetActivityText("Fighting...");
-                break;
-        }
+        UnitStats stats = GetComponent<UnitStats>();
+        stats.SetActivity(activityType);
     }
 
     public void StopActivity()
     {
         activityType = ActivityType.None;
-        characterUI.SetActivityText("Waiting...");
+        UnitStats stats = GetComponent<UnitStats>();
+        stats.SetActivity(activityType);
     }
 
     private void FindNextTarget()
@@ -316,15 +299,5 @@ public class UnitControlScript : MonoBehaviour
             return nearestObject.GetComponent<Interactable>();
         else 
             return null;
-    }
-
-    public enum ActivityType
-    {
-        Farming,
-        CuttingTrees,
-        Digging,
-        Fighting,
-        Hauling,
-        None
     }
 }

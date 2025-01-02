@@ -11,7 +11,7 @@ public class CharacterUI : Singleton<CharacterUI>
     [SerializeField] TMP_Text treeCuttingLevel;
     [SerializeField] TMP_Text miningLevel;
     [SerializeField] TMP_Text fightingLevel;
-    [SerializeField] TMP_Text currentActivityText; // Add this line
+    [SerializeField] TMP_Text currentActivityText;
     public Image characterIcon;
     public GameObject characterIconBox;
     public Button nextButton;
@@ -60,6 +60,7 @@ public class CharacterUI : Singleton<CharacterUI>
         treeCuttingLevel.text = unit.treeCuttingLevel.ToString();
         miningLevel.text = unit.miningLevel.ToString();
         fightingLevel.text = unit.fightingLevel.ToString();
+        UpdateActivityText(unit.activityType);
     }
 
     private void ShowNextCharacter()
@@ -111,8 +112,25 @@ public class CharacterUI : Singleton<CharacterUI>
         gameObject.SetActive(false);
     }
 
-    public void SetActivityText(string action)
+    public void UpdateActivityText(ActivityType activityType)
     {
-        currentActivityText.text = action;
+        switch (activityType)
+        {
+            case ActivityType.None:
+                currentActivityText.text = "Idle";
+                break;
+            case ActivityType.CuttingTrees:
+                currentActivityText.text = "Cutting Tree";
+                break;
+            case ActivityType.Digging:
+                currentActivityText.text = "Mining";
+                break;
+            case ActivityType.Hauling:
+                currentActivityText.text = "Gathering";
+                break;
+            case ActivityType.Fighting:
+                currentActivityText.text = "Fighting";
+                break;
+        }
     }
 }

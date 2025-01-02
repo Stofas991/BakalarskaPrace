@@ -105,16 +105,16 @@ public class Interactable : MonoBehaviour
                 Console.ResetColor();
                 break;
             case InteractableType.Tree:
-                playerControlScript.SetActivity(UnitControlScript.ActivityType.CuttingTrees);
+                playerControlScript.SetActivity(ActivityType.CuttingTrees);
                 break;
             case InteractableType.Hill:
-                playerControlScript.SetActivity(UnitControlScript.ActivityType.Digging);
+                playerControlScript.SetActivity(ActivityType.Digging);
                 break;
             case InteractableType.Enemy:
-                playerControlScript.SetActivity(UnitControlScript.ActivityType.Fighting);
+                playerControlScript.SetActivity(ActivityType.Fighting);
                 break;
             case InteractableType.Hauling:
-                playerControlScript.SetActivity(UnitControlScript.ActivityType.Hauling);
+                playerControlScript.SetActivity(ActivityType.Hauling);
                 break;
         }
 
