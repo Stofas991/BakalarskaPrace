@@ -105,7 +105,6 @@ public class EventManager : Singleton<EventManager>
 
     private Vector3 GetRandomPositionInsideSquare(Vector3 centerPosition, float size)
     {
-        // Vypoèítání náhodné pozice uvnitø ètverce
         float halfSize = size / 2f;
         float randomX = UnityEngine.Random.Range(-halfSize, halfSize);
         float randomZ = UnityEngine.Random.Range(-halfSize, halfSize);
@@ -131,7 +130,6 @@ public class EventManager : Singleton<EventManager>
 
     void SelectRandomEvent()
     {
-        // Vybrání náhodného eventu ze seznamu
         if (events.Count > 0)
         {
             int randomIndex = UnityEngine.Random.Range(0, events.Count);
@@ -177,11 +175,9 @@ public class EventManager : Singleton<EventManager>
     {
         while (!playerInputReceived)
         {
-            // Poèkej na další snímek
             yield return null;
         }
 
-        // Obnova hry po hráèovì vstupu
         Time.timeScale = 1;
     }
 
